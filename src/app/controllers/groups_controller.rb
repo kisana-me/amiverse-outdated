@@ -9,7 +9,7 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     @group.account = @current_account
-    @group.aid = unique_random_id(Group, 'aid')
+    @group.aid = generate_aid(Group, 'aid')
     if @group.save
       flash[:success] = '作成しました'
       redirect_to groups_path

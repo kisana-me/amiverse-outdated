@@ -33,7 +33,7 @@ class SignupController < ApplicationController
         return
       end
     end
-    @account.aid = unique_random_id(Account, 'aid')
+    @account.aid = generate_aid(Account, 'aid')
     @account.activitypub_id = URI.join(ENV['APP_HOST'], '@' + params[:account][:name_id])
     key_pair = generate_rsa_key_pair
     @account.private_key = key_pair[:private_key]

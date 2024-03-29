@@ -18,7 +18,7 @@ class V1::ItemsController < V1::ApplicationController
       sensitive: params[:sensitive]
     )
     @item.account_id = @current_account.id
-    @item.item_id = unique_random_id(Item, 'item_id')
+    @item.item_id = generate_aid(Item, 'item_id')
     @item.uuid = SecureRandom.uuid
     @item.item_type = 'plane'
     if @item.save

@@ -12,7 +12,7 @@ class V1::SignupController < V1::ApplicationController
       password_confirmation: params[:password_confirmation]
     )
     if Invitation.exists?(code: params[:code])
-      @account.aid = unique_random_id(Account, 'aid')
+      @account.aid = generate_aid(Account, 'aid')
       if @account.save
         render json: { status: 'created' }
       else

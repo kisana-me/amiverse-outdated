@@ -21,7 +21,7 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
     @item.account = @current_account
-    @item.aid = unique_random_id(Item, 'aid')
+    @item.aid = generate_aid(Item, 'aid')
     @item.kind = 'plane'
     if @item.save
       if params[:item][:selected_images].present?

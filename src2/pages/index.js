@@ -11,8 +11,8 @@ export default function Home() {
   const loggedIn = useContext(appContext).loggedIn
   const modalTrigger = useContext(appContext).modalTrigger
   const account = useContext(appContext).account
-  const setFlashKind = useContext(appContext).setFlash
-  const setFlashMessage = useContext(appContext).setFlash
+  const setFlashKind = useContext(appContext).setFlashKind
+  const setFlashMessage = useContext(appContext).setFlashMessage
   const [loadItems, setloadItems] = useState(true)
   const [items, setItems] = useState([])
   const [page, setPage] = useState(1)

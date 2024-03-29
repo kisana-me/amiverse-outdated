@@ -29,7 +29,7 @@ class ImagesController < ApplicationController
     end
     @image.account = @current_account
     extension = File.extname(params[:image][:image].original_filename).delete_prefix(".")
-    @image.aid = unique_random_id(Image, 'aid')
+    @image.aid = generate_aid(Image, 'aid')
     @image.image.attach(
       key: "/images/#{@image.aid}.#{extension}",
       io: (params[:image][:image]),

@@ -12,7 +12,7 @@ class EmojisController < ApplicationController
   def create
     @emoji = Emoji.new(emoji_params)
     @emoji.account_id = @current_account.id
-    @emoji.emoji_id = unique_random_id(Emoji, 'emoji_id')
+    @emoji.emoji_id = generate_aid(Emoji, 'emoji_id')
     if @emoji.save
       flash[:success] = '作成しました。'
       redirect_to emojis_path

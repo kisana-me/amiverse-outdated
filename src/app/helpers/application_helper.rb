@@ -8,18 +8,6 @@ module ApplicationHelper
       page_title + " | " + base_title
     end
   end
-  def image_url(image_aid, type = 'images', format = '.webp')
-    case type
-    when 'icon'
-      type = 'icons'
-    when 'banner'
-      type = 'banners'
-    else
-      type = 'images'
-    end
-    image_path = File.join(type, image_aid + format)
-    return object_url(image_path)
-  end
   def full_api_url(path)
     return File.join(ENV["API_URL"], path)
   end
@@ -27,13 +15,6 @@ module ApplicationHelper
     current_page = current_page.to_i
     page = where_to_go == 'next' ? [current_page + 1, 2].max : where_to_go == 'prev' ? [current_page - 1, 1].max : 2
     return page
-  end
-  def redirect_back_or(default)
-    redirect_to(session[:forwarding_url] || default)
-    session.delete(:forwarding_url)
-  end
-  def store_location
-    session[:forwarding_url] = request.original_url if request.get?
   end
   private
   def object_url(path_key)
