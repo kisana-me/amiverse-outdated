@@ -1,5 +1,4 @@
 class VideosController < ApplicationController
-  include DataStream
   before_action :logged_in_account
   before_action :set_video, only: %i[ show_video ]
 
@@ -12,7 +11,7 @@ class VideosController < ApplicationController
   end
   def create
     @video = Video.new(video_params)
-    @video.aid = unique_random_id(Video, 'aid')
+    @video.aid = generate_aid(Video, 'aid')
     if params[:video][:video].blank?
       flash[:danger] = "動画がありません"
       return redirect_to settings_storage_path

@@ -69,7 +69,11 @@ class Account < ApplicationRecord
   # --- #
   private
   def valid_images
-    validate_using_image(self, icon_id, self.id)
-    validate_using_image(self, banner_id, self.id)
+    if self.icon_id_changed?
+      validate_using_image(self, icon_id, self.id)
+    end
+    if self.banner_id_changed?
+      validate_using_image(self, banner_id, self.id)
+    end
   end
 end

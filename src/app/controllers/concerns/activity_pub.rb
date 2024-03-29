@@ -233,7 +233,7 @@ module ActivityPub
           sensitive: object['sensitive']
         )
         @item.account_id = attributed_to.id
-        @item.item_id = unique_random_id(Item, 'item_id')
+        @item.item_id = generate_aid(Item, 'item_id')
         @item.uuid = SecureRandom.uuid
         @item.item_type = 'plane'
         if @item.save
@@ -296,7 +296,7 @@ module ActivityPub
     )
     data = JSON.parse(res.body)
     server_params = {
-      server_id: unique_random_id(ActivityPubServer, 'server_id'),
+      server_id: generate_aid(ActivityPubServer, 'server_id'),
       host: host
     }
     server_params[:name] = data['metadata']['nodeName'] if data['metadata']['nodeName'].present?
@@ -493,7 +493,7 @@ module ActivityPub
     account = Account.new(
       name: data['name'].present? ? data['name'] : '',
       name_id: get_name_id(data['id'], data['preferredUsername']),
-      account_id: unique_random_id(Account, 'account_id'),
+      account_id: generate_aid(Account, 'account_id'),
       activitypub_id: uri,
       #serverと紐づけ
       outsider: true,
