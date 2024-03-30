@@ -3,14 +3,17 @@ class ApplicationRecord < ActiveRecord::Base
   private
   def validate_using_image(ins, image_aid, account_id = 0)
     if image_aid.present?
-      if image = Image.where('BINARY aid = ?', image_aid).first
+      if image = Image.find_by(
+        aid: image_aid,
+        deleted: false
+      )
         unless account_id == image.account_id
           if image.private || JSON.parse(image.permission_scope).all? { |item| item.is_a?(Hash) && !item['icon'].nil? }   
-            ins.errors.add(:base, '画像の所有者はアイコンに設定することを許可していません')
+            ins.errors.add(:base, '画像の所有者は使用を許可していません')
           end
         end
       else
-        ins.errors.add(:base, '存在しない画像をアイコンに設定しようとしています')
+        ins.errors.add(:base, '画像が存在しません')
       end
     end
   end

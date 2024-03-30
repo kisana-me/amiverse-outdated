@@ -29,30 +29,38 @@ module SessionsHelper
       secure: secure_cookies,
       httponly: true
     }
+    session[:logged_in] = true
+    session[:current_account] = account
   end
   def logged_in?
     !@current_account.nil?
   end
   def current_account
-    if @current_account
-      return
-    else
-      begin
-        account = Account.find_by(
-          aid: cookies.signed[:amiverse_aid],
-          deleted: false
-        ) if cookies.signed[:amiverse_aid].present?
-        session = Session.find_by(
-          account_id: account.id,
-          uuid: cookies.signed[:amiverse_uid],
-          deleted: false
-        ) if cookies.signed[:amiverse_uid].present?
-        if BCrypt::Password.new(session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
-          @current_account = account
-        end
-      rescue
-        @current_account = nil
+    if session[:logged_in].present?
+      unless session[:logged_in]
+        return 
       end
+    end
+    if session[:current_account].present?
+      return session[:current_account]
+    else
+      return unless cookies.signed[:amiverse_aid].present?
+      return unless cookies.signed[:amiverse_uid].present?
+      account = Account.find_by(
+        aid: cookies.signed[:amiverse_aid],
+        deleted: false
+      )
+      db_session = Session.find_by(
+        account_id: account.id,
+        uuid: cookies.signed[:amiverse_uid],
+        deleted: false
+      )
+      if BCrypt::Password.new(db_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
+        session[:current_account] = account
+        return account
+      end
+      session[:logged_in] = false
+      @current_account = nil
     end
   end
   def current_account?(account)
@@ -69,6 +77,7 @@ module SessionsHelper
       deleted: false
     ) if cookies.signed[:amiverse_uid].present?
     session.delete
+    session[:logged_in] = false
     cookies.delete(:amiverse_aid)
     cookies.delete(:amiverse_uid)
     cookies.delete(:amiverse_rtk)

@@ -1,0 +1,8 @@
+<% provide(:layout_type, 'header_text') %>
+<% provide(:title, '絵文字') %>
+<% provide(:header_text, '絵文字') %>
+
+<% @emojis.each do |emoji| %>
+  <%= render 'emoji', emoji: emoji %>
+<% end %>
+<%= link_to('new', new_emoji_path) %>

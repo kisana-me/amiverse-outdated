@@ -41,7 +41,7 @@ Rails.application.routes.draw do
   delete 'items/:aid/destroy' => 'items#destroy', as: 'destroy_item'
 
   # reaction
-  post 'react/:item_id/:emoji_id' => 'reactions#react', as: 'react'
+  post 'react/:item_aid/:emoji_aid' => 'reactions#react', as: 'react'
 
   # storage
   get 'storage' => 'storage#index'
@@ -74,13 +74,7 @@ Rails.application.routes.draw do
   post 'groups/:group_aid/remove/:account_aid' => 'groups#group_remove', as: 'group_remove'
 
   # emoji
-  get 'emojis' => 'emojis#index'
-  get 'emojis/new' => 'emojis#new', as: 'new_emoji'
-  post 'emojis/create' => 'emojis#create', as: 'create_emoji'
-  get 'emojis/:aid' => 'emojis#show', as: 'emoji'
-  get 'emojis/:aid/edit' => 'emojis#edit', as: 'edit_emoji'
-  patch 'emojis/:aid/update' => 'emojis#update', as: 'update_emoji'
-  delete 'emojis/:aid/destroy' => 'emojis#destroy', as: 'destroy_emoji'
+  resources :emojis, param: :aid
 
   # tag
   get 'tags' => 'tags#index'

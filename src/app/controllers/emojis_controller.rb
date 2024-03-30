@@ -2,7 +2,9 @@ class EmojisController < ApplicationController
   before_action :logged_in_account
   #before_action :set_item, only: %i[ show edit update destroy ]
   def index
-    @emojis = Emoji.all
+    @emojis = Emoji.where(
+      deleted: false
+    )
   end
   def show
   end
@@ -11,12 +13,13 @@ class EmojisController < ApplicationController
   end
   def create
     @emoji = Emoji.new(emoji_params)
-    @emoji.account_id = @current_account.id
-    @emoji.emoji_id = generate_aid(Emoji, 'emoji_id')
+    @emoji.account = @current_account
+    @emoji.aid = generate_aid(Emoji, 'aid')
     if @emoji.save
-      flash[:success] = '作成しました。'
+      flash[:success] = '作成しました'
       redirect_to emojis_path
     else
+      flash.now[:danger] = '作成できませんでした'
       render :new
     end
   end
@@ -29,10 +32,9 @@ class EmojisController < ApplicationController
   private
   def emoji_params
     params.require(:emoji).permit(
-      :emoji_type,
-      :content,
-      :description,
-      :category
+      :name,
+      :name_id,
+      :description
     )
   end
 end

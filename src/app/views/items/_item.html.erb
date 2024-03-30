@@ -54,7 +54,7 @@
   <div class="item-reactions">
     <% item.emojis.each do |emoji| %>
       <div class="item-reaction">
-        <%= button_to emoji.content, react_path(item.aid, emoji.emoji_id) %>
+        <%= button_to emoji.name, react_path(item.aid, emoji.aid) %>
         <span><%= item.reactions.where(emoji_id: emoji.id).count %></span>
       </div>
     <% end %>
@@ -77,7 +77,7 @@
       <summary>リアクション<%= item.reactions.count %></summary>
       <div class="item-details-container">
         <% Emoji.all.each do |emoji| %>
-          <%= button_to emoji.content, react_path(item.aid, emoji.emoji_id), method: :post %>
+          <%= button_to emoji.name, react_path(item.aid, emoji.aid), method: :post %>
         <% end %>
       </div>
     </details>

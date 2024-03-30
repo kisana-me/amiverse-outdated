@@ -2,8 +2,14 @@ class ReactionsController < ApplicationController
   before_action :logged_in_account
   #before_action :set_item, only: %i[ show edit update destroy ]
   def react
-    emoji = Emoji.find_by(emoji_id: params[:emoji_id])
-    item = Item.find_by(item_id: params[:item_id])
+    emoji = Emoji.find_by(
+      aid: params[:emoji_aid],
+      deleted: false
+    )
+    item = Item.find_by(
+      aid: params[:item_aid],
+      deleted: false
+    )
     this_react_params = {
       account_id: @current_account.id,
       emoji_id: emoji.id,
@@ -20,7 +26,7 @@ class ReactionsController < ApplicationController
         flash[:danger] = '失敗しました'
       end
     end
-    redirect_to item_path(item.item_id)
+    redirect_to item_path(item.aid)
   end
   private
   def reaction_params

@@ -275,12 +275,16 @@ ActiveRecord::Schema[7.0].define(version: 993) do
   create_table "emojis", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
-    t.string "kind", default: "", null: false
-    t.string "content", default: "", null: false
-    t.string "description", default: "", null: false
+    t.string "name", default: "", null: false
+    t.string "name_id", default: "", null: false
+    t.text "description", default: "", null: false
+    t.boolean "custom", default: false, null: false
+    t.boolean "official", default: false, null: false
     t.boolean "sensitive", default: false, null: false
     t.boolean "local", default: false, null: false
-    t.string "icon_id", default: "", null: false
+    t.boolean "scope", default: false, null: false
+    t.boolean "limit", default: false, null: false
+    t.boolean "private", default: false, null: false
     t.boolean "deleted", default: false, null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
@@ -598,6 +602,17 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.datetime "updated_at", null: false
     t.index ["replied"], name: "fk_rails_7f82de0917"
     t.index ["replier"], name: "fk_rails_2001645403"
+  end
+
+  create_table "roles", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "aid", null: false
+    t.string "name", default: "", null: false
+    t.text "description", default: "", null: false
+    t.string "icon_id", default: "", null: false
+    t.bigint "counter", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["aid"], name: "index_roles_on_aid", unique: true
   end
 
   create_table "server_Logs", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|

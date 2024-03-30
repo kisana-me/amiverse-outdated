@@ -25,7 +25,7 @@ Rails.application.configure do
   ENV["RAILS_SECURE_COOKIES"].present? ? secure_cookies = true : secure_cookies = false
   config.session_store :redis_session_store,
   domain: :all,
-  expires: 1.year.from_now,
+  expires: 1.day.from_now,
   secure: secure_cookies,
   httponly: true,
   servers: %w(redis://redis:6379/0),

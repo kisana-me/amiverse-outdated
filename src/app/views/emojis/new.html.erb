@@ -1,0 +1,14 @@
+<% provide(:layout_type, 'header_text') %>
+<% provide(:title, '絵文字作成') %>
+<% provide(:header_text, '絵文字作成') %>
+
+<div>
+  <%= form_with model: @emoji, url: emojis_path do |form| %>
+    <%= render "shared/error_messages", instead: @emoji %>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_area :description %>
+    <%= form.submit %>
+  <% end %>
+</div>
