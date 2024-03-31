@@ -1,6 +1,5 @@
 class SessionsController < ApplicationController
   before_action :logged_in_account, only: %i[ index destroy ]
-  before_action :logged_out_account, only: %i[ new create ]
   def index
     @sessions = Session.where(account_id: @current_account.id, deleted: false)
   end

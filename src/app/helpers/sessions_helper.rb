@@ -1,34 +1,77 @@
 module SessionsHelper
   def log_in(account)
-    uuid = SecureRandom.uuid
-    token = SecureRandom.urlsafe_base64
-    Session.create(
-      account_id: account.id,
-      uuid: uuid,
-      session_digest: digest(token)
+    new_session = true
+    Rails.logger.info('=====きた=====')
+    # db sessionを用意
+    if cookies.signed[:amiverse_uid].present? &&
+    cookies.signed[:amiverse_rtk].present? &&
+    doubt_session = Session.find_by(
+      uuid: cookies.signed[:amiverse_uid],
+      deleted: false
     )
-    secure_cookies = ENV["RAILS_SECURE_COOKIES"].present?
-    cookies.permanent.signed[:amiverse_aid] = {
-      value: account.aid,
-      domain: :all,
-      expires: 1.year.from_now,
-      secure: secure_cookies,
-      httponly: true
-    }
-    cookies.permanent.signed[:amiverse_uid] = {
-      value: uuid,
-      domain: :all,
-      expires: 1.year.from_now,
-      secure: secure_cookies,
-      httponly: true
-    }
-    cookies.permanent.signed[:amiverse_rtk] = {
-      value: token,
-      domain: :all,
-      expires: 1.year.from_now,
-      secure: secure_cookies,
-      httponly: true
-    }
+    Rails.logger.info('=====検証=====')
+      if BCrypt::Password.new(doubt_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
+        db_session = doubt_session
+        new_session = false
+      end
+    end
+    Rails.logger.info('=====１=====')
+    if new_session
+      Rails.logger.info('=====新しく=====')
+      uuid = SecureRandom.uuid
+      token = SecureRandom.urlsafe_base64
+      db_session = Session.create!(
+        uuid: uuid,
+        session_digest: digest(token)
+      )
+      AccountSession.create(
+        account: account,
+        session: db_session,
+        ip_address: '',
+        user_agent: request.user_agent,
+        current: true
+      )
+    else
+      Rails.logger.info('=====古い=====')
+      AccountSession.where(
+        session: db_session
+      ).update_all(current: false)
+      if current_account_session = AccountSession.find_by(
+        account: account,
+        session: db_session
+      )
+        unless current_account_session.current?
+          current_account_session.update(current: true)
+        end
+      else
+        AccountSession.create(
+          account: account,
+          session: db_session,
+          ip_address: '',
+          user_agent: request.user_agent,
+          current: true
+        )
+      end
+    end
+    Rails.logger.info('=====くっき=====')
+    # cookie更新
+    if new_session
+      secure_cookies = ENV["RAILS_SECURE_COOKIES"].present?
+      cookies.permanent.signed[:amiverse_uid] = {
+        value: uuid,
+        domain: :all,
+        expires: 1.month.from_now,
+        secure: secure_cookies,
+        httponly: true
+      }
+      cookies.permanent.signed[:amiverse_rtk] = {
+        value: token,
+        domain: :all,
+        expires: 1.month.from_now,
+        secure: secure_cookies,
+        httponly: true
+      }
+    end
     session[:logged_in] = true
     session[:current_account] = account
   end
@@ -36,26 +79,27 @@ module SessionsHelper
     !@current_account.nil?
   end
   def current_account
-    if session[:logged_in].present?
-      unless session[:logged_in]
-        return 
-      end
+    if session[:logged_in].nil? || !session[:logged_in]
+      return
     end
     if session[:current_account].present?
       return session[:current_account]
     else
-      return unless cookies.signed[:amiverse_aid].present?
       return unless cookies.signed[:amiverse_uid].present?
-      account = Account.find_by(
-        aid: cookies.signed[:amiverse_aid],
-        deleted: false
-      )
+      return unless cookies.signed[:amiverse_rtk].present?
       db_session = Session.find_by(
-        account_id: account.id,
         uuid: cookies.signed[:amiverse_uid],
         deleted: false
       )
       if BCrypt::Password.new(db_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
+        sessions = AccountSession.where(
+          session: db_session
+        )
+        account_session = sessions.order(current: :desc).first
+        account = Account.find_by(
+          id: account_session.account_id,
+          deleted: false
+        )
         session[:current_account] = account
         return account
       end

@@ -6,6 +6,16 @@
 <% content_for :settings_content do %>
   <div>ログイン履歴</div>
   <div>セッション一覧</div>
+    <div>
+      ログイン中のアカウント:
+      <% @logged_in_accounts.each do | account | %>
+        <br />
+        - なまえ：<%= account.name %>
+        <br />
+        - ID：<%= account.name_id %>
+        <br />
+      <% end %>
+    </div>  
   <%# render 'sessions/session', sessions: @sessions %>
   <div>二段階認証</div>
   <div>連携サービス</div>

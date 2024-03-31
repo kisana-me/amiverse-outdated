@@ -1,5 +1,4 @@
 class SignupController < ApplicationController
-  before_action :logged_out_account, only: %i[check new create create_admin]
   def index
   end
   def check # 招待コードの入力

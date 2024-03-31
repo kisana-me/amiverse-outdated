@@ -3,6 +3,7 @@
 <% provide(:header_text, 'ログイン') %>
 
 <div class="sessions-new-container">
+
   <%= form_with(scope: :session, url: create_session_path, data: { turbo: false }) do |f| %>
     <div class="text-field-sizing">
       <div class="text-field-group">
@@ -16,6 +17,10 @@
     </div>
     <%= f.submit "ログイン" %>
   <% end %>
+  <% if logged_in? %>
+    追加のアカウントを作成しますか？
+  <% else %>
   アカウントをお持ちでないですか？
+  <% end %>
   <%= link_to "サインアップ", signup_path %>
 </div>

@@ -1,5 +1,5 @@
 class Account < ApplicationRecord
-  has_many :sessions
+  has_many :account_sessions
   has_many :invitations
   has_many :items
   has_many :images

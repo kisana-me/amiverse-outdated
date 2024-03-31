@@ -29,9 +29,9 @@ Rails.application.configure do
   secure: secure_cookies,
   httponly: true,
   servers: %w(redis://redis:6379/0),
-  key: 'ams',
+  key: 'amiverse_ses',
   redis: {
-    key_prefix: "session:"
+    key_prefix: "sessions:"
   }
 
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]

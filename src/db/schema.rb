@@ -22,6 +22,21 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.check_constraint "json_valid(`content`)", name: "content"
   end
 
+  create_table "account_sessions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "session_id", null: false
+    t.string "name", default: "", null: false
+    t.string "ip_address", default: "", null: false
+    t.string "user_agent", default: "", null: false
+    t.boolean "current", default: false, null: false
+    t.boolean "deleted", default: false, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_sessions_on_account_id"
+    t.index ["session_id"], name: "index_account_sessions_on_session_id"
+  end
+
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
@@ -643,17 +658,12 @@ ActiveRecord::Schema[7.0].define(version: 993) do
   end
 
   create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "account_id", null: false
-    t.string "name", default: "", null: false
-    t.string "ip_address", default: "", null: false
-    t.string "user_agent", default: "", null: false
     t.string "uuid", null: false
     t.string "session_digest", null: false
     t.boolean "deleted", default: false, null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_sessions_on_account_id"
     t.index ["uuid"], name: "index_sessions_on_uuid", unique: true
   end
 
@@ -780,6 +790,8 @@ ActiveRecord::Schema[7.0].define(version: 993) do
 
   add_foreign_key "Polls", "accounts"
   add_foreign_key "Polls", "surveys"
+  add_foreign_key "account_sessions", "accounts"
+  add_foreign_key "account_sessions", "sessions"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "applications", "accounts"
@@ -831,7 +843,6 @@ ActiveRecord::Schema[7.0].define(version: 993) do
   add_foreign_key "replies", "items", column: "replied"
   add_foreign_key "replies", "items", column: "replier"
   add_foreign_key "server_images", "accounts"
-  add_foreign_key "sessions", "accounts"
   add_foreign_key "subscribers", "accounts"
   add_foreign_key "subscribers", "subscriptions"
   add_foreign_key "subscriptions", "accounts"
