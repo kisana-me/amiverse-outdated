@@ -7,13 +7,21 @@
   <div>ログイン履歴</div>
   <div>セッション一覧</div>
     <div>
-      ログイン中のアカウント:
-      <% @logged_in_accounts.each do | account | %>
-        <br />
-        - なまえ：<%= account.name %>
-        <br />
-        - ID：<%= account.name_id %>
-        <br />
+      <%= form_with(url: change_account_path, data: { turbo: false }) do |f| %>
+        <div class="">
+          <div class="">
+            ログイン中のアカウント:
+            <% @logged_in_accounts.each do | account | %>
+              <br />
+              - なまえ：<%= account.name %>
+              <br />
+              - ID：<%= account.name_id %>
+              <br />
+              <%= f.radio_button :aid, account.aid %>
+            <% end %>
+          </div>
+        </div>
+        <%= f.submit "変更" %>
       <% end %>
     </div>  
   <%# render 'sessions/session', sessions: @sessions %>

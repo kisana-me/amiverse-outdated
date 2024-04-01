@@ -1,11 +1,18 @@
 module ImageTreatment
   def treat_image(aid, type, model = Image, attachment = 'image')
-    instance = model.where('BINARY aid = ?', aid).first
+    instance = model.find_by(aid: aid)
     image = instance.send(attachment.to_s)
     image.analyze if image.attached?
     image.variant(custom_optimization(type), type).processed
   end
-  def delete_treated_image(aid, type)
+  def delete_treated_image(image: '', model: 'images', type: 'images', aid: '', format: '.webp')
+    del_key = "variants/#{model}/#{type}/#{aid + format}"
+    #image.service.delete_prefixed(del_key)
+    blob_id = ActiveStorage::Blob.find_by(key: del_key).id
+    ActiveStorage::Attachment.find_by(blob_id: blob_id).delete
+    #ActiveStorage::VariantRecord.find_by(blob_id: blob_id).delete
+    ActiveStorage::Blob.find_by(key: del_key).delete
+    ActiveStorage::Blob.find_by(key: del_key).destroy
   end
   private
   def custom_optimization(type)

@@ -3,12 +3,38 @@
 <% provide(:header_text, '絵文字作成') %>
 
 <div>
-  <%= form_with model: @emoji, url: emojis_path do |form| %>
+  <%= form_with model: @emoji, url: emojis_path do |f| %>
     <%= render "shared/error_messages", instead: @emoji %>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_area :description %>
-    <%= form.submit %>
+    <%= f.label :name, 'name' %>
+    <%= f.text_field :name %>
+    <br />
+    <%= f.label :name_id, 'name_id' %>
+    <%= f.text_field :name_id %>
+    <br />
+    <%= f.label :description, 'description' %>
+    <%= f.text_area :description %>
+    <br />
+    <%= f.label :image, 'image' %>
+    <%= f.file_field :image %>
+    <br />
+    <%= f.label :custom, 'custom' %>
+    <%= f.check_box :custom %>
+    <br />
+    <%= f.label :sensitive, 'sensitive' %>
+    <%= f.check_box :sensitive %>
+    <br />
+    <%= f.label :local, 'local' %>
+    <%= f.check_box :local %>
+    <br />
+    <%= f.label :scope, 'scope' %>
+    <%= f.check_box :scope %>
+    <br />
+    <%= f.label :limit, 'limit' %>
+    <%= f.check_box :limit %>
+    <br />
+    <%= f.label :private, 'private' %>
+    <%= f.check_box :private %>
+    <br />
+    <%= f.submit %>
   <% end %>
 </div>

@@ -5,6 +5,11 @@ class CreateTopics < ActiveRecord::Migration[7.0]
       t.string :name, null: false, default: ''
       t.text :description, null: false, default: ''
       t.bigint :counter, null: false, default: 0
+      t.string :kind, null: false, default: ''
+      t.json :meta, null: false, default: []
+      t.json :cache, null: false, default: []
+      t.boolean :deleted, null: false, default: false
+      t.datetime :deleted_at
       t.timestamps
     end
     add_index :topics, [:aid], unique: true

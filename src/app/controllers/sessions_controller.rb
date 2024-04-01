@@ -18,8 +18,18 @@ class SessionsController < ApplicationController
       flash[:success] = t('.success')
       redirect_to root_url
     else
-      flash.now[:danger] = '間違っています。'
+      flash.now[:danger] = '間違っています'
       render 'new'
+    end
+  end
+  def change_account
+    account = Account.find_by(aid: params[:aid])
+    if change_account_session(account)
+      flash[:success] = '変更しました'
+      redirect_to root_url
+    else
+      flash[:danger] = '変更できませんでした'
+      redirect_to root_url
     end
   end
   def edit
@@ -27,8 +37,16 @@ class SessionsController < ApplicationController
   def update
   end
   def logout
-    log_out if logged_in?
-    flash[:success] = "ログアウトしました。"
+    if logged_in?
+      name = @current_account
+      log_out(@current_account)
+    end
+    flash[:success] = "#{name}からログアウトしました"
+    redirect_to root_url
+  end
+  def all_logout
+    all_log_out if logged_in?
+    flash[:success] = "すべてからログアウトしました"
     redirect_to root_url
   end
   def delete
