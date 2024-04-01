@@ -110,6 +110,7 @@ Rails.application.routes.draw do
   # session
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create', as: 'create_session'
+  post 'change-account' => 'sessions#change_account', as: 'change_account'
   delete 'logout' => 'sessions#logout'
 
   # setting

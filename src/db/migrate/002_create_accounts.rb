@@ -5,6 +5,7 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       t.string :name, null: false, default: ''
       t.string :name_id, null: false
       t.string :activitypub_id, null: false, default: ''
+      t.string :atprotocol_id, null: false, default: ''
       t.string :icon_id, null: false, default: ''
       t.string :banner_id, null: false, default: ''
       t.bigint :followers_counter, null: false, default: 0

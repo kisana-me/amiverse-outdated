@@ -1,34 +1,7 @@
-<% provide(:title, '招待たち') %>
-<h1>招待たち</h1>
+<% provide(:layout_type, 'header_text') %>
+<% provide(:header_text, '招待') %>
+<% provide(:title, '招待') %>
+
 <div style="overflow-y:scroll;">
-  <table>
-    <tr>
-      <th>ID</th>
-      <th>詳細</th>
-      <th>account_id</th>
-      <th>name</th>
-      <th>invitation_code</th>
-      <th>uses</th>
-      <th>max_uses</th>
-      <th>expires_at</th>
-      <th>deleted</th>
-      <th>created_at</th>
-      <th>updated_at</th>
-    </tr>
-    <% @invitations.each do |i| %>
-      <tr>
-        <td><%= i.id %></td>
-        <td><%= link_to '詳細', admin_invitation_path(i.invitation_code) %></td>
-        <td><%= i.account_id %></td>
-        <td><%= i.name %></td>
-        <td><%= i.invitation_code %></td>
-        <td><%= i.uses %></td>
-        <td><%= i.max_uses %></td>
-        <td><%= i.expires_at %></td>
-        <td><%= i.deleted %></td>
-        <td><%= i.created_at %></td>
-        <td><%= i.updated_at %></td>
-      </tr>
-    <% end %>
-  </table>
+  <%= render 'admin/shared/all_table', instead: @invitations %>
 </div>
