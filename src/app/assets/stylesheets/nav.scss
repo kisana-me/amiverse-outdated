@@ -1,7 +1,11 @@
+/* 共通 */
+nav a {
+  color: white;
+}
 /* FORM-2 */
 nav {
-  width: 30px;
-  height: 100vh;
+  width: 70px;
+  height: 100svh;
   position: sticky;
   padding: 30px 5px;
   box-sizing: border-box;
@@ -11,38 +15,54 @@ nav {
   flex-direction: column;
   z-index: 110;
 }
+/* ボタン三種 */
 .nav-logo {
-  margin-bottom: 30px;
+  margin-bottom: 60px;
 }
 .nav-ul {
   width: 100%;
+  height: 100%;
   margin: 0px;
   padding: 0px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  height: 100%;
-  list-style: none;
 }
+.nav-menu {
+}
+/* 5大ボタン */
 .nav-li {
-  height: 30px;
-  display: flex;
-  align-items: center;
-}
-.nav-list-container {
+  width: 60px;
+  height: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+}
+.nav-list-container {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.nav-list-container:hover {
+  background: #fff4;
 }
 .nav-list-icon {
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .nav-list-image-icon {
-  width: 20px;
+  width: 36px;
   aspect-ratio: 1/1;
   object-fit: cover;
   object-position: top;
-  border-radius: 10px;
+  border-radius: 18px;
   display: block;
 }
 .nav-list-info {
@@ -58,7 +78,7 @@ nav {
     top: auto;
     bottom: 0px;
     width: 100%;
-    height: 30px;
+    height: 46px;
     padding: 0px;
     backdrop-filter: blur(3px);
     background: var(--blur-color);
@@ -69,19 +89,40 @@ nav {
   .nav-ul {
     flex-direction: row;
     justify-content: space-around;
+    align-items: center
   }
   .nav-menu {
     display: none;
   }
-}
-@media (min-width: 800px) {
-  /* FORM-3 */
-  nav {
-    width: 110px;
+  .nav-li {
+    height: 41px;
+    width: 41px;
   }
   .nav-list-container {
-    display: flex;
+    height: 41px;
+    width: 41px;
+  }
+}
+@media (min-width: 1300px) {
+  /* FORM-3 */
+  nav {
+    width: 200px;
+  }
+  .nav-li {
+    width: 190px;
     flex-direction: row;
+    justify-content: flex-start;
+  }
+  .nav-list-container {
+    height: 100%;
+    width: 170px;
+    padding: 10px;
+    border-radius: 5px;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .nav-list-icon {
+    margin-right: 7px;
   }
   .nav-list-info {
     display: inline-block;
