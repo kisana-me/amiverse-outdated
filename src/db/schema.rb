@@ -22,6 +22,15 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.check_constraint "json_valid(`content`)", name: "content"
   end
 
+  create_table "account_badges", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "badge_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_badges_on_account_id"
+    t.index ["badge_id"], name: "index_account_badges_on_badge_id"
+  end
+
   create_table "account_invitations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "invitation_id", null: false
@@ -29,6 +38,15 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_account_invitations_on_account_id"
     t.index ["invitation_id"], name: "index_account_invitations_on_invitation_id"
+  end
+
+  create_table "account_roles", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_roles_on_account_id"
+    t.index ["role_id"], name: "index_account_roles_on_role_id"
   end
 
   create_table "account_rooms", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -62,7 +80,6 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.boolean "foreigner", default: false, null: false
     t.boolean "activitypub", default: false, null: false
     t.string "activitypub_id", default: "", null: false
-<<<<<<< HEAD
     t.text "public_key", default: "", null: false
     t.text "private_key", default: "", null: false
     t.boolean "atprotocol", default: false, null: false
@@ -79,9 +96,6 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.text "pinned_items", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "languages", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "achievements", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-=======
-    t.string "atprotocol_id", default: "", null: false
->>>>>>> 882686536af9cd4edb855e308ddc59140a502dc0
     t.string "icon_id", default: "", null: false
     t.string "banner_id", default: "", null: false
     t.bigint "followers_counter", default: 0, null: false
@@ -950,17 +964,12 @@ ActiveRecord::Schema[7.0].define(version: 993) do
 
   add_foreign_key "Polls", "accounts"
   add_foreign_key "Polls", "surveys"
-<<<<<<< HEAD
   add_foreign_key "account_badges", "accounts"
   add_foreign_key "account_badges", "badges"
   add_foreign_key "account_invitations", "accounts"
   add_foreign_key "account_invitations", "invitations"
   add_foreign_key "account_roles", "accounts"
   add_foreign_key "account_roles", "roles"
-=======
-  add_foreign_key "account_invitations", "accounts"
-  add_foreign_key "account_invitations", "invitations"
->>>>>>> 882686536af9cd4edb855e308ddc59140a502dc0
   add_foreign_key "account_rooms", "accounts"
   add_foreign_key "account_rooms", "rooms"
   add_foreign_key "account_sessions", "accounts"

@@ -3,7 +3,7 @@
     <div class="nav-li">
       <%= link_to root_path, style: "width: 100%;" do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon">🍭</div>
+          <div class="nav-list-icon"><%= render 'svgs/amiverse' %></div>
           <div class="nav-list-info">APIv0.0.1</div>
         </div>
       <% end %>
@@ -13,7 +13,7 @@
     <div class="nav-li">
       <%= link_to root_path, style: "width: 100%;" do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon">🪐</div>
+          <div class="nav-list-icon"><%= render 'svgs/home' %></div>
           <div class="nav-list-info">Home</div>
         </div>
       <% end %>
@@ -21,7 +21,7 @@
     <div class="nav-li">
       <%= link_to discovery_path, style: "width: 100%;" do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon">🦄</div>
+          <div class="nav-list-icon"><%= render 'svgs/search' %></div>
           <div class="nav-list-info">Discovery</div>
         </div>
       <% end %>
@@ -29,7 +29,7 @@
     <div class="nav-li">
       <%= link_to dashboard_path, style: "width: 100%;" do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon">😀</div>
+          <div class="nav-list-icon"><%= render 'svgs/dashboard' %></div>
           <div class="nav-list-info">Dashboard</div>
         </div>
       <% end %>
@@ -37,7 +37,7 @@
     <div class="nav-li">
       <%= link_to notifications_path, style: "width: 100%;" do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon">🎉</div>
+          <div class="nav-list-icon"><%= render 'svgs/notifications' %></div>
           <div class="nav-list-info">Notification</div>
         </div>
       <% end %>
@@ -45,11 +45,13 @@
     <div class="nav-li">
       <%= link_to messages_path, style: "width: 100%;" do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon">📧</div>
+          <div class="nav-list-icon"><%= render 'svgs/message' %></div>
           <div class="nav-list-info">Messages</div>
         </div>
       <% end %>
     </div>
+  </div>
+  <div class="nav-menu">
     <div class="nav-li">
       <% if @current_account %>
         <%= link_to account_path(@current_account.name_id), style: "width: 100%;" do %>
@@ -65,18 +67,16 @@
       <% else %>
         <%= link_to login_path do %>
           <div class="nav-list-container">
-            <div class="nav-list-icon">💖</div>
+            <div class="nav-list-icon"><%= render 'svgs/login' %></div>
             <div class="nav-list-info">LOGIN</div>
           </div>
         <% end %>
       <% end %>
     </div>
-  </div>
-  <div class="nav-menu">
     <div class="nav-li">
       <%= link_to settings_path, style: "width: 100%;" do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon">⚙️</div>
+          <div class="nav-list-icon"><%= render 'svgs/settings' %></div>
           <div class="nav-list-info">Settings</div>
         </div>
       <% end %>
