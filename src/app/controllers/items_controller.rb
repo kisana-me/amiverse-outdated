@@ -2,6 +2,7 @@ class ItemsController < ApplicationController
   before_action :logged_in_account, only: %i[ index show new create update destroy ]
   before_action :set_item, only: %i[ show edit update destroy ]
   include ActivityPub
+  include Format
 
   def index
     offset_item = 0
@@ -67,6 +68,8 @@ class ItemsController < ApplicationController
       #  to_url: to_url
       #)
       #ActionCable.server.broadcast('items_channel', serialize_item(@item))
+      item_json = item_data(@item)
+      ActionCable.server.broadcast('current_channel', item_json)
     else
       flash[:success] = '失敗しました。'
       render :new

@@ -1,16 +1,25 @@
 /* FORM-2 */
 .tab-container {
-  height: 100vh;
-  z-index: 50;
-  width: 200px;
-  position: sticky;
+  width: 260px;
+  height: 100svh;
   top: 0px;
+  position: sticky;
   flex-shrink: 0;
+  z-index: 50;
+  display: inline-block;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 999.9px) {
   /* FORM-1 */
   .tab-container {
     display: none;
+  }
+}
+
+@media (min-width: 1150px) {
+  /* FORM-3 */
+  .tab-container {
+    width: 340px;
+    display: inline-block;
   }
 }

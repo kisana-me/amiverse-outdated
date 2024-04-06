@@ -6,10 +6,13 @@
   <div class='amiverse-index-box'>
     <%= render "items/form", item: Item.new %>
   </div>
-  <div id="items">
-    <% @items.each do |item| %>
-      <%= render 'items/item', item: item, reactions: @reactions %>
-    <% end %>
+  <div data-controller="current">
+    <button data-action="click->current#speak">speak</button>
+    <div data-current-target="current" id="items">
+      <% @items.each do |item| %>
+        <%= render 'items/item', item: item, reactions: @reactions %>
+      <% end %>
+    </div>
     <%= link_to "次のページ", tl_current_path(page: to_page(params[:page], 'next')) %>
     <%= link_to "前のページ", tl_current_path(page: to_page(params[:page], 'prev')) %>
   </div>
