@@ -7,7 +7,7 @@
     <div class="top-container">
       <div class="banner-container" id="banner-container" >
         <% if !@account.banner_id.blank? %>
-          <%= image_tag image_url(aid: @account.banner_id, type: 'banner'), class: 'account-banner' %>
+          <%= image_tag image_url(aid: @account.banner_id, type: 'banners'), class: 'account-banner' %>
         <% else %>
           <%= image_tag 'banner.webp', class: 'account-banner' %>
         <% end %>
@@ -17,7 +17,7 @@
       <div id="name-before"></div>
       <div class="icon-container">
         <% if !@account.icon_id.blank? %>
-          <%= image_tag image_url(aid: @account.icon_id, type: 'icon',), class: 'account-icon' %>
+          <%= image_tag image_url(aid: @account.icon_id, type: 'icons',), class: 'account-icon' %>
         <% else %>
           <%= image_tag 'icon.webp', class: 'account-icon' %>
         <% end %>
