@@ -1,56 +1,86 @@
+<% if defined? show_replying %>
+  <div class="item-reply">
+    <% if !item.replying.empty? %>
+      <div class="item-reply-from">
+        📩返信先
+      </div>
+      <% item.replying.each do |reply| %>
+        <%= render 'items/item', item: reply %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
 <div class="item">
-  <div class="item-details">
-    <%= link_to account_path(item.account.name_id) do %>
-      <div class="item-whose">
-        <% if !item.account.icon_id.blank? %>
-          <%= image_tag image_url(aid: item.account.icon_id, type: 'icon'), class: 'item_account_image' %>
-        <% else %>
-          <%= image_tag 'icon.webp', class: 'item_account_image' %>
-        <% end %>
-        <div class="item-account">
-          <div class="item-account-profile">
-            <div class="item-account-name">
+  <div class="item-owners">
+    <div class="item-owners-account">
+      <%= link_to account_path(item.account.name_id) do %>
+        <div class="ioa-link">
+          <% if !item.account.icon_id.blank? %>
+            <%= image_tag image_url(aid: item.account.icon_id, type: 'icons'), class: 'ioa-icon' %>
+          <% else %>
+            <%= image_tag 'icon.webp', class: 'ioa-icon' %>
+          <% end %>
+          <div class="ioa-profile">
+            <div class="ioa-name">
               <%= item.account.name %>
             </div>
-            <div class="item-account-name-id">
+            <div class="ioa-nameid">
               @<%= item.account.name_id %>
             </div>
           </div>
         </div>
+      <% end %>
+      <div class="ioa-badges">
+        <div>🍭</div>
+        <div>💕</div>
+        <div>🫧</div>
+        <div>🌈</div>
+        <div>💮</div>
+        <div>🔰</div>
       </div>
-    <% end %>
-    <div class="item-r">
-      <div class="item-day">
-        <%= item.created_at.strftime("%Y年 %m月 %d日") %>
-        <br />
-        <%= item.created_at.strftime("%k時 %M分 %S秒") %>
+      <div class="ioa-others">
+        <div class="ioa-button-wrap">
+          <div class="ioa-button">フォローする</div>
+        </div>
       </div>
-      <div class="item-menu">・・・</div>
     </div>
   </div>
-  <%= link_to item_path(item.aid), class: 'item-content-link' do %>
-    <div class="item-content">
-      <%= item.content %>
+  <div class="item-details">
+    <div class="item-details-kind">
+      <%# item.kind %>
     </div>
-  <% end %>
-    <div class="item-media">
-      <%# item.images.each do |image| %>
-        <%# image_tag image_url(image.account.aid, 'images', image.aid), class: 'item-image' %>
-      <%# end %>
-      <% if false %>
-        <video controls class='video-view' id='video-<%= video.video_id %>'></video>
-        <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
-        <script>
-          var video = document.getElementById('video-<%= video.video_id %>');
-          var videoSrc = 'http://localhost:9000/development/variants/accounts/00000000000000/videos/<%= video.video_id %>/output.m3u8';
-          if (Hls.isSupported()) {
-            var hls = new Hls();
-            hls.loadSource(videoSrc);
-            hls.attachMedia(video);
-          }
-        </script>
-      <% end %>
+    <div class="item-details-kind">
+      <%# item.kind %>
     </div>
+    <div class="item-details-id">
+      <%= link_to item.aid, item_path(item.aid) %>
+    </div>
+    <div class="item-details-date">
+      <%= item.created_at.strftime("%Y年 %m月 %d日 %k時 %M分 %S秒") %>
+    </div>
+  </div>
+  <div class="item-content">
+    <%= item.content %>
+  </div>
+  <div class="item-media">
+    <%# item.images.each do |image| %>
+      <%# image_tag image_url(image.account.aid, 'images', image.aid), class: 'item-image' %>
+    <%# end %>
+    <% if false %>
+      <video controls class='video-view' id='video-<%= video.video_id %>'></video>
+      <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+      <script>
+        var video = document.getElementById('video-<%= video.video_id %>');
+        var videoSrc = 'http://localhost:9000/development/variants/accounts/00000000000000/videos/<%= video.video_id %>/output.m3u8';
+        if (Hls.isSupported()) {
+          var hls = new Hls();
+          hls.loadSource(videoSrc);
+          hls.attachMedia(video);
+        }
+      </script>
+    <% end %>
+  </div>
   <div class="item-reactions">
     <% item.emojis.each do |emoji| %>
       <div class="item-reaction">
@@ -66,56 +96,84 @@
     <% end %>
   </div>
   <div class="item-panel">
-    <div style="display: inline-block;">返信先<%= item.replying.count %></div>
-    <details class="item-details">
-      <summary>返信<%= item.repliers.count %></summary>
-      <div class="item-details-container">
-        <%= render 'items/form', initial_reply_aid: item.aid %>
-      </div>
-    </details>
-    <details>
-      <summary>引用<%= item.quoters.count %></summary>
-      <div class="item-details-container">
-        <%= render 'items/form', initial_quote_aid: item.aid %>
-      </div>
-    </details>
-    <details>
-      <summary>リアクション<%= item.reactions.count %></summary>
-      <div class="item-details-container">
-        <% Emoji.all.each do |emoji| %>
-          <%= button_to react_path(item.aid, emoji.aid), method: :post do %>
-            <% if emoji.custom %>
-              <%= image_tag image_url(model: 'emojis', type: 'tb-emojis', aid: emoji.aid), class: '' %>
-            <% else %>
-              <%= emoji.name %>
+    <div class="item-tab">
+      <input id="tab_replying" type="radio" name="tab_menu">
+      <label class="tab_menu" for="tab_replying">返信先<%= item.replying.count %></label>
+      <input id="tab_repliers" type="radio" name="tab_menu">
+      <label class="tab_menu" for="tab_repliers">返信<%= item.repliers.count %></label>
+      <input id="tab_quoters" type="radio" name="tab_menu">
+      <label class="tab_menu" for="tab_quoters">引用<%= item.quoters.count %></label>
+      <input id="tab_reactions" type="radio" name="tab_menu">
+      <label class="tab_menu" for="tab_reactions">リアクション<%= item.reactions.count %></label>
+      <input id="tab_share" type="radio" name="tab_menu">
+      <label class="tab_menu" for="tab_share">共有</label>
+      <input id="tab_save" type="radio" name="tab_menu">
+      <label class="tab_menu" for="tab_save">保存</label>
+      <input id="tab_others" type="radio" name="tab_menu">
+      <label class="tab_menu" for="tab_others">その他</label>
+      <details>
+        <summary>詳しく</summary>
+        <div id="tab_replying_content" class="tab_content">
+          返信先の表示
+          <% if !item.replying.empty? %>
+            <div class="item-reply-from">
+              📩返信先
+            </div>
+            <% item.replying.each do |reply| %>
+              <%= reply.aid %>
             <% end %>
-          <% end%>
-        <% end %>
-      </div>
-    </details>
-    <details>
-      <summary>共有</summary>
-      <div class="item-details-container">
-        https://amiverse.net/items/<%= item.aid %>
-      </div>
-    </details>
-    <details>
-      <summary>保存</summary>
-      <div class="item-details-container">
-        ダウンロード・ブックマーク
-      </div>
-    </details>
-  </div>
-  <% if defined? show_reply_from %>
-    <div class="item-reply">
-      <% if !item.repliers.empty? %>
-        <div class="item-reply-from">
-          📩返信
+          <% else %>
+            返信先はありません
+          <% end %>
         </div>
-        <% item.repliers.each do |reply| %>
-          <%= render 'items/item', item: reply %>
-        <% end %>
-      <% end %>
+        <div id="tab_repliers_content" class="tab_content">
+          返信する
+          <%= render 'items/form', initial_replied: item.aid %>
+        </div>
+        <div id="tab_quoters_content" class="tab_content">
+          引用する
+          <%= render 'items/form', initial_quoted: item.aid %>
+        </div>
+        <div id="tab_reactions_content" class="tab_content">
+          リアクションする
+          <% Emoji.all.each do |emoji| %>
+            <%= button_to react_path(item.aid, emoji.aid), method: :post do %>
+              <% if emoji.custom %>
+                <%= image_tag image_url(model: 'emojis', type: 'tb-emojis', aid: emoji.aid), class: '' %>
+              <% else %>
+                <%= emoji.name %>
+              <% end %>
+            <% end%>
+          <% end %>
+        </div>
+        <div id="tab_share_content" class="tab_content">
+          共有する
+          https://amiverse.net/items/<%= item.aid %>
+        </div>
+        <div id="tab_save_content" class="tab_content">
+          保存する
+          ダウンロード・ブックマーク
+        </div>
+        <div id="tab_others_content" class="tab_content">
+          その他
+          アナリティクス
+          埋め込む
+          報告
+        </div>
+      </details>
     </div>
-  <% end %>
+  </div>
 </div>
+
+<% if defined? show_repliers %>
+  <div class="item-reply">
+    <% if !item.repliers.empty? %>
+      <div class="item-reply-from">
+        📩返信
+      </div>
+      <% item.repliers.each do |reply| %>
+        <%= render 'items/item', item: reply %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

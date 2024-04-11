@@ -6,9 +6,8 @@
   <div class='amiverse-index-box'>
     <%= render "items/form", item: Item.new %>
   </div>
-  <div data-controller="current">
-    <button data-action="click->current#speak">speak</button>
-    <div data-current-target="current" id="items">
+  <div>
+    <div id="items">
       <% @items.each do |item| %>
         <%= render 'items/item', item: item, reactions: @reactions %>
       <% end %>

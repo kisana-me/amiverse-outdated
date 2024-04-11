@@ -6,18 +6,10 @@
   <% if @current_account %>
     <% if @current_account.administrator? %>
       <div class='amiverse-index-box'>
-        <div data-controller="current">
-          <button data-action="click->current#speak">speak</button>
-          <div data-current-target="current">
-
-          </div>
-        </div>
         <div data-controller="popup">
           <button data-action="click->popup#toggle">Open Pop-up</button>
-          <button data-action="click->popup#speak">speak</button>
-          <div data-popup-target="popup" class="popup">
-            <div class="popup-content">
-              <span data-action="click->popup#close" class="close">&times;</span>
+          <div data-popup-target="popup">
+            <div>
               <p>This is a pop-up!</p>
             </div>
           </div>

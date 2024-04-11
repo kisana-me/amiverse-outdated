@@ -47,11 +47,11 @@ class ItemsController < ApplicationController
           end
         end
       end
-      if reply_to = Item.find_by(aid: params[:item][:reply_aid])
-        Reply.create(replier: @item, replied: reply_to)
+      if replied = Item.find_by(aid: params[:item][:replied])
+        Reply.create(replier: @item, replied: replied)
       end
-      if quote_to = Item.find_by(aid: params[:item][:quote_aid])
-        Quote.create(quoter: @item, quoted: quote_to)
+      if quoted = Item.find_by(aid: params[:item][:quoted])
+        Quote.create(quoter: @item, quoted: quoted)
       end
       flash[:success] = '投稿しました。'
       redirect_to item_url(@item.aid)

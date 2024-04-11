@@ -1,17 +1,26 @@
+
+/* item */
+
 .item {
   padding: 10px 5px;
   border-bottom: 1px var(--border-color) solid;
-  //display: flex;
 }
-.item-details {
+
+/* item-owners */
+
+.item-owners {
+}
+/* item-owners-account -> ioa */
+.item-owners-account {
   display: flex;
-  justify-content: space-between;
+  height: 56px;
 }
-.item-whose {
+/* ioa-link */
+.ioa-link {
   display: flex;
   padding: 4px;
 }
-.item_account_image{
+.ioa-icon {
   border-radius: 24px;
   height: 48px;
   aspect-ratio: 1/1;
@@ -20,44 +29,82 @@
   object-position: top center;
   background: linear-gradient(90deg,#747eee,#d453cc 50%,#fe5597);
 }
-.item-account {
-  margin-left: 8px;
-}
-.item-account-profile {
+.ioa-profile {
+  margin-left: 12px;
   display: flex;
   flex-direction: column;
 }
-.item-account-name {
+.ioa-name {
   font-size: 24px;
   line-height: 30px;
+  overflow: hidden;
+  white-space: nowrap; /* テキストを折り返さずに１行に表示 */
+  text-overflow: ellipsis; /* 切り捨てられたテキストを省略記号で表示 */
 }
-.item-account-name-id {
+.ioa-nameid {
   line-height: 18px;
   font-size: 16px;
 }
-.item-r {
+/* ioa-badges */
+.ioa-badges {
+  padding: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+  overflow-y: auto;
+  line-height: 25px;
+}
+.ioa-badges div {
+  display: inline-block;
+}
+/* ioa-others */
+.ioa-others {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+}
+.ioa-button-wrap {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
-.item-day {
-  line-height: 18px;
-  font-size: 14px;
+.ioa-button {
+  width: 96px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background-color: #c2c7fca4;
 }
-.item-content-link {
-  display: block;
+
+/* item-details */
+
+.item-details {
+  display: flex;
 }
+.item-details-date {
+  margin-left: auto;
+  font-size: 10px;
+}
+
+/* item-content */
+
 .item-content {
   color: var(--font-color);
   min-height: 40px;
   padding: 5px;
   overflow-wrap: break-word;
 }
+
+/* item-media */
+
 .item-media {
   padding: 5px;
 }
 .item-image {
   width: 100%;
 }
+
+/* item-reactions */
+
 .item-reactions {
   display: flex;
   padding: 4px;
@@ -67,18 +114,30 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+/* item-panel */
+
 .item-panel {
   padding: 4px;
 }
-.item-panel > details {
-  display: inline-block;
+input[name="tab_menu"] {
+  display: none;
 }
-.item-details-container{
-  position: absolute;
-  background: #59a059;
-  padding: 10px;
-  border-radius: 5px;
+.tab_content {
+  display: none;
 }
+#tab_replying:checked ~ details #tab_replying_content,
+#tab_repliers:checked ~ details #tab_repliers_content,
+#tab_quoters:checked ~ details #tab_quoters_content,
+#tab_reactions:checked ~ details #tab_reactions_content,
+#tab_share:checked ~ details #tab_share_content,
+#tab_save:checked ~ details #tab_save_content,
+#tab_others:checked ~ details #tab_others_content {
+    display: block;
+}
+
+/* other */
+
 .item-reply {
   margin-left: 10px;
   border-left: #d453cc 2px solid;
