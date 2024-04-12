@@ -97,23 +97,23 @@
   </div>
   <div class="item-panel">
     <div class="item-tab">
-      <input id="tab_replying" type="radio" name="tab_menu">
-      <label class="tab_menu" for="tab_replying">返信先<%= item.replying.count %></label>
-      <input id="tab_repliers" type="radio" name="tab_menu">
-      <label class="tab_menu" for="tab_repliers">返信<%= item.repliers.count %></label>
-      <input id="tab_quoters" type="radio" name="tab_menu">
-      <label class="tab_menu" for="tab_quoters">引用<%= item.quoters.count %></label>
-      <input id="tab_reactions" type="radio" name="tab_menu">
-      <label class="tab_menu" for="tab_reactions">リアクション<%= item.reactions.count %></label>
-      <input id="tab_share" type="radio" name="tab_menu">
-      <label class="tab_menu" for="tab_share">共有</label>
-      <input id="tab_save" type="radio" name="tab_menu">
-      <label class="tab_menu" for="tab_save">保存</label>
-      <input id="tab_others" type="radio" name="tab_menu">
-      <label class="tab_menu" for="tab_others">その他</label>
+      <input id="<%= item.aid %>_tab_replying" type="radio" name="tab_menu">
+      <label class="tab_menu" for="<%= item.aid %>_tab_replying">返信先<%= item.replying.count %></label>
+      <input id="<%= item.aid %>_tab_repliers" type="radio" name="tab_menu">
+      <label class="tab_menu" for="<%= item.aid %>_tab_repliers">返信<%= item.repliers.count %></label>
+      <input id="<%= item.aid %>_tab_quoters" type="radio" name="tab_menu">
+      <label class="tab_menu" for="<%= item.aid %>_tab_quoters">引用<%= item.quoters.count %></label>
+      <input id="<%= item.aid %>_tab_reactions" type="radio" name="tab_menu">
+      <label class="tab_menu" for="<%= item.aid %>_tab_reactions">リアクション<%= item.reactions.count %></label>
+      <input id="<%= item.aid %>_tab_share" type="radio" name="tab_menu">
+      <label class="tab_menu" for="<%= item.aid %>_tab_share">共有</label>
+      <input id="<%= item.aid %>_tab_save" type="radio" name="tab_menu">
+      <label class="tab_menu" for="<%= item.aid %>_tab_save">保存</label>
+      <input id="<%= item.aid %>_tab_others" type="radio" name="tab_menu">
+      <label class="tab_menu" for="<%= item.aid %>_tab_others">その他</label>
       <details>
         <summary>詳しく</summary>
-        <div id="tab_replying_content" class="tab_content">
+        <div id="<%= item.aid %>_tab_replying_content" class="tab_content">
           返信先の表示
           <% if !item.replying.empty? %>
             <div class="item-reply-from">
@@ -126,15 +126,15 @@
             返信先はありません
           <% end %>
         </div>
-        <div id="tab_repliers_content" class="tab_content">
+        <div id="<%= item.aid %>_tab_repliers_content" class="tab_content">
           返信する
           <%= render 'items/form', initial_replied: item.aid %>
         </div>
-        <div id="tab_quoters_content" class="tab_content">
+        <div id="<%= item.aid %>_tab_quoters_content" class="tab_content">
           引用する
           <%= render 'items/form', initial_quoted: item.aid %>
         </div>
-        <div id="tab_reactions_content" class="tab_content">
+        <div id="<%= item.aid %>_tab_reactions_content" class="tab_content">
           リアクションする
           <% Emoji.all.each do |emoji| %>
             <%= button_to react_path(item.aid, emoji.aid), method: :post do %>
@@ -146,21 +146,32 @@
             <% end%>
           <% end %>
         </div>
-        <div id="tab_share_content" class="tab_content">
+        <div id="<%= item.aid %>_tab_share_content" class="tab_content">
           共有する
           https://amiverse.net/items/<%= item.aid %>
         </div>
-        <div id="tab_save_content" class="tab_content">
+        <div id="<%= item.aid %>_tab_save_content" class="tab_content">
           保存する
           ダウンロード・ブックマーク
         </div>
-        <div id="tab_others_content" class="tab_content">
+        <div id="<%= item.aid %>_tab_others_content" class="tab_content">
           その他
           アナリティクス
           埋め込む
           報告
         </div>
       </details>
+      <style>
+        #<%= item.aid %>_tab_replying:checked ~ details #<%= item.aid %>_tab_replying_content,
+        #<%= item.aid %>_tab_repliers:checked ~ details #<%= item.aid %>_tab_repliers_content,
+        #<%= item.aid %>_tab_quoters:checked ~ details #<%= item.aid %>_tab_quoters_content,
+        #<%= item.aid %>_tab_reactions:checked ~ details #<%= item.aid %>_tab_reactions_content,
+        #<%= item.aid %>_tab_share:checked ~ details #<%= item.aid %>_tab_share_content,
+        #<%= item.aid %>_tab_save:checked ~ details #<%= item.aid %>_tab_save_content,
+        #<%= item.aid %>_tab_others:checked ~ details #<%= item.aid %>_tab_others_content {
+            display: block;
+        }
+      </style>
     </div>
   </div>
 </div>

@@ -15,6 +15,9 @@
   display: flex;
   height: 56px;
 }
+.item-owners-account > *:first-child {
+  min-width: 0;
+}
 /* ioa-link */
 .ioa-link {
   display: flex;
@@ -33,17 +36,21 @@
   margin-left: 12px;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 .ioa-name {
   font-size: 24px;
   line-height: 30px;
   overflow: hidden;
-  white-space: nowrap; /* テキストを折り返さずに１行に表示 */
-  text-overflow: ellipsis; /* 切り捨てられたテキストを省略記号で表示 */
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .ioa-nameid {
   line-height: 18px;
   font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 /* ioa-badges */
 .ioa-badges {
@@ -53,6 +60,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   line-height: 25px;
+  flex-shrink: 20;
 }
 .ioa-badges div {
   display: inline-block;
@@ -126,6 +134,7 @@ input[name="tab_menu"] {
 .tab_content {
   display: none;
 }
+/*遺産*/
 #tab_replying:checked ~ details #tab_replying_content,
 #tab_repliers:checked ~ details #tab_repliers_content,
 #tab_quoters:checked ~ details #tab_quoters_content,

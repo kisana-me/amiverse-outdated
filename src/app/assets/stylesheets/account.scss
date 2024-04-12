@@ -10,6 +10,7 @@
   position: sticky;
   top: 0px;
   overflow: hidden;
+  z-index: 1;
 }
 .banner-container {
   width: 100%;
@@ -36,7 +37,7 @@
   //box-shadow: 0 -20px 25px 10px #dc24a138;
   position: sticky;
   top: 0px;
-  z-index: 2;
+  z-index: 3;
   align-items: center;
 }
 #name-before {
@@ -55,7 +56,7 @@
   aspect-ratio: 1/1;
   object-fit: cover;
   object-position: top;
-  border: 2px #36f18a solid;
+  box-shadow: 2px 4px 8px 0px var(--shadow-color);
   border-radius: 54px;
   display: block;
 }
@@ -73,7 +74,7 @@
   padding: 10px;
   background: var(--transparent-background-color);
   backdrop-filter: blur(3px);
-  z-index: 1;
+  z-index: 2;
   position: relative;
   p {
     margin: 0px;
@@ -88,7 +89,7 @@
   background: var(--transparent-background-color);
   backdrop-filter: blur(3px);
   //box-shadow: 0 9px 12px 1px #dc24a138;
-  z-index: 2;
+  z-index: 3;
   position: sticky;
   top: 64px;
   div {
@@ -102,7 +103,7 @@
 
 .content-container {
   background: var(--background-color);
-  z-index: 1;
+  z-index: 2;
   position: relative;
   padding: 10px;
 }
