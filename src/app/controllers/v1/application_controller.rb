@@ -62,8 +62,8 @@ class V1::ApplicationController < ApplicationController
       :bot,
       :kind
     ])
-    account_data_json['icon_url'] = image_url(account.icon_id, 'icon')
-    account_data_json['banner_url'] = image_url(account.banner_id, 'banner')
+    account_data_json['icon_url'] = image_url(aid: account.icon_id, type: 'icons')
+    account_data_json['banner_url'] = image_url(aid: account.banner_id, type: 'banners')
     account_data_json['items'] = items_data(account.items)
     return account_data_json
   end
@@ -79,8 +79,8 @@ class V1::ApplicationController < ApplicationController
       :bot,
       :kind
     ])
-    account_data_json['icon_url'] = image_url(account.icon_id, 'icon')
-    account_data_json['banner_url'] = image_url(account.banner_id, 'banner')
+    account_data_json['icon_url'] = image_url(aid: account.icon_id, type: 'icons')
+    account_data_json['banner_url'] = image_url(aid: account.banner_id, type: 'banners')
     return account_data_json
   end
   def item_data(item)
@@ -101,21 +101,21 @@ class V1::ApplicationController < ApplicationController
     item_data_json['account'] = account_data_json
     # image
     images_array_json = []
-    images = JSON.parse(item.images)
-    images.each do |image|
-      #image_data_json = image_data(image)
-      if image_data = Image.find_by(
-        aid: image,
-        private: false,
-        deleted: false
-      )
-      else
-        # 削除された画像
-      end
-      image_data_json['url'] = image_url(image_data.aid)
-      images_array_json << image_data_json
-    end
-    item_data_json['images'] = images_array_json
+    #images = JSON.parse(item.images)
+    #images.each do |image|
+    #  #image_data_json = image_data(image)
+    #  if image_data = Image.find_by(
+    #    aid: image,
+    #    private: false,
+    #    deleted: false
+    #  )
+    #  else
+    #    # 削除された画像
+    #  end
+    #  image_data_json['url'] = image_url(aid: image_data.aid)
+    #  images_array_json << image_data_json
+    #end
+    #item_data_json['images'] = images_array_json
     # video
     # reaction
     item_data_json['reactions'] = []

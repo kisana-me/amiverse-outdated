@@ -28,30 +28,31 @@ class Account < ApplicationRecord
     presence: true,
     length: { in: 5..25, allow_blank: true },
     uniqueness: { case_sensitive: false }
-  # with_options unless: -> { validation_context == :skip } do ???
-  validates :name_id,
-    presence: true,
-    length: { in: 5..50, allow_blank: true },
-    format: { with: BASE_64_URL_REGEX, allow_blank: true },
-    uniqueness: { case_sensitive: false }
-  validate :valid_images
-  validates :icon_id,
-    format: { with: BASE_64_URL_REGEX, allow_blank: true }
-  validates :banner_id,
-    format: { with: BASE_64_URL_REGEX, allow_blank: true }
-  validates :email,
-    length: { maximum: 255, allow_blank: true },
-    format: { with: VALID_EMAIL_REGEX, allow_blank: true },
-    uniqueness: { case_sensitive: false, allow_blank: true }
-  validates :password,
-    presence: true,
-    length: { in: 8..63, allow_blank: true },
-    allow_nil: true
-  validate do |record|
-    record.errors.add(:password, :blank) unless record.password_digest.present?
+  with_options unless: -> { validation_context == :skip } do
+    validates :name_id,
+      presence: true,
+      length: { in: 5..50, allow_blank: true },
+      format: { with: BASE_64_URL_REGEX, allow_blank: true },
+      uniqueness: { case_sensitive: false }
+    validate :valid_images
+    validates :icon_id,
+      format: { with: BASE_64_URL_REGEX, allow_blank: true }
+    validates :banner_id,
+      format: { with: BASE_64_URL_REGEX, allow_blank: true }
+    validates :email,
+      length: { maximum: 255, allow_blank: true },
+      format: { with: VALID_EMAIL_REGEX, allow_blank: true },
+      uniqueness: { case_sensitive: false, allow_blank: true }
+    validates :password,
+      presence: true,
+      length: { in: 8..63, allow_blank: true },
+      allow_nil: true
+    validate do |record|
+      record.errors.add(:password, :blank) unless record.password_digest.present?
+    end
+    validates_length_of :password, maximum: ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED
+    validates_confirmation_of :password, allow_blank: true
   end
-  validates_length_of :password, maximum: ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED
-  validates_confirmation_of :password, allow_blank: true
   has_secure_password validations: false
   # other
   def add_roles(add_roles_array)

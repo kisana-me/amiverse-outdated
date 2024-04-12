@@ -1,16 +1,17 @@
 module ActivityPub
-  def ap_follow(follow_to:, follow_from:, uid:)
+  include HttpCommunication
+  def ap_follow(follow_to:, follow_from:, uuid:)
     ap_send(
-      id: "follow/#{uid}",
+      id: "follow/#{uuid}",
       type: 'Follow',
       actor: follow_from,
       object: follow_to.activitypub_id,
       destination: follow_to
     )
   end
-  def undo_follow(follow_to:, follow_from:, uid:)
+  def undo_follow(follow_to:, follow_from:, uuid:)
     undo_object = {
-      "id": File.join(follow_from.activitypub_id, "follow/#{uid}"),
+      "id": File.join(follow_from.activitypub_id, "follow/#{uuid}"),
       "type": 'Follow',
       "actor": follow_from.activitypub_id,
       "object": follow_to.activitypub_id
@@ -493,13 +494,14 @@ module ActivityPub
     account = Account.new(
       name: data['name'].present? ? data['name'] : '',
       name_id: get_name_id(data['id'], data['preferredUsername']),
-      account_id: generate_aid(Account, 'account_id'),
+      aid: generate_aid(Account, 'aid'),
       activitypub_id: uri,
       #serverと紐づけ
-      outsider: true,
+      foreigner: true,
+      activitypub: true,
       activated: true,
-      bio: data['summary'].present? ? data['summary'] : '',
-      explorable: data['discoverable'].nil? ? true : data['discoverable'].present?,
+      summary: data['summary'].present? ? data['summary'] : '',
+      discoverable: data['discoverable'].nil? ? true : data['discoverable'].present?,
       locked: data['manuallyApprovesFollowers'].nil? ? true : data['manuallyApprovesFollowers'].present?,
       public_key: data['publicKey']['publicKeyPem']
     )
