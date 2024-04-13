@@ -97,11 +97,9 @@ module ActivityPub
       "object": object
     }
     deliver(
+      actor: actor,
       body: body,
-      name_id: actor.name_id,
-      private_key: actor.private_key,
-      to_url: File.join(destination.activitypub_id, 'inbox'),
-      public_key: actor.public_key
+      to_url: File.join(destination.activitypub_id, 'inbox')
     )
   end
   def read(data)
@@ -348,15 +346,8 @@ module ActivityPub
     end
     return account
   end
-  def deliver1(
-      body:,
-      name_id:,
-      private_key:,
-      from_url: ENV['APP_HOST'],
-      to_url:,
-      public_key:
-    )
-    headers, digest, to_be_signed, sign, statement = sign_headers(body, name_id, private_key, from_url, to_url, public_key)
+  def deliver(actor:, body:, to_url:, from_url: ENV['APP_HOST'])
+    headers, digest, to_be_signed, sign, statement = sign_headers(actor: actor, body: body, to_url: to_url, from_url: from_url)
     req,res = https_post(
       to_url,
       headers,
@@ -369,57 +360,14 @@ module ActivityPub
       signature: sign,
       statement: statement,
       content: body.to_json,
-      response: res.body)
-  end
-  def deliver(
-      body:,
-      name_id:,
-      private_key:,
-      public_key:,
-      from_url: ENV['APP_HOST'],
-      to_url:
+      response: res.body
     )
-    current_time = Time.now.utc.httpdate
-    to_host = URI.parse(to_url).host
-    context = HttpSignatures::Context.new(
-      keys: {"examplekey" => {
-        private_key: private_key,
-        #public_key: public_key
-      }},
-      algorithm: "rsa-sha256",
-      headers: ["(request-target)", "Date", "Host", "Digest"],
-    )
-    #headers, digest, to_be_signed, sign, statement = sign_headers(body, name_id, private_key, from_url, to_url)
-    #https_post(url, headers, data)
-    uri = URI.parse(to_url)
-    req = Net::HTTP::Post.new(uri.path)
-    digest = Digest::SHA256.base64digest(body.to_json)
-    req['Date'] = current_time
-    req['Host'] = to_host
-    req['Digest'] = digest
-    req['Content-Type'] = 'application/activity+json'
-    #req.use_ssl = true
-    req.body = body.to_json
-    context.signer.sign(req)
-    http = Net::HTTP.new(to_host, uri.port)
-    http.use_ssl = true
-    res = http.request(req)
-    #Rails.logger.info('=========')
-    #Rails.logger.info(context.verifier.valid?(req))
-    ActivityPubDelivered.create(
-      to_url: to_url,
-      digest: digest,
-      to_be_signed: current_time,
-      signature: req['Signature'],
-      statement: res.header,
-      content: body.to_json,
-      response: res.body)
   end
   def front_deliver(body, name_id, private_key, from_url, to_url, public_key)
     headers, digest, to_be_signed, sign, statement = sign_headers(body, name_id, private_key, from_url, to_url)
     req,res = http_post(
       'http://front:3000/outbox',
-      {Authorization: 'Bearer token-here',
+      {Authorization: "Bearer #{ENV['SERVER_PASSWORD']}",
       'Content-Type' => 'application/json'
       },{
       to_url: to_url,
@@ -435,30 +383,27 @@ module ActivityPub
       content: body.to_json,
       response: res.body)
   end
-  def sign_headers(body, name_id, private_key, from_url, to_url, public_key)
-    from_host = URI.parse(from_url).host
-    to_host = URI.parse(to_url).host
-    current_time, digest, to_be_signed, signature = create_http_signature(from_url: from_url, to_url: to_url, private_key: private_key, body: body)
+  def sign_headers(actor:, body:, to_url:, from_url:)
+    http_signature = create_http_signature(private_key: actor.private_key, body: body, to_url: to_url, from_url: from_url)
     statement = [
-      "keyId=\"https://#{from_host}/@#{name_id}#main-key\"",
+      "keyId=\"https://#{URI.parse(from_url).host}/@#{actor.name_id}#main-key\"",
       'algorithm="rsa-sha256"',
       'headers="(request-target) date host digest"',
-      "signature=\"#{signature}\""
-    ].join(',') # content-lengthも必要?
+      "signature=\"#{http_signature[3]}\""
+    ].join(',')
     headers = {
-      Host: to_host,
-      Date: current_time,
-      Digest: "SHA-256=#{digest}",
-      Signature: statement,
-      Authorization: "Signature #{statement}",
-      #Accept: 'application/json',
+      'Host': URI.parse(to_url).host,
+      'Date': http_signature[0],
+      'Digest': "SHA-256=#{http_signature[1]}",
+      'Signature': statement,
+      'Authorization': "Signature #{statement}",
+      #'Accept': 'application/json',
       #'Accept-Encoding': 'gzip',
       #'Cache-Control': 'max-age=0',
       'Content-Type': 'application/activity+json',
-      'User-Agent': "Amiverse v0.0.1 (+https://#{from_host}/)"
+      'User-Agent': "Amiverse v0.0.1 (+https://#{URI.parse(from_url).host}/)"
     }
-    
-    return headers, digest, to_be_signed, signature, statement
+    return headers, http_signature[1], http_signature[2], http_signature[3], statement
   end
   def check_sign(body,a)
     digest = Digest::SHA256.base64digest(body.to_json)
