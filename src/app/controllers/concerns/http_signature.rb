@@ -3,21 +3,11 @@ module HttpSignature
     to_host = URI.parse(to_url).host
     current_time = Time.now.utc.httpdate
     digest = Digest::SHA256.base64digest(body.to_json)
-    case type
-    when 'join'
-      to_be_signed = [
-        "(request-target): post #{URI.parse(to_url).path}",
-        "date: #{current_time}",
-        "host: #{to_host}",
-        "digest: SHA-256=#{digest}"].join("\n")
-    when 'enter'
-      to_be_signed = "(request-target): post #{URI.parse(to_url).path}
-      date: #{current_time}
-      host: #{to_host}
-      digest: SHA-256=#{digest}"
-    else
-      to_be_signed = "(request-target): post #{URI.parse(to_url).path}\ndate: #{current_time}\nhost: #{to_host}\ndigest: SHA-256=#{digest}"
-    end
+    to_be_signed = [
+      "(request-target): post #{URI.parse(to_url).path}",
+      "date: #{current_time}",
+      "host: #{to_host}",
+      "digest: SHA-256=#{digest}"].join("\n")
     signature = generate_signature(private_key, to_be_signed)
     return current_time, digest, to_be_signed, signature
   end
