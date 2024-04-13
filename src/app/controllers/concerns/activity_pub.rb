@@ -129,8 +129,8 @@ module ActivityPub
       follower = account(body['actor'])
       if followed && follower
         follow_params = {
-          followed: followed.account_id,
-          follower: follower.account_id,
+          followed: followed.aid,
+          follower: follower.aid,
           uuid: id # uuidではなくid
         }
         if Follow.exists?(follow_params)
@@ -158,8 +158,8 @@ module ActivityPub
         followed = account(object['object'])
         follower = account(object['actor'])
         follow_params = {
-          followed: followed.account_id,
-          follower: follower.account_id,
+          followed: followed.aid,
+          follower: follower.aid,
           uuid: object['id']
         }
         if follow = Follow.find_by(follow_params)
@@ -187,15 +187,15 @@ module ActivityPub
     when 'Undo'
       case object['type']
       when 'Follow'
-        follow_to_account = account(object['object'])
-        follow_from_account = account(body['actor'])
-        if follow_to_account && follow_from_account
-          this_follow_params = {
-            follow_to_id: follow_to_account.account_id,
-            follow_from_id: follow_from_account.account_id
+        followed = account(object['object'])
+        follower = account(body['actor'])
+        if followed && follower
+          follow_params = {
+            followed: followed.aid,
+            follower: follower.aid
           }
-          if Follow.exists?(this_follow_params)
-            Follow.where(this_follow_params).delete_all
+          if Follow.exists?(follow_params)
+            Follow.where(follow_params).delete_all
             status = 'S0'
           else
             status = 'E4'
@@ -216,7 +216,7 @@ module ActivityPub
           content: object['content'].force_encoding('UTF-8'),
           sensitive: object['sensitive']
         )
-        @item.account_id = attributed_to.id
+        @item.aid = attributed_to.id
         @item.item_id = generate_aid(Item, 'item_id')
         @item.uuid = SecureRandom.uuid
         @item.item_type = 'plane'
