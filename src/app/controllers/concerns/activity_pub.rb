@@ -348,7 +348,7 @@ module ActivityPub
     end
     return account
   end
-  def deliver(
+  def deliver1(
       body:,
       name_id:,
       private_key:,
@@ -371,17 +371,16 @@ module ActivityPub
       content: body.to_json,
       response: res.body)
   end
-  def gem1_deliver(
+  def deliver(
       body:,
       name_id:,
       private_key:,
-      #public_key:,
+      public_key:,
       from_url: ENV['APP_HOST'],
       to_url:
     )
     current_time = Time.now.utc.httpdate
     to_host = URI.parse(to_url).host
-    Rails.logger.info(OpenSSL::PKey::RSA.new(private_key))
     context = HttpSignatures::Context.new(
       keys: {"examplekey" => {
         private_key: private_key,
