@@ -17,12 +17,12 @@ module Tools
       public_key: public_key_pem
     }
   end
-  def generate_signature(data, private_key_pem)
+  def generate_signature(private_key_pem, data)
     private_key = OpenSSL::PKey::RSA.new(private_key_pem)
     signature = private_key.sign(OpenSSL::Digest::SHA256.new, data)
     return Base64.strict_encode64(signature)
   end
-  def verify_signature(data, signature, public_key_pem)
+  def verify_signature(public_key_pem, signature, data)
     public_key = OpenSSL::PKey::RSA.new(public_key_pem)
     decoded_signature = Base64.strict_decode64(signature)
     return public_key.verify(OpenSSL::Digest::SHA256.new, decoded_signature, data)

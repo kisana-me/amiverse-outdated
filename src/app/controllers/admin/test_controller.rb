@@ -1,5 +1,6 @@
 class Admin::TestController < Admin::ApplicationController
   include ActivityPub
+  include Tools
 
   def index
   end
@@ -16,31 +17,23 @@ class Admin::TestController < Admin::ApplicationController
     render 'new'
   end
   def verify
-    context = HttpSignatures::Context.new(
-      keys: {"https://misskey.io/users/9arqrxdfco#main-key" => {
-        public_key: params[:public_key]
-      }},
-      algorithm: "rsa-sha256",
-      headers: ["(request-target)", "Date", "Host", "Digest"],
-    )
-    uri = URI.parse(params[:url])
-    req = Net::HTTP::Post.new(uri.path)
-    req['Date'] = params[:date]
-    req['Host'] = params[:host]
-    req['Digest'] = params[:digest]
-    req['Signature'] = params[:message]
-    Rails.logger.info('=====ok?===')
-    Rails.logger.info(context.verifier.valid?(req))
-    ######################
-    @verify = [params[:message], params[:signature], params[:public_key]]
-    if result = verify_signature(params[:message], params[:signature], params[:public_key])
-      if result
-        flash.now[:success] = '認証成功'
-      else
-        flash.now[:danger] = '認証失敗'
-      end
+    begin
+      message = params[:message]
+      en_sign = generate_signature(@current_account.private_key, message)
+      result = verify_signature(@current_account.public_key, params[:signature], message)
+    rescue => e
+      Rails.logger.info('====Error====')
+      Rails.logger.info(e.message)
+    end
+    Rails.logger.info('====en_sign====')
+    Rails.logger.info(en_sign)
+    Rails.logger.info('====result====')
+    Rails.logger.info(result)
+    Rails.logger.info('====end====')
+    if result
+      flash.now[:success] = '成功'
     else
-      flash.now[:danger] = '例外'
+      flash.now[:danger] = '失敗'
     end
     render 'new'
   end

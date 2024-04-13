@@ -1,5 +1,6 @@
 module ActivityPub
   include HttpCommunication
+  include HttpSignature
   def ap_follow(follow_to:, follow_from:, uuid:)
     ap_send(
       id: "follow/#{uuid}",
@@ -99,7 +100,8 @@ module ActivityPub
       body: body,
       name_id: actor.name_id,
       private_key: actor.private_key,
-      to_url: File.join(destination.activitypub_id, 'inbox')
+      to_url: File.join(destination.activitypub_id, 'inbox'),
+      public_key: actor.public_key
     )
   end
   def read(data)
@@ -351,9 +353,10 @@ module ActivityPub
       name_id:,
       private_key:,
       from_url: ENV['APP_HOST'],
-      to_url:
+      to_url:,
+      public_key:
     )
-    headers, digest, to_be_signed, sign, statement = sign_headers(body, name_id, private_key, from_url, to_url)
+    headers, digest, to_be_signed, sign, statement = sign_headers(body, name_id, private_key, from_url, to_url, public_key)
     req,res = https_post(
       to_url,
       headers,
@@ -433,22 +436,15 @@ module ActivityPub
       content: body.to_json,
       response: res.body)
   end
-  def sign_headers(body, name_id, private_key, from_url, to_url)
+  def sign_headers(body, name_id, private_key, from_url, to_url, public_key)
     from_host = URI.parse(from_url).host
     to_host = URI.parse(to_url).host
-    current_time = Time.now.utc.httpdate
-    digest = Digest::SHA256.base64digest(body.to_json)
-    to_be_signed = [
-      "(request-target): post #{URI.parse(to_url).path}",
-      "date: #{current_time}",
-      "host: #{to_host}",
-      "digest: SHA-256=#{digest}"].join("\n")
-    sign = generate_signature(to_be_signed, private_key)
+    current_time, digest, to_be_signed, signature = create_http_signature(from_url: from_url, to_url: to_url, private_key: private_key, body: body)
     statement = [
       "keyId=\"https://#{from_host}/@#{name_id}#main-key\"",
       'algorithm="rsa-sha256"',
       'headers="(request-target) date host digest"',
-      "signature=\"#{sign}\""
+      "signature=\"#{signature}\""
     ].join(',') # content-lengthも必要?
     headers = {
       Host: to_host,
@@ -463,7 +459,7 @@ module ActivityPub
       'User-Agent': "Amiverse v0.0.1 (+https://#{from_host}/)"
     }
     
-    return headers, digest, to_be_signed, sign, statement
+    return headers, digest, to_be_signed, signature, statement
   end
   def check_sign(body,a)
     digest = Digest::SHA256.base64digest(body.to_json)
