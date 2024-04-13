@@ -25,12 +25,12 @@ module ActivityPub
       destination: follow_to
     )
   end
-  def accept_follow(received_body:, follow_to_account:, follow_from_account:)
+  def accept_follow(id:, followed:, follower:)
     accept_object = {
-      "id": received_body['id'],
+      "id": id,
       "type": 'Follow',
-      "actor": follow_from_account.activitypub_id,
-      "object": follow_to_account.activitypub_id
+      "actor": follower.activitypub_id,
+      "object": followed.activitypub_id
     }
     ap_send(
       id: 'accept_follow',
@@ -108,25 +108,7 @@ module ActivityPub
     context = body['@context']
     id = body['id']
     object = body['object'] unless body['object'].nil?
-    #--- Info ---
-    # 0:処理開始
-    # 1:内部処理は完了
-    #--- Success ---
-    # 0:正常に完了
-    # 1:することなく完了
-    #--- Error ---
-    # 0:actorのアカウントが存在しない
-    # 1:すでにフォロー済み
-    # 2:フォロー出来なかった
-    # 3:フォロー先アカウントが存在しない
-    # 4:フォローしていないので解除できない
-    # 5:?
-    # 6:フォローアクセプト受け取ったが処理できない
-    # 7:actorかobjectのアカウントが存在しない
-    status = 'I0'
-    ########
-    # 記録 #
-    ########
+    status = 'Info:処理開始'
     received_params = {
       received_at: body['received_at'].to_s,
       headers: headers.to_json,
@@ -143,30 +125,28 @@ module ActivityPub
     ########
     case body['type']
     when 'Follow'
-      follow_to_account = account(object)
-      follow_from_account = account(body['actor'])
-      if follow_to_account && follow_from_account
-        this_follow_params = {
-          follow_to_id: follow_to_account.account_id,
-          follow_from_id: follow_from_account.account_id,
-          uid: id,
-          accepted: true
+      followed = account(object)
+      follower = account(body['actor'])
+      if followed && follower
+        follow_params = {
+          followed: followed.account_id,
+          follower: follower.account_id,
+          uuid: id # uuidではなくid
         }
-        if Follow.exists?(this_follow_params)
-          status = 'E1'
-        elsif Follow.create!(this_follow_params)
-          # 鍵垢でなければすぐにAcceptを返却
-          accept_follow(
-            received_body: body,
-            follow_to_account: follow_to_account,
-            follow_from_account: follow_from_account
-          )
-          status = 'S0'
+        if Follow.exists?(follow_params)
+          status = 'Info:フォロー済み'
         else
-          status = 'E2'
+          follow_params.merge!(accepted: true)
+          Follow.create(follow_params)
+          status = 'Success:フォロー完了'
         end
+        accept_follow(
+          id: body['id'],
+          followed: followed,
+          follower: follower
+        )
       else
-        status = 'E7'
+        status = 'Error:アカウントが存在しない'
       end
     when 'Like'
       #actorがobjectをいいねする
@@ -175,19 +155,22 @@ module ActivityPub
     when 'Accept'
       case object['type']
       when 'Follow'
-        follow_to = account(object['object'])
-        follow_from = account(object['actor'])
-        this_follow_params = {
-          follow_to_id: account(object['object']).account_id,
-          follow_from_id: account(object['actor']).account_id,
-          uid: object['id']
+        followed = account(object['object'])
+        follower = account(object['actor'])
+        follow_params = {
+          followed: followed.account_id,
+          follower: follower.account_id,
+          uuid: object['id']
         }
-        follow = Follow.find_by(this_follow_params)
-        follow.accepted = true
-        if follow.save!
-          status = 'S0'
+        if follow = Follow.find_by(follow_params)
+          if follow.accepted
+            status = 'Info:フォロー承認済み'
+          else
+            follow.update(accepted: true)
+            status = 'Success:フォロー承認完了'
+          end
         else
-          status = 'E6'
+          status = 'Error:指定のフォローが見つからない'
         end
       when 'Undo'
         Rails.logger.info('----------')
@@ -238,7 +221,7 @@ module ActivityPub
         @item.uuid = SecureRandom.uuid
         @item.item_type = 'plane'
         if @item.save
-          status = 'S0'
+          status = 'Success:投稿完了'
         end
       else
         #その他

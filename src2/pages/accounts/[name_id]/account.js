@@ -60,7 +60,16 @@ export async function getServerSideProps({req, res, context, query}) {
       icon: {
         type: 'Image',
         mediaType: 'image/webp',
+        name: '',
+        sensitive: false,
         url: accountData.icon_url
+      },
+      image: {
+        type: 'Image',
+        mediaType: 'image/webp',
+        name: '',
+        sensitive: false,
+        url: accountData.banner_url
       },
       preferredUsername: accountData.name_id,
       inbox: FullAppUrl(`/@${accountData.name_id}/inbox`),

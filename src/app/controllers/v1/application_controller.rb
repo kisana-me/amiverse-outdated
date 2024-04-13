@@ -60,7 +60,8 @@ class V1::ApplicationController < ApplicationController
       :meta,
       :cache,
       :bot,
-      :kind
+      :kind,
+      :public_key
     ])
     account_data_json['icon_url'] = image_url(aid: account.icon_id, type: 'icons')
     account_data_json['banner_url'] = image_url(aid: account.banner_id, type: 'banners')
@@ -82,6 +83,8 @@ class V1::ApplicationController < ApplicationController
     account_data_json['icon_url'] = image_url(aid: account.icon_id, type: 'icons')
     account_data_json['banner_url'] = image_url(aid: account.banner_id, type: 'banners')
     return account_data_json
+  end
+  def ap_account_data(account)
   end
   def item_data(item)
     item_data_json = item.as_json(only: [
