@@ -60,7 +60,7 @@ module ActivityPub
       "@context": "https://www.w3.org/ns/activitystreams",
       "type": "Create",
       "id": "https://amiverse.net/items/#{item.aid}/create",
-      "published": item.created_at,
+      "published": item.created_at.utc.iso8601,
       "to": [
         "https://www.w3.org/ns/activitystreams#Public"
       ],
@@ -69,11 +69,10 @@ module ActivityPub
       ],
       "actor": "https://amiverse.net/#{item.account.name_id}",
       "object": {
-        "@context": "https://www.w3.org/ns/activitystreams",
         "type": "Note",
         "id": "https://amiverse.net/items/#{item.aid}",
         "url": "https://amiverse.net/items/#{item.aid}",
-        "published": item.created_at,
+        "published": item.created_at.utc.iso8601,
         "to": [
           "https://www.w3.org/ns/activitystreams#Public"
         ],
