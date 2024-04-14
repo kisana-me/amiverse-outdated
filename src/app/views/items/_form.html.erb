@@ -38,8 +38,8 @@
     <details>
       <summary>設定</summary>
       <div>
-        <%= form.label :from_url, style: "display: block" %>
-        <%= form.text_field :from_url %>
+        <%= form.label :publish, '公開範囲' %>
+        <%= form.select :publish, [['全世界', 1], ['ローカル', 2], ['フォロワー', 3], ['直接', 4], ['限定', 5]], { selected: 1 } %>
         <%= form.label :to_url, style: "display: block" %>
         <%= form.text_field :to_url %>
       </div>

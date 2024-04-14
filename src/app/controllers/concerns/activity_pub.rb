@@ -1,6 +1,8 @@
 module ActivityPub
   include HttpCommunication
   include HttpSignature
+  include ActivityStreams
+
   def ap_follow(follow_to:, follow_from:, uuid:)
     ap_send(
       id: "follow/#{uuid}",
@@ -57,31 +59,28 @@ module ActivityPub
     body = {
       "@context": "https://www.w3.org/ns/activitystreams",
       "type": "Create",
-      "id": "https://amiverse.net/items/#{item.item_id}/create",
+      "id": "https://amiverse.net/items/#{item.aid}/create",
       "published": item.created_at,
       "to": [
-        "https://mstdn.jp/users/kisana",
-        "https://misskey.io/users/9arqrxdfco",
-        "https://amiverse.net/#{item.account.name_id}/followers",
         "https://www.w3.org/ns/activitystreams#Public"
+      ],
+      "cc": [
+        "https://amiverse.net/#{item.account.name_id}/followers"
       ],
       "actor": "https://amiverse.net/#{item.account.name_id}",
       "object": {
         "@context": "https://www.w3.org/ns/activitystreams",
         "type": "Note",
-        "id": "https://amiverse.net/items/#{item.item_id}",
-        "url": "https://amiverse.net/items/#{item.item_id}",
+        "id": "https://amiverse.net/items/#{item.aid}",
+        "url": "https://amiverse.net/items/#{item.aid}",
         "published": item.created_at,
         "to": [
           "https://www.w3.org/ns/activitystreams#Public"
         ],
         "cc": [
-          "https://mstdn.jp/users/kisana",
-          "https://misskey.io/users/9arqrxdfco",
-          "https://amiverse.net/#{item.account.name_id}/followers",
-          "https://www.w3.org/ns/activitystreams#Public"
+          "https://amiverse.net/#{item.account.aid}/followers"
         ],
-        "attributedTo": "https://amiverse.net/#{item.account.name_id}/followers",
+        "attributedTo": "https://amiverse.net/#{item.account.aid}/followers",
         "content": item.content
       }
     }
@@ -329,7 +328,7 @@ module ActivityPub
     return account
   end
   def deliver(actor:, body:, to_url:, from_url: ENV['APP_HOST'])
-    headers, digest, to_be_signed, sign, statement = sign_headers(actor: actor, body: body, to_url: to_url, from_url: from_url)
+    headers, statement, http_signature = create_signed_headers(actor: actor, body: body, to_url: to_url, from_url: from_url)
     req,res = https_post(
       to_url,
       headers,
@@ -337,9 +336,9 @@ module ActivityPub
     )
     ActivityPubDelivered.create(
       to_url: to_url,
-      digest: digest,
-      to_be_signed: to_be_signed,
-      signature: sign,
+      digest: http_signature[1],
+      to_be_signed: http_signature[2],
+      signature: http_signature[3],
       statement: statement,
       content: body.to_json,
       response: res.body
@@ -364,41 +363,6 @@ module ActivityPub
       statement: statement,
       content: body.to_json,
       response: res.body)
-  end
-  def sign_headers(actor:, body:, to_url:, from_url:)
-    http_signature = create_http_signature(private_key: actor.private_key, body: body, to_url: to_url, from_url: from_url)
-    statement = [
-      "keyId=\"https://#{URI.parse(from_url).host}/@#{actor.name_id}#main-key\"",
-      'algorithm="rsa-sha256"',
-      'headers="(request-target) date host digest"',
-      "signature=\"#{http_signature[3]}\""
-    ].join(',')
-    headers = {
-      'Host': URI.parse(to_url).host,
-      'Date': http_signature[0],
-      'Digest': "SHA-256=#{http_signature[1]}",
-      'Signature': statement,
-      'Authorization': "Signature #{statement}",
-      #'Accept': 'application/json',
-      #'Accept-Encoding': 'gzip',
-      #'Cache-Control': 'max-age=0',
-      'Content-Type': 'application/activity+json',
-      'User-Agent': "Amiverse v0.0.1 (+https://#{URI.parse(from_url).host}/)"
-    }
-    return headers, http_signature[1], http_signature[2], http_signature[3], statement
-  end
-  def check_sign(body,a)
-    digest = Digest::SHA256.base64digest(body.to_json)
-    received_digest = data['headers']['digest'].split('=')[1]
-    signature = data['headers']['signature']
-    segments = signature.split(',')
-    obj_segments = {}
-    segments.each do |segment|
-      key, value = segment.split('=')
-      key = key.gsub('"', '').strip
-      value = value.gsub('"', '').strip
-      obj_segments[key] = value
-    end
   end
   def get_name_id(uri, preferredUsername)
     host = URI.parse(uri).host

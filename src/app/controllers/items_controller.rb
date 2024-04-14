@@ -53,23 +53,20 @@ class ItemsController < ApplicationController
       if quoted = Item.find_by(aid: params[:item][:quoted])
         Quote.create(quoter: @item, quoted: quoted)
       end
-      flash[:success] = '投稿しました。'
+      flash[:success] = '投稿しました'
       redirect_to item_url(@item.aid)
-      #item = create_item_broadcast_format(@item)
-      
-      #from_url = 'https://amiverse.net'
-      #to_url = 'https://mstdn.jp/inbox'
-      #from_url = params[:item][:from_url] unless params[:item][:from_url].empty?
-      #to_url = params[:item][:to_url] unless params[:item][:to_url].empty?
-      #deliver(
-      #  body: create_note(item: @item),
-      #  name_id: @current_account.name_id,
-      #  private_key: @current_account.private_key,
-      #  to_url: to_url
-      #)
-      #ActionCable.server.broadcast('items_channel', serialize_item(@item))
-      item_json = item_data(@item)
-      ActionCable.server.broadcast('current_channel', item_json)
+      # 範囲が全世界ならば
+      ## APが有効ならば
+      ### 他のインスタンスにフォロワーがいれば
+      if params[:item][:to_url].present?
+        Rails.logger.info('========ap note send========')
+        deliver(
+          actor: @item.account,
+          body: create_note(item: @item),
+          to_url: params[:item][:to_url]
+        )
+      end
+      #ActionCable.server.broadcast('current_channel', item_data(@item))
     else
       flash[:success] = '失敗しました。'
       render :new
