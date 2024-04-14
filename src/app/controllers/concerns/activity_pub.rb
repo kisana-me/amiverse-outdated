@@ -80,7 +80,7 @@ module ActivityPub
         "cc": [
           "https://amiverse.net/#{item.account.aid}/followers"
         ],
-        "attributedTo": "https://amiverse.net/#{item.account.aid}/followers",
+        "attributedTo": "https://amiverse.net/#{item.account.aid}",
         "content": item.content
       }
     }

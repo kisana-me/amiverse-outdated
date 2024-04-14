@@ -6,6 +6,7 @@ module ActivityStreams
       "type": "Note",
       "id": "https://amiverse.net/items/#{item.aid}",
       "url": "https://amiverse.net/items/#{item.aid}",
+      "attributedTo": "https://amiverse.net/#{item.account.aid}",
       "published": item.created_at,
       "to": [
         "https://www.w3.org/ns/activitystreams#Public"
@@ -13,8 +14,14 @@ module ActivityStreams
       "cc": [
         "https://amiverse.net/#{item.account.aid}/followers"
       ],
-      "attributedTo": "https://amiverse.net/#{item.account.aid}/followers",
-      "content": item.content
+      "sensitive": false,
+      "conversation": "",
+      "content": item.content,
+      "attachment": [],
+      "tag": [],
+      "replies": {
+        # collections
+      }
     }
   end
 end

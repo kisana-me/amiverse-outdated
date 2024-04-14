@@ -31,7 +31,7 @@ export default async function handler(req, res) {
     data = {'error':'Request you sent was not POST. This program is not support Activity Pub cliant.'}
   }
 
-  res.setHeader('Content-Type', 'application/activity+json; charset=utf-8')
+  res.setHeader('Content-Type', 'application/activity+json')
   res.write(JSON.stringify(to_url_res))
   res.end()
 }
