@@ -57,7 +57,7 @@ module ActivityPub
   end
   def create_note(item:)
     body = {
-      "@context": "https://www.w3.org/ns/activitystreams",
+      "@context": ["https://www.w3.org/ns/activitystreams", {}],
       "type": "Create",
       "id": "https://amiverse.net/items/#{item.aid}/create",
       "published": item.created_at.utc.iso8601,
@@ -65,9 +65,9 @@ module ActivityPub
         "https://www.w3.org/ns/activitystreams#Public"
       ],
       "cc": [
-        "https://amiverse.net/#{item.account.name_id}/followers"
+        "https://amiverse.net/@#{item.account.name_id}/followers"
       ],
-      "actor": "https://amiverse.net/#{item.account.name_id}",
+      "actor": "https://amiverse.net/@#{item.account.name_id}",
       "object": {
         "type": "Note",
         "id": "https://amiverse.net/items/#{item.aid}",
@@ -77,9 +77,9 @@ module ActivityPub
           "https://www.w3.org/ns/activitystreams#Public"
         ],
         "cc": [
-          "https://amiverse.net/#{item.account.aid}/followers"
+          "https://amiverse.net/@#{item.account.name_id}/followers"
         ],
-        "attributedTo": "https://amiverse.net/#{item.account.aid}",
+        "attributedTo": "https://amiverse.net/@#{item.account.name_id}",
         "content": item.content
       }
     }
