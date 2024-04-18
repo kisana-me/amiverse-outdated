@@ -6,6 +6,28 @@ class AccountsController < ApplicationController
   def show
     @account = find_account_by_nid(params[:name_id])
   end
+  def reject_follow
+    account = find_account_by_nid(params[:name_id])
+    this_follow_params = {
+      followed: @current_account,
+      follower: account
+    }
+    if account.foreigner
+      if follow = Follow.find_by(this_follow_params)
+        ap_reject_follow(followed: @current_account, follower: account,
+        follow_id: File.join(@current_account.activitypub_id, "@#{@current_account.name_id}/follow/#{follow.uuid}")
+      )
+        follow.delete
+        flash[:success] = 'フォロワー取り消し依頼しました'
+      else
+        flash[:danger] = 'フォローされていません'
+      end
+    else
+      Follow.where(this_follow_params).delete_all
+      flash[:success] = 'フォロワーを削除しました'
+    end
+    redirect_to root_path
+  end
   def follow
     account = find_account_by_nid(params[:name_id])
     this_follow_params = {

@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   get '@:name_id/icon' => 'accounts#show_icon', as: 'show_icon', constraints: { name_id: /.*/ }
   get '@:name_id/banner' => 'accounts#show_banner', as: 'show_banner', constraints: { name_id: /.*/ }
   post '@:name_id/follow' => 'accounts#follow', as: 'follow', constraints: { name_id: /.*/ }
+  post '@:name_id/reject_follow' => 'accounts#reject_follow', as: 'reject_follow', constraints: { name_id: /.*/ }
   patch '@:name_id/upate' => 'accounts#update', as: 'update_account'
 
   # item

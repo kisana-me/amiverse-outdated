@@ -30,6 +30,7 @@
         <% elsif @current_account.present? %>
           <% if Follow.exists?(followed: @current_account, follower: @account) %>
             <div>フォローされています</div>
+            <%= button_to("フォロワー解除", reject_follow_path(@account.name_id), method: :post) %>
           <% end %>
           <% if Follow.exists?(followed: @account, follower: @current_account) %>
             <%= button_to("フォロー解除", follow_path(@account.name_id), method: :post) %>
