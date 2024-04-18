@@ -62,7 +62,7 @@ class ItemsController < ApplicationController
         Rails.logger.info('========ap note send========')
         deliver(
           actor: @item.account,
-          body: create_note(item: @item),
+          body: ap_pre_create_note(item: @item),
           to_url: params[:item][:to_url]
         )
       end

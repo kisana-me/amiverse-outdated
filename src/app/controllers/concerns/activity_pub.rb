@@ -3,31 +3,52 @@ module ActivityPub
   include HttpSignature
   include ActivityStreams
 
-  def ap_follow(follow_to:, follow_from:, uuid:)
+  ### GENERAL ###
+
+  def ap_create(id:, to:, cc:, actor:, object:, published:)
+    {
+      "@context": ["https://www.w3.org/ns/activitystreams", {}],
+      "type": "Create",
+      "id": File.join(ENV['APP_HOST'], id),
+      "published": published.utc.iso8601,
+      "to": [
+        "https://www.w3.org/ns/activitystreams#Public"
+      ],
+      "cc": [
+        "https://amiverse.net/@#{item.account.name_id}/followers"
+      ],
+      "actor": File.join(ENV['APP_HOST'], '@'+ actor.name_id),
+      "object": object
+    }
+  end
+
+  ### FOLLOW ###
+
+  def ap_follow(followed:, follower:, id:)
     ap_send(
-      id: "follow/#{uuid}",
+      id: "follow/#{id}",
       type: 'Follow',
-      actor: follow_from,
-      object: follow_to.activitypub_id,
-      destination: follow_to
+      actor: follower,
+      object: followed.activitypub_id,
+      destination: followed
     )
   end
-  def undo_follow(follow_to:, follow_from:, uuid:)
+  def ap_undo_follow(followed:, follower:, id:)
     undo_object = {
-      "id": File.join(follow_from.activitypub_id, "follow/#{uuid}"),
+      "id": File.join(follower.activitypub_id, "follow/#{id}"),
       "type": 'Follow',
-      "actor": follow_from.activitypub_id,
-      "object": follow_to.activitypub_id
+      "actor": follower.activitypub_id,
+      "object": followed.activitypub_id
     }
     ap_send(
       id: 'undo_follow',
       type: 'Undo',
-      actor: follow_from,
+      actor: follower,
       object: undo_object,
-      destination: follow_to
+      destination: followed
     )
   end
-  def accept_follow(id:, followed:, follower:)
+  def ap_accept_follow(followed:, follower:, id:)
     accept_object = {
       "id": id,
       "type": 'Follow',
@@ -42,20 +63,26 @@ module ActivityPub
       destination: follower
     )
   end
-  def accept_undo_follow(received_body:, follow_to_account:, follow_from_account:)
+  def ap_accept_undo_follow(received_body:, followed:, follower:)
     ap_send(
       id: 'undo_follow',
       type: 'Accept',
-      actor: follow_to_account,
+      actor: followed,
       object: received_body,
-      destination: follow_from_account
+      destination: follower
     )
   end
-  def like()
+
+  ### LIKE ###
+
+  def ap_like()
   end
-  def undo_like()
+  def ap_undo_like()
   end
-  def create_note(item:)
+
+  ### NOTE ###
+
+  def ap_pre_create_note(item:)
     body = {
       "@context": ["https://www.w3.org/ns/activitystreams", {}],
       "type": "Create",
@@ -138,10 +165,10 @@ module ActivityPub
           Follow.create(follow_params)
           status = 'Success:フォロー完了'
         end
-        accept_follow(
-          id: body['id'],
+        ap_accept_follow(
           followed: followed,
-          follower: follower
+          follower: follower,
+          id: body['id']
         )
       else
         status = 'Error:アカウントが存在しない'

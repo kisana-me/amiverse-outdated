@@ -15,7 +15,7 @@ class AccountsController < ApplicationController
     if account.foreigner
       if Follow.exists?(this_follow_params)
         follow = Follow.find_by(this_follow_params)
-        undo_follow(follow_to: account, follow_from: @current_account, uuid: follow.uuid)
+        ap_undo_follow(follow_to: account, follow_from: @current_account, uuid: follow.uuid)
         follow.delete
         flash[:success] = 'フォロー取り消し依頼しました'
       else
