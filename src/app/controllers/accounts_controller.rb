@@ -15,7 +15,7 @@ class AccountsController < ApplicationController
     if account.foreigner
       if Follow.exists?(this_follow_params)
         follow = Follow.find_by(this_follow_params)
-        ap_undo_follow(follow_to: account, follow_from: @current_account, uuid: follow.uuid)
+        ap_undo_follow(followed: account, follower: @current_account, id: follow.uuid)
         follow.delete
         flash[:success] = 'フォロー取り消し依頼しました'
       else
@@ -23,7 +23,7 @@ class AccountsController < ApplicationController
         Rails.logger.info(this_follow_params[:uuid])
         follow = Follow.new(this_follow_params)
         if follow.save!
-          ap_follow(follow_to: account, follow_from: @current_account, uuid: this_follow_params[:uuid])
+          ap_follow(followed: account, follower: @current_account, id: this_follow_params[:uuid])
           flash[:success] = 'フォロー依頼しました'
         else
           flash[:danger] = 'フォロー依頼できません'

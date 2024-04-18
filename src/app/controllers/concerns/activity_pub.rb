@@ -5,18 +5,18 @@ module ActivityPub
 
   ### GENERAL ###
 
-  def ap_create(id:, to:, cc:, actor:, object:, published:)
+  def ap_create(
+  id:,
+  to: ["https://www.w3.org/ns/activitystreams#Public"],
+  cc: [], actor:, object:, published:
+  )
     {
       "@context": ["https://www.w3.org/ns/activitystreams", {}],
       "type": "Create",
       "id": File.join(ENV['APP_HOST'], id),
       "published": published.utc.iso8601,
-      "to": [
-        "https://www.w3.org/ns/activitystreams#Public"
-      ],
-      "cc": [
-        "https://amiverse.net/@#{item.account.name_id}/followers"
-      ],
+      "to": to,
+      "cc": cc,
       "actor": File.join(ENV['APP_HOST'], '@'+ actor.name_id),
       "object": object
     }
