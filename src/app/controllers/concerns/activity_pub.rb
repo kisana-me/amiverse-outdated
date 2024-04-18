@@ -76,14 +76,14 @@ module ActivityPub
     reject_object = {
       id: follow_id,
       type: 'Follow',
-      actor: follower,
-      object: followed
+      actor: follower.activitypub_id,
+      object: followed.activitypub_id
     }
     ap_send(
       id: 'undo_follow',
       type: 'Reject',
       actor: followed,
-      object: received_body,
+      object: reject_object,
       destination: follower
     )
   end
