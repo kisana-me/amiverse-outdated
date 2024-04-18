@@ -28,6 +28,9 @@
         <% if @account == @current_account %>
           <%= link_to('設定', settings_path) %>
         <% elsif @current_account.present? %>
+          <% if Follow.exists?(followed: @current_account, follower: @account) %>
+            <div>フォローされています</div>
+          <% end %>
           <% if Follow.exists?(followed: @account, follower: @current_account) %>
             <%= button_to("フォロー解除", follow_path(@account.name_id), method: :post) %>
           <% else %>
