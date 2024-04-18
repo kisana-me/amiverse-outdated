@@ -1,5 +1,6 @@
 class V1::ActivityPubController < V1::ApplicationController
-  include ActivityPub
+  # include ActivityPub
+  include ApReceiver
 
   def inbox
     # frontで受け取ったactivityを解析・保存

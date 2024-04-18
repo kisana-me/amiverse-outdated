@@ -63,10 +63,25 @@ module ActivityPub
       destination: follower
     )
   end
-  def ap_accept_undo_follow(received_body:, followed:, follower:)
+  def ap_accept_undo_follow(received_body:, followed:, follower:)#???
     ap_send(
       id: 'undo_follow',
       type: 'Accept',
+      actor: followed,
+      object: received_body,
+      destination: follower
+    )
+  end
+  def ap_reject_follow(follow_id:, followed:, follower:)
+    reject_object = {
+      id: follow_id,
+      type: 'Follow',
+      actor: follower,
+      object: followed
+    }
+    ap_send(
+      id: 'undo_follow',
+      type: 'Reject',
       actor: followed,
       object: received_body,
       destination: follower
@@ -184,8 +199,7 @@ module ActivityPub
         follower = account(object['actor'])
         follow_params = {
           followed: followed,
-          follower: follower,
-          uuid: object['id']
+          follower: follower
         }
         if follow = Follow.find_by(follow_params)
           if follow.accepted

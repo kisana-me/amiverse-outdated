@@ -1,0 +1,2 @@
+module ApResolver
+end

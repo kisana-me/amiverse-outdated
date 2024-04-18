@@ -1,9 +1,9 @@
 module ApReceiver
   include ActivityPub
 
-  def receive(data)
-    headers = JSON.parse(data['headers'])
-    body = JSON.parse(data['body'])
+  def ap_receive(data)
+    headers = data['headers']
+    body = data['body']
     # BODY #
     context = body['@context']
     id = body['id']
@@ -60,8 +60,7 @@ module ApReceiver
         follower = account(object['actor'])
         follow_params = {
           followed: followed,
-          follower: follower,
-          uuid: object['id']
+          follower: follower
         }
         if follow = Follow.find_by(follow_params)
           if follow.accepted
