@@ -1,15 +1,14 @@
 module ApReceiver
   include ActivityPub
+  # include ApSender
 
   def ap_receive(data)
-    headers = data['headers']
-    body = data['body']
-    # BODY #
+    body = JSON.parse(data['body'])
+    headers = JSON.parse(data['headers'])
     context = body['@context']
     id = body['id']
     object = body['object'] unless body['object'].nil?
     activity_type = body['type'] unless body['type'].nil?
-
     status = 'Info:処理開始'
     received_params = {
       activitypub_id: id,

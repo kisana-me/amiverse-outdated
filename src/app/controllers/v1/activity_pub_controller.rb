@@ -1,5 +1,4 @@
 class V1::ActivityPubController < V1::ApplicationController
-  # include ActivityPub
   include ApReceiver
 
   def inbox
@@ -8,7 +7,7 @@ class V1::ActivityPubController < V1::ApplicationController
     # frontから来たか検証 if data['key'] == ENV['key']
     # digestやsignなど検証 check_sign(data)
     # データ処理
-    status = read(data)
+    status = ap_receive(data)
     render json: { status: status }
   end
   def outbox
