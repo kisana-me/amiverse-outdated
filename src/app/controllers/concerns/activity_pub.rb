@@ -3,7 +3,7 @@ module ActivityPub
   include HttpSignature
   include ActivityStreams
 
-  ### GENERAL ###
+  ### AS GENERAL ###
 
   def ap_create(
   id:,

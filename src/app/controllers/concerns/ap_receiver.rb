@@ -4,7 +4,7 @@ module ApReceiver
 
   def ap_receive(data)
     body = JSON.parse(data['body'])
-    headers = JSON.parse(data['headers'])
+    headers = data['headers']
     context = body['@context']
     id = body['id']
     object = body['object'] unless body['object'].nil?
@@ -16,7 +16,7 @@ module ApReceiver
       headers: headers.to_json,
       body: body.to_json,
       status: status,
-      object: object,
+      object: object.to_json,
       activity_type: activity_type
     }
     saved_data = ActivityPubReceived.create!(received_params)
@@ -83,6 +83,26 @@ module ApReceiver
       else
       end
     when 'Reject'
+      case object['type']
+      when 'Follow'
+        followed = account(object['object'])
+        follower = account(object['actor'])
+        if followed && follower
+          follow_params = {
+            followed: followed,
+            follower: follower
+          }
+          if Follow.exists?(follow_params)
+            Follow.where(follow_params).delete_all
+            status = 'Success:フォロワーを解除完了'
+          else
+            status = 'Error:対象のフォローが見つからない'
+          end
+        else
+          status = 'Error:対象のアカウントが見つからない'
+        end
+      else
+      end
     when 'Undo'
       case object['type']
       when 'Follow'
@@ -95,12 +115,12 @@ module ApReceiver
           }
           if Follow.exists?(follow_params)
             Follow.where(follow_params).delete_all
-            status = 'S0'
+            status = 'Success:アンフォロー完了'
           else
-            status = 'E4'
+            status = 'Error:対象のフォローが見つからない'
           end
         else
-          status = 'E0'
+          status = 'Error:対象のアカウントが見つからない'
         end
       else
         #その他
