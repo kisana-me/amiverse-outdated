@@ -1,23 +1,19 @@
 module SessionsHelper
   def log_in(account)
     new_session = true
-    Rails.logger.info('=====きた=====')
-    # db sessionを用意
+    # 古参
     if cookies.signed[:amiverse_uid].present? &&
     cookies.signed[:amiverse_rtk].present? &&
     doubt_session = Session.find_by(
       uuid: cookies.signed[:amiverse_uid],
       deleted: false
     )
-    Rails.logger.info('=====検証=====')
       if BCrypt::Password.new(doubt_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
         db_session = doubt_session
         new_session = false
       end
     end
-    Rails.logger.info('=====１=====')
-    if new_session
-      Rails.logger.info('=====新しく=====')
+    if new_session # 新規
       uuid = SecureRandom.uuid
       token = SecureRandom.urlsafe_base64
       db_session = Session.create!(
@@ -31,8 +27,7 @@ module SessionsHelper
         user_agent: request.user_agent,
         current: true
       )
-    else
-      Rails.logger.info('=====古い=====')
+    else # 古参紐づけ
       AccountSession.where(
         session: db_session
       ).update_all(current: false)
@@ -53,7 +48,6 @@ module SessionsHelper
         )
       end
     end
-    Rails.logger.info('=====くっき=====')
     # cookie更新
     if new_session
       secure_cookies = ENV["RAILS_SECURE_COOKIES"].present?
@@ -79,41 +73,43 @@ module SessionsHelper
     !@current_account.nil?
   end
   def current_account
-    if session[:logged_in].nil? || !session[:logged_in]
-      return
-    end
     if session[:current_account].present?
       return session[:current_account]
     else
-      return unless cookies.signed[:amiverse_uid].present?
-      return unless cookies.signed[:amiverse_rtk].present?
-      db_session = Session.find_by(
-        uuid: cookies.signed[:amiverse_uid],
-        deleted: false
-      )
-      if BCrypt::Password.new(db_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
-        sessions = AccountSession.where(
-          session: db_session
-        )
-        account_session = sessions.order(current: :desc).first
-        account = Account.find_by(
-          id: account_session.account_id,
+      if cookies.signed[:amiverse_uid].present? && cookies.signed[:amiverse_rtk].present?
+        db_session = Session.find_by(
+          uuid: cookies.signed[:amiverse_uid],
           deleted: false
         )
-        session[:current_account] = account
-        return account
+        if BCrypt::Password.new(db_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
+          sessions = AccountSession.where(
+            session: db_session
+          )
+          account_session = sessions.order(current: :desc).first
+          account = Account.find_by(
+            id: account_session.account_id,
+            deleted: false
+          )
+          session[:current_account] = account
+          session[:logged_in] = true
+          return account
+        end
       end
       session[:logged_in] = false
+      session.delete(:current_account)
+      cookies.delete(:amiverse_uid)
+      cookies.delete(:amiverse_rtk)
       @current_account = nil
+      return nil
     end
   end
   def current_account?(account)
     account == current_account
   end
   def change_account_session(account)
-    return unless account
-    return unless cookies.signed[:amiverse_uid].present? || cookies.signed[:amiverse_rtk].present?
-    #return if account == @current_account
+    return {status: false, message: '変更先アカウントが指定されていません'} unless account
+    return {status: false, message: 'ブラウザのログイン情報が読み込めません'} unless cookies.signed[:amiverse_uid].present? || cookies.signed[:amiverse_rtk].present?
+    return {status: false, message: 'ログイン中のアカウントです'} if account == @current_account
     begin
       db_session = Session.find_by(
         uuid: cookies.signed[:amiverse_uid],
@@ -123,8 +119,12 @@ module SessionsHelper
         AccountSession.where(session: db_session).update_all(current: false)
         AccountSession.where(session: db_session).find_by(account: account).update(current: true)
         session[:current_account] = account
+        return {status: true, message: '変更しました'}
+      else
+        return {status: false, message: 'アカウントの承認に失敗しました'}
       end
     rescue
+      return {status: false, message: '不明な内部エラー'}
     end
   end
   def log_out(account)

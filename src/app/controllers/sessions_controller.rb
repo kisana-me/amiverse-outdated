@@ -24,11 +24,12 @@ class SessionsController < ApplicationController
   end
   def change_account
     account = Account.find_by(aid: params[:aid])
-    if change_account_session(account)
-      flash[:success] = '変更しました'
+    result = change_account_session(account)
+    if result[:status]
+      flash[:success] = result[:message]
       redirect_to root_url
     else
-      flash[:danger] = '変更できませんでした'
+      flash[:danger] = result[:message]
       redirect_to root_url
     end
   end
