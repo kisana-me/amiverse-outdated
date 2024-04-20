@@ -1,9 +1,10 @@
-class CreateReactions < ActiveRecord::Migration[7.0]
+class CreateModelReactions < ActiveRecord::Migration[7.0]
   def change
-    create_table :reactions do |t|
+    create_table :model_reactions do |t|
       t.references :account, null: false, foreign_key: true
       t.references :emoji, null: false, foreign_key: true
-      t.references :item, null: false, foreign_key: true
+      t.string :model, null: false, default: ''
+      t.string :aid, null: false, default: ''
       t.string :effect_type, null: false, default: ''
       t.string :kind, null: false, default: ''
       t.json :meta, null: false, default: []

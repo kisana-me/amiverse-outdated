@@ -76,11 +76,11 @@ module SessionsHelper
     if session[:current_account].present?
       return session[:current_account]
     else
-      if cookies.signed[:amiverse_uid].present? && cookies.signed[:amiverse_rtk].present?
-        db_session = Session.find_by(
-          uuid: cookies.signed[:amiverse_uid],
-          deleted: false
-        )
+      if cookies.signed[:amiverse_uid].present? && cookies.signed[:amiverse_rtk].present? &&
+      db_session = Session.find_by(
+        uuid: cookies.signed[:amiverse_uid],
+        deleted: false
+      )
         if BCrypt::Password.new(db_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
           sessions = AccountSession.where(
             session: db_session

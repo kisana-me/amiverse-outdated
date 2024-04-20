@@ -24,6 +24,7 @@ class SignupController < ApplicationController
     @account = Account.new(account_params)
     if Account.first.blank?
       @account.activated = true
+      @account.administrator = true
       @account.roles = ['administrator'].to_json
     else
       invitation = check_invitation_code(session[:code])
@@ -54,7 +55,7 @@ class SignupController < ApplicationController
     params.require(:account).permit(
       :name,
       :name_id,
-      :summary,
+      :description,
       :location,
       :birthday,
       :password,

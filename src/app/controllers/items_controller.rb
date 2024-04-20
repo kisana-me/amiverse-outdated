@@ -23,7 +23,6 @@ class ItemsController < ApplicationController
     @item = Item.new(item_params)
     @item.account = @current_account
     @item.aid = generate_aid(Item, 'aid')
-    @item.kind = 'plane'
     if @item.save
       if params[:item][:selected_images].present?
         params[:item][:selected_images].each do |aid|

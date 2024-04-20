@@ -20,6 +20,6 @@ class CreateEmojis < ActiveRecord::Migration[7.0]
       t.datetime :deleted_at
       t.timestamps
     end
-    add_index :emojis, [:aid], unique: true
+    add_index :emojis, [:aid, :name_id], unique: true
   end
 end

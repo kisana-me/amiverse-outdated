@@ -1,10 +1,11 @@
-class CreateCategories < ActiveRecord::Migration[7.0]
+class CreateTrends < ActiveRecord::Migration[7.0]
   def change
-    create_table :categories do |t|
-      t.string :aid, null: false
+    create_table :trends do |t|
+      t.string :uuid, null: false
       t.string :name, null: false, default: ''
       t.text :description, null: false, default: ''
-      t.bigint :counter, null: false, default: 0
+      t.bigint :word_counter, null: false, default: 0
+      t.bigint :search_counter, null: false, default: 0
       t.string :kind, null: false, default: ''
       t.json :meta, null: false, default: []
       t.json :cache, null: false, default: []
@@ -12,6 +13,6 @@ class CreateCategories < ActiveRecord::Migration[7.0]
       t.datetime :deleted_at
       t.timestamps
     end
-    add_index :categories, [:aid], unique: true
+    add_index :trends, [:uuid], unique: true
   end
 end
