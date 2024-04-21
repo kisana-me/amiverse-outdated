@@ -40,8 +40,8 @@
     <div>
       <%= form_with model: @video, url: videos_path, data: { turbo: false } do |f| %>
       <%= render 'shared/error_messages', instead: @video %>
-      <%= f.label :video, 'video' %>
-      <%= f.file_field :video %>
+      <%= f.label :video_data, 'video' %>
+      <%= f.file_field :video_data %>
       <br/>
       <div class="text-field-group">
         <%= f.text_field :name, class: 'text-field-field', placeholder: ' ' %>
@@ -59,18 +59,8 @@
     <% @videos.each do |video| %>
       <%= video.name %>
       <%= video.aid %>
+      <%= video_tag(video_url(aid: video.aid), controls: true) %>
       <%= video.description %>
-      <video controls class='video-view' id='video-<%= video.video_id %>'></video>
-      <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
-      <script>
-        var video = document.getElementById('video-<%= video.video_id %>');
-        var videoSrc = 'http://localhost:9000/development/variants/accounts/00000000000000/videos/<%= video.video_id %>/output.m3u8';
-        if (Hls.isSupported()) {
-          var hls = new Hls();
-          hls.loadSource(videoSrc);
-          hls.attachMedia(video);
-        }
-      </script>
     <% end %>
   </details>
   <details>

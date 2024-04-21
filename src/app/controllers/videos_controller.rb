@@ -12,29 +12,17 @@ class VideosController < ApplicationController
   def create
     @video = Video.new(video_params)
     @video.aid = generate_aid(Video, 'aid')
-    if params[:video][:video].blank?
-      flash[:danger] = "動画がありません"
-      return redirect_to settings_storage_path
-    end
-    capacity = @current_account.storage_max_size - @current_account.storage_size
-    if params[:video][:video].size > capacity
-      flash[:danger] = "ストレージ容量が足りません"
-      return redirect_to settings_storage_path
-    end 
-    video_type = content_type_to_extension(params[:video][:video].content_type)
-    @video.video.attach(
-      key: "accounts/#{@current_account.aid}/videos/#{@video.aid}.#{video_type}",
-      io: (params[:video][:video]),
-      filename: "#{@video.aid}.#{video_type}"
-    )
-    @current_account.update(storage_size: @current_account.storage_size + @video.video.byte_size.to_i)
     @video.account = @current_account
     if @video.save
-      EncodeJob.perform_later(@video, @current_account)
+      EncodeJob.perform_later(
+        video: @video,
+        aid: @video.aid,
+        key: "/videos/#{@video.aid}.#{@video.video_data.original_filename.split('.').last.downcase}"
+      )
       flash[:success] = "アップロードしました"
       redirect_to settings_storage_path
     else
-      flash[:danger] = "アップロードできませんでした"
+      flash[:danger] = "アップロードできませんでした#{@video.errors.full_messages.join(", ")}"
       redirect_to settings_storage_path
     end
   end
@@ -52,7 +40,8 @@ class VideosController < ApplicationController
   def video_params
     params.require(:video).permit(
       :name,
-      :description
+      :description,
+      :video_data
     )
   end
 end

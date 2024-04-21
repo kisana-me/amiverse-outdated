@@ -13,8 +13,8 @@ class ApplicationRecord < ActiveRecord::Base
       secret_access_key: ENV["S3_PASSWORD"],
       force_path_style: true
     )
-    downloaded_image = Tempfile.new(['image'])
-    converted_image = Tempfile.new(['image'])
+    downloaded_image = Tempfile.new(['downloaded_image'])
+    converted_image = Tempfile.new(['converted_image'])
     s3.get_object(bucket: ENV["S3_BUCKET"], key: self.original_key, response_target: downloaded_image.path)
     image = MiniMagick::Image.open(downloaded_image.path)
     resize = "2048x2048>"
@@ -63,6 +63,8 @@ class ApplicationRecord < ActiveRecord::Base
     key = "/variants/#{model}/#{type}/#{self.aid}.webp"
     s3_upload(key: key, file: converted_image.path, content_type: 'image/webp')
     add_mca_data(self, 'variants', [type])
+    downloaded_image.close
+    converted_image.close
   end
   private
   def validate_using_image(ins, image_aid, account_id = 0)
