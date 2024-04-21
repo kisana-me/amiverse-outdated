@@ -1,5 +1,7 @@
 class Item < ApplicationRecord
   belongs_to :account
+  has_many :item_images
+  has_many :images, through: :item_images
   # reply
   has_many :replied, class_name: 'Reply', foreign_key: 'replied'
   has_many :replier, class_name: 'Reply', foreign_key: 'replier'

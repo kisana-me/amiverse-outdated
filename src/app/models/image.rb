@@ -1,5 +1,7 @@
 class Image < ApplicationRecord
   belongs_to :account
+  has_many :item_images
+  has_many :items, through: :item_images
   validate :image_type
   before_create :image_upload
   attr_accessor :image_data
@@ -20,7 +22,7 @@ class Image < ApplicationRecord
     s3_upload(key: key, file: file, content_type: content_type)
   end
 
-  def delete_from_s3
+  def image_delete
     s3 = Aws::S3::Client.new(
       endpoint: ENV["S3_ENDPOINT_0"],
       region: ENV["S3_REGION"],
@@ -38,7 +40,7 @@ class Image < ApplicationRecord
       self.errors.add(:base, "画像がありません")
       return
     end
-    allowed_content_types = ['image/png', 'image/jpeg', 'image/webp']
+    allowed_content_types = ['image/png', 'image/jpeg', 'image/gif', 'image/webp']
     unless allowed_content_types.include?(self.image_data.content_type)
       self.errors.add(:base, "未対応の形式です")
       return

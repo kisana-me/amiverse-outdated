@@ -26,11 +26,9 @@ class ImagesController < ApplicationController
     @image.account = @current_account
     @image.aid = generate_aid(Image, 'aid')
     if @image.save
+      @image.process_image
       flash[:success] = "アップロードしました"
       redirect_to settings_storage_path
-      Rails.logger.info('test')
-      @image.process_image
-      Rails.logger.info('end')
     else
       flash[:danger] = "アップロードできませんでした#{@image.errors.full_messages.join(", ")}"
       redirect_to settings_storage_path

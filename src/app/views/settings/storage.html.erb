@@ -31,7 +31,7 @@
         名前:<%= image.name %>
         ID:<%= image.aid %>
         説明:<%= image.description %>
-        
+        <%= image_tag image_url(aid: image.aid), class: 'storage-images-image' %>
       </div>
     <% end %>
   </details>

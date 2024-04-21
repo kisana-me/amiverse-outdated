@@ -1,16 +1,11 @@
 class ApplicationRecord < ActiveRecord::Base
   primary_abstract_class
 
-  def process_image(type: 'images')
+  def process_image(model: 'images', type: 'images')
     variants =JSON.parse(self.variants)
-    Rails.logger.info(self.variants)
     if variants.include?(type)
-      Rails.logger.info('処理済み')
       return
-    else
-      Rails.logger.info('含まれず')
     end
-    Rails.logger.info('処理開始')
     s3 = Aws::S3::Client.new(
       endpoint: ENV["S3_ENDPOINT_0"],
       region: ENV["S3_REGION"],
@@ -18,13 +13,10 @@ class ApplicationRecord < ActiveRecord::Base
       secret_access_key: ENV["S3_PASSWORD"],
       force_path_style: true
     )
-    temp_file = Tempfile.new(['image', '.img'])
-    s3.get_object(bucket: ENV["S3_BUCKET"], key: self.original_key, response_target: temp_file.path)
-    Rails.logger.info(temp_file.path)
-    image = MiniMagick::Image.read(temp_file)
-    converted_image = MiniMagick::Tool::Convert.new
-    converted_image << image.path
-    converted_image.format("webp")
+    downloaded_image = Tempfile.new(['image'])
+    converted_image = Tempfile.new(['image'])
+    s3.get_object(bucket: ENV["S3_BUCKET"], key: self.original_key, response_target: downloaded_image.path)
+    image = MiniMagick::Image.open(downloaded_image.path)
     resize = "2048x2048>"
     extent = "" # 切り取る
     case type
@@ -55,26 +47,22 @@ class ApplicationRecord < ActiveRecord::Base
     when 'tb-emojis'
       resize = "50x50>"
     end
-    converted_image.combine_options do |img|
+    image.format('webp')
+    image.coalesce
+    image.combine_options do |img|
       img.gravity "center"
       img.quality 85
       img.auto_orient
-      img.format "webp"
       img.strip # EXIF削除
       img.resize resize
-      img.extent extent
+      unless extent == ''
+        img.extent extent
+      end
     end
-    converted_image.write(temp_file)
-    #ok
-    Rails.logger.info('処理終了')
-    image_upload(
-      type: type,
-      file: temp_file,
-      extension: 'webp',
-      content_type: 'image/webp'
-    )
+    image.write(converted_image.path)
+    key = "/variants/#{model}/#{type}/#{self.aid}.webp"
+    s3_upload(key: key, file: converted_image.path, content_type: 'image/webp')
     add_mca_data(self, 'variants', [type])
-    Rails.logger.info('アップロード完了')
   end
   private
   def validate_using_image(ins, image_aid, account_id = 0)
@@ -95,15 +83,15 @@ class ApplicationRecord < ActiveRecord::Base
   end
   def add_mca_data(object, column, add_mca_array)
     mca_array = JSON.parse(object[column.to_sym])
-    add_mca_array.each do |role|
-      mca_array.push(role)
+    add_mca_array.each do |obj|
+      mca_array.push(obj)
     end
     object.update(column.to_sym => mca_array.to_json)
   end
   def remove_mca_data(object, column, remove_mca_array)
     mca_array = JSON.parse(object[column.to_sym])
-    remove_mca_array.each do |role|
-      mca_array.delete(role)
+    remove_mca_array.each do |obj|
+      mca_array.delete(obj)
     end
     object.update(column.to_sym => mca_array.to_json)
   end
@@ -116,6 +104,16 @@ class ApplicationRecord < ActiveRecord::Base
       force_path_style: true
     )
     obj = s3.bucket(ENV["S3_BUCKET"]).object(key)
-    obj.upload_file(file, content_type: content_type)
+    obj.upload_file(file, content_type: content_type, acl: 'readonly')
+  end
+  def s3_delete(key:)
+    s3 = Aws::S3::Client.new(
+      endpoint: ENV["S3_ENDPOINT_0"],
+      region: ENV["S3_REGION"],
+      access_key_id: ENV["S3_USER"],
+      secret_access_key: ENV["S3_PASSWORD"],
+      force_path_style: true
+    )
+    s3.delete_object(bucket: ENV["S3_BUCKET"], key: key)
   end
 end

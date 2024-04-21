@@ -64,9 +64,9 @@
     <%= item.content %>
   </div>
   <div class="item-media">
-    <%# item.images.each do |image| %>
-      <%# image_tag image_url(image.account.aid, 'images', image.aid), class: 'item-image' %>
-    <%# end %>
+    <% item.images.each do |image| %>
+      <%= image_tag image_url(aid: image.aid), class: 'item-image' %>
+    <% end %>
     <% if false %>
       <video controls class='video-view' id='video-<%= video.video_id %>'></video>
       <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
