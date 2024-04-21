@@ -10,8 +10,8 @@
     <div>
       <%= form_with model: @image, url: images_path, data: { turbo: false } do |f| %>
         <%= render 'shared/error_messages', instead: @image %>
-        <%= f.label :image, 'image' %>
-        <%= f.file_field :image %>
+        <%= f.label :image_data, 'image' %>
+        <%= f.file_field :image_data %>
         <br/>
         <div class="text-field-group">
           <%= f.text_field :name, class: 'text-field-field', placeholder: '名前' %>
@@ -31,11 +31,7 @@
         名前:<%= image.name %>
         ID:<%= image.aid %>
         説明:<%= image.description %>
-        <% if image.image.attached? %>
-          <%= image_tag image_url(aid: image.aid), class: 'storage-images-image' %>
-        <% else %>
-          <div>のいまげ</div>
-        <% end %>
+        
       </div>
     <% end %>
   </details>

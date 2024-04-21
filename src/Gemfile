@@ -25,8 +25,7 @@ gem 'sidekiq'
 gem "redis"
 gem 'redis-session-store'
 # gem "kredis"
-gem 'http_signatures'
-gem 'http_signature'
+gem 'mime-types'
 gem 'rubyzip', '2.3.0'
 gem 'rails-i18n'
 group :development, :test do

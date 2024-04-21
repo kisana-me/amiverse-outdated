@@ -570,6 +570,8 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.boolean "scope", default: false, null: false
     t.boolean "limit", default: false, null: false
     t.boolean "private", default: false, null: false
+    t.string "original_key", default: "", null: false
+    t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.string "kind", default: "", null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -581,6 +583,7 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.index ["aid"], name: "index_images_on_aid", unique: true
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
   create_table "inquiries", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|

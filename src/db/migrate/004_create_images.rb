@@ -10,6 +10,8 @@ class CreateImages < ActiveRecord::Migration[7.0]
       t.boolean :scope, null: false, default: false
       t.boolean :limit, null: false, default: false
       t.boolean :private, null: false, default: false
+      t.string :original_key, null: false, default: ''
+      t.json :variants, null: false, default: []
       t.string :kind, null: false, default: ''
       t.json :meta, null: false, default: []
       t.json :cache, null: false, default: []
