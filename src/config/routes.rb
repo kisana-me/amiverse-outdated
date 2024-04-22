@@ -48,15 +48,15 @@ Rails.application.routes.draw do
   get 'storage' => 'storage#index'
 
   # image
-  resources :images, param: :aid, only: %i[ show create update delete ]
+  resources :images, param: :aid, only: %i[ show create update destroy ]
   get 'images/:aid/icon' => 'images#show_icon'
   get 'images/:aid/banner' => 'images#show_banner'
 
   # video
-  resources :videos, param: :aid, only: %i[ create update delete ]
+  resources :videos, param: :aid, only: %i[ create update destroy ]
 
   # notifications
-  #resources :videos, param: :aid, only: %i[ create update delete ]
+  #resources :videos, param: :aid, only: %i[ create update destroy ]
   get 'notifications' => 'notifications#index'
   get 'notifications/new' => 'notifications#new', as: 'new_notification'
   post 'notifications/create' => 'notifications#create', as: 'create_notification'

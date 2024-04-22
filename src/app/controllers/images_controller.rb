@@ -37,6 +37,9 @@ class ImagesController < ApplicationController
   def update
   end
   def destroy
+    @image.destroy
+    flash[:success] = "削除しました"
+    redirect_to settings_storage_path
   end
   private
   def set_image

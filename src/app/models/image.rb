@@ -4,6 +4,7 @@ class Image < ApplicationRecord
   has_many :items, through: :item_images
   validate :image_type
   before_create :image_upload
+  before_destroy :image_delete
   attr_accessor :image_data
   
   def image_upload(
@@ -23,15 +24,8 @@ class Image < ApplicationRecord
   end
 
   def image_delete
-    s3 = Aws::S3::Client.new(
-      endpoint: ENV["S3_ENDPOINT_0"],
-      region: ENV["S3_REGION"],
-      access_key_id: ENV["S3_USER"],
-      secret_access_key: ENV["S3_PASSWORD"],
-      force_path_style: true
-    )
-    #s3.get_object(bucket: bucket_name, key: 'file.txt')
-    s3.delete_object(bucket: 'your-bucket-name', key: "#{aid}.#{'webp'}")
+    Rails.logger.info('=============')
+    s3_delete(key: original_key)
   end
 
   private
