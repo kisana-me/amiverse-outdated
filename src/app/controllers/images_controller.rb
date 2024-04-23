@@ -3,30 +3,13 @@ class ImagesController < ApplicationController
   before_action :logged_in_account
   before_action :set_image
 
-  def show
-    send_noblob_stream(
-      @image.image,
-      treat_image(@image.aid, 'images')
-    )
-  end
-  def show_icon
-    send_noblob_stream(
-      @image.image,
-      treat_image(@image.aid, 'icons')
-    )
-  end
-  def show_banner
-    send_noblob_stream(
-      @image.image,
-      treat_image(@image.aid, 'banners')
-    )
-  end
   def create
     @image = Image.new(image_params)
     @image.account = @current_account
     @image.aid = generate_aid(Image, 'aid')
+    @image.name = @image.image_data.original_filename if @image.name.blank?
     if @image.save
-      @image.process_image
+      @image.create_variant
       flash[:success] = "アップロードしました"
       redirect_to settings_storage_path
     else
@@ -37,9 +20,13 @@ class ImagesController < ApplicationController
   def update
   end
   def destroy
-    @image.destroy
-    flash[:success] = "削除しました"
-    redirect_to settings_storage_path
+    if @image.destroy
+      flash[:success] = "削除しました"
+      redirect_to settings_storage_path
+    else
+      flash[:danger] = "削除できません"
+      redirect_to settings_storage_path
+    end
   end
   private
   def set_image

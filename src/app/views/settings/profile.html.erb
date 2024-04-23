@@ -8,19 +8,15 @@
     <div>
       <details>
         <summary>アイコン</summary>
-        <%= f.label :icon, 'icon' %>
-        <%= f.file_field :icon %>
+        <%= f.label :icon_data, 'icon_data' %>
+        <%= f.file_field :icon_data %>
         <% @images.each do |image| %>
           <div>
             <%= f.radio_button :icon_id, image.aid %>
             名前:<%= image.name %>
             ID:<%= image.aid %>
             説明:<%= image.description %>
-            <% if image.image.attached? %>
-              <%= image_tag image_url(aid: image.aid), class: 'storage-images-image' %>
-            <% else %>
-              <div>のいまげ</div>
-            <% end %>
+            <%= image_tag image_url(id: image.aid), class: 'storage-images-image' %>
           </div>
         <% end %>
       </details>
@@ -34,11 +30,7 @@
             名前:<%= image.name %>
             ID:<%= image.aid %>
             説明:<%= image.description %>
-            <% if image.image.attached? %>
-              <%= image_tag image_url(aid: image.aid), class: 'storage-images-image' %>
-            <% else %>
-              <div>のいまげ</div>
-            <% end %>
+              <%= image_tag image_url(id: image.aid), class: 'storage-images-image' %>
           </div>
         <% end %>
       </details>
@@ -55,8 +47,8 @@
     <%= f.label :birthday, '誕生日' %>
     <%= f.datetime_field :birthday %>
     <br />
-    <%= f.label :summary, '紹介文' %>
-    <%= f.text_area :summary %>
+    <%= f.label :description, '紹介文' %>
+    <%= f.text_area :description %>
     <br />
     <%# f.label :lang, '言語' %>
     <%# f.select :lang, [['日本語', 1], ['English', 2]], { include_blank: false, selected: 0 } %>

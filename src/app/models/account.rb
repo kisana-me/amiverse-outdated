@@ -34,11 +34,6 @@ class Account < ApplicationRecord
       length: { in: 5..50, allow_blank: true },
       format: { with: BASE_64_URL_REGEX, allow_blank: true },
       uniqueness: { case_sensitive: false }
-    validate :valid_images
-    validates :icon_id,
-      format: { with: BASE_64_URL_REGEX, allow_blank: true }
-    validates :banner_id,
-      format: { with: BASE_64_URL_REGEX, allow_blank: true }
     validates :email,
       length: { maximum: 255, allow_blank: true },
       format: { with: VALID_EMAIL_REGEX, allow_blank: true },
@@ -54,6 +49,35 @@ class Account < ApplicationRecord
     validates_confirmation_of :password, allow_blank: true
   end
   has_secure_password validations: false
+  attr_accessor :icon_data
+  attr_accessor :banner_data
+  validate :type_and_capacity
+  before_create :upload_icon
+  before_update :upload_icon
+  include ObjectImage
+
+  def upload_icon
+    Rails.logger.info('アップロード')
+    return unless icon_data
+    Rails.logger.info('アップロード開始')
+    # icon_keyがあれば削除
+    if icon_key.present?
+      Rails.logger.info('画像あり＝＝＝＝＝＝＝＝＝＝＝＝')
+    end
+    key = image_upload(
+      image_type: 'icon',
+      image_id: aid,
+      file: icon_data.tempfile,
+      extension: icon_data.original_filename.split('.').last.downcase,
+      content_type: icon_data.content_type
+    )
+    self.icon_key = key
+    Rails.logger.info('画像あり＝＝＝＝＝＝＝＝＝＝＝＝')
+    Rails.logger.info(icon_data.size)
+    Rails.logger.info(used_storage_size)
+    Rails.logger.info('画像あり＝＝＝＝＝＝＝＝＝＝＝＝')
+    self.used_storage_size = used_storage_size.to_i + icon_data.size.to_i 
+  end
   # other
   def add_roles(add_roles_array)
     add_mca_data(self, 'roles', add_roles_array)
@@ -69,11 +93,20 @@ class Account < ApplicationRecord
   end
   # --- #
   private
+  def type_and_capacity
+    Rails.logger.info('バリデーション')
+    return unless icon_data
+    Rails.logger.info('バリデーション開始')
+    capacity = max_storage_size - used_storage_size
+    if icon_data.size > capacity
+      errors.add(:base, "ストレージ容量がありません")
+    end
+  end
   def valid_images
-    if self.icon_id_changed?
+    if self.icon_key_changed?
       validate_using_image(self, icon_id, self.id)
     end
-    if self.banner_id_changed?
+    if self.banner_key_changed?
       validate_using_image(self, banner_id, self.id)
     end
   end

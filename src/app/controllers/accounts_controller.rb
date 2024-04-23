@@ -70,8 +70,6 @@ class AccountsController < ApplicationController
   def update
     @account = @current_account
     if @account.update(account_update_params)
-      treat_image(@account.icon_id, 'icons') if @account.icon_id.present? # 更新されたときのみ実行が好ましい
-      treat_image(@account.banner_id, 'banners') if @account.banner_id.present? # 更新されたときのみ実行が好ましい
       flash[:success] = "更新しました"
       redirect_to account_path(@account.name_id)
     else
@@ -99,9 +97,9 @@ class AccountsController < ApplicationController
     params.require(:account).permit(
       :name,
       :name_id,
-      :icon_id,
-      :banner_id,
-      :summary,
+      :icon_data,
+      :banner_data,
+      :description,
       :location,
       :birthday,
       :password,
@@ -112,9 +110,9 @@ class AccountsController < ApplicationController
     params.require(:account).permit(
       :name,
       :name_id,
-      :icon_id,
-      :banner_id,
-      :summary,
+      :icon_data,
+      :banner_data,
+      :description,
       :location,
       :birthday
     )

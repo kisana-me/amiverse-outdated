@@ -6,7 +6,7 @@
   <div class="account-container" id="account-container">
     <div class="top-container">
       <div class="banner-container" id="banner-container" >
-        <% if !@account.banner_id.blank? %>
+        <% if @account.banner_key.present? %>
           <%= image_tag image_url(aid: @account.banner_id, type: 'banners'), class: 'account-banner' %>
         <% else %>
           <%= image_tag 'banner.webp', class: 'account-banner' %>
@@ -16,8 +16,8 @@
     <div class="name-container fixed" id="name-container">
       <div id="name-before"></div>
       <div class="icon-container">
-        <% if !@account.icon_id.blank? %>
-          <%= image_tag image_url(aid: @account.icon_id, type: 'icons',), class: 'account-icon' %>
+        <% if @account.icon_key.present? %>
+          <%= image_tag image_url(key: @account.icon_key), class: 'account-icon' %>
         <% else %>
           <%= image_tag 'icon.webp', class: 'account-icon' %>
         <% end %>
@@ -44,7 +44,7 @@
     </div>
 
     <div class="profile-container">
-      <div><span>紹介文:</span><%= @account.summary %></div>
+      <div><span>紹介文:</span><%= @account.description %></div>
       <div><span>場所:</span><%= @account.location %></div>
       <div><span>誕生日:</span><%= @account.birthday&.strftime("%Y年 %m月 %d日") %></div>
       <div><span>フォロワー:</span><%= @account.followers.count %></div>

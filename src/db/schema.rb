@@ -133,8 +133,8 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.string "usage_type", default: "", null: false
     t.text "defaults", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
     t.text "settings", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
-    t.string "icon_id", default: "", null: false
-    t.string "banner_id", default: "", null: false
+    t.string "icon_key", default: "", null: false
+    t.string "banner_key", default: "", null: false
     t.bigint "followers_counter", default: 0, null: false
     t.bigint "following_counter", default: 0, null: false
     t.bigint "items_counter", default: 0, null: false
@@ -159,8 +159,8 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.integer "score", default: 0, null: false
     t.text "moderation_note", default: "", null: false
-    t.bigint "storage_size", default: 0, null: false
-    t.bigint "storage_max_size", default: 1000000000, null: false
+    t.bigint "used_storage_size", default: 0, null: false
+    t.bigint "max_storage_size", default: 1000000000, null: false
     t.string "password_digest"
     t.boolean "deleted", default: false, null: false
     t.datetime "deleted_at"
@@ -575,6 +575,7 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.string "kind", default: "", null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.bigint "data_size", default: 0, null: false
     t.boolean "deleted", default: false, null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false

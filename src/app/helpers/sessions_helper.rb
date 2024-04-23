@@ -67,14 +67,18 @@ module SessionsHelper
       }
     end
     session[:logged_in] = true
-    session[:current_account] = account
+    session[:current_account_aid] = account.aid
   end
   def logged_in?
     !@current_account.nil?
   end
   def current_account
-    if session[:current_account].present?
-      return session[:current_account]
+    if session[:current_account_aid].present?
+      account = Account.find_by(
+        aid: session[:current_account_aid],
+        deleted: false
+      )
+      return account
     else
       if cookies.signed[:amiverse_uid].present? && cookies.signed[:amiverse_rtk].present? &&
       db_session = Session.find_by(
@@ -90,13 +94,13 @@ module SessionsHelper
             id: account_session.account_id,
             deleted: false
           )
-          session[:current_account] = account
+          session[:current_account_aid] = account.aid
           session[:logged_in] = true
           return account
         end
       end
       session[:logged_in] = false
-      session.delete(:current_account)
+      session.delete(:current_account_aid)
       cookies.delete(:amiverse_uid)
       cookies.delete(:amiverse_rtk)
       @current_account = nil
@@ -118,7 +122,7 @@ module SessionsHelper
       if BCrypt::Password.new(db_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
         AccountSession.where(session: db_session).update_all(current: false)
         AccountSession.where(session: db_session).find_by(account: account).update(current: true)
-        session[:current_account] = account
+        session[:current_account_aid] = account.aid
         return {status: true, message: '変更しました'}
       else
         return {status: false, message: 'アカウントの承認に失敗しました'}
@@ -139,10 +143,11 @@ module SessionsHelper
         new_account_session = account_sessions.order(current: :desc).first
         account_sessions.update_all(current: false)
         new_account_session.update(current: true)
-        session[:current_account] = account
+        session[:current_account_aid] = account.aid
         session[:logged_in] = true
       else
         db_session.delete
+        session[:current_account_aid] = nil
         session[:logged_in] = false
       end
     end

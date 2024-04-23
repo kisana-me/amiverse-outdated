@@ -32,7 +32,7 @@
         ID:<%= image.aid %>
         説明:<%= image.description %>
         <%= button_to("削除", image_path(image.aid), method: :delete) %>
-        <%= image_tag image_url(aid: image.aid), class: 'storage-images-image' %>
+        <%= image_tag image_url(id: image.aid), class: 'storage-images-image' %>
       </div>
     <% end %>
   </details>

@@ -59,8 +59,8 @@
         <%= link_to account_path(@current_account.name_id) do %>
           <div class="nav-list-container">
             <div class="nav-list-icon">
-              <% if !@current_account.icon_id.blank? %>
-                <%= image_tag image_url(aid: @current_account.icon_id, type: 'icons'), class: 'nav-list-image-icon' %>
+              <% if @current_account.icon_key.present? %>
+                <%= image_tag image_url(key: @current_account.icon_key), class: 'nav-list-image-icon' %>
               <% else %>
                 <%= image_tag 'icon.webp', class: 'nav-list-image-icon' %>
               <% end %>

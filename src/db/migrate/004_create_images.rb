@@ -15,6 +15,7 @@ class CreateImages < ActiveRecord::Migration[7.0]
       t.string :kind, null: false, default: ''
       t.json :meta, null: false, default: []
       t.json :cache, null: false, default: []
+      t.bigint :data_size, null: false, default: 0
       t.boolean :deleted, null: false, default: false
       t.datetime :deleted_at
       t.timestamps

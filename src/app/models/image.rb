@@ -3,29 +3,39 @@ class Image < ApplicationRecord
   has_many :item_images
   has_many :items, through: :item_images
   validate :image_type
-  before_create :image_upload
-  before_destroy :image_delete
+  validate :check_storage_capacity
+  before_create :upload_image
+  before_destroy :delete_image
   attr_accessor :image_data
-  
-  def image_upload(
-    type: '',
-    file: image_data.tempfile,
-    extension: image_data.original_filename.split('.').last.downcase,
-    content_type: self.image_data.content_type
-  )
-    case type
-    when ''
-      key = "/images/#{aid}.#{extension}"
-      self.original_key = key
-    else
-      key = "/variants/images/#{type}/#{aid}.#{extension}"
-    end
-    s3_upload(key: key, file: file, content_type: content_type)
-  end
+  include ObjectImage
 
-  def image_delete
-    Rails.logger.info('=============')
-    s3_delete(key: original_key)
+  def upload_image
+    key = image_upload(
+      image_id: aid,
+      file: image_data.tempfile,
+      extension: image_data.original_filename.split('.').last.downcase,
+      content_type: image_data.content_type
+    )
+    self.original_key = key
+    self.data_size = image_data.size
+    account.update(used_storage_size: account.used_storage_size += image_data.size)
+  end
+  def create_variant
+    process_image(
+      image_type: 'images',
+      variant_type: 'images',
+      image_id: aid,
+      original_key: original_key,
+      json_variants_array: self.variants
+    )
+    add_mca_data(self, 'variants', ['images'])
+  end
+  def delete_variants_image
+    image_variants_delete(json_variants_array: variants, image_id: aid)
+  end
+  def delete_image
+    image_delete(original_key: original_key, json_variants_array: variants, image_id: aid)
+    account.update(used_storage_size: account.used_storage_size -= data_size)
   end
 
   private
@@ -41,10 +51,10 @@ class Image < ApplicationRecord
     end
   end
   def check_storage_capacity
-    return unless image.attached?
-    capacity = account.storage_max_size - account.storage_size
-    if image.blob.byte_size > capacity
-      errors.add(:image, "ストレージ容量が足りません")
+    return unless image_data
+    capacity = account.max_storage_size - account.used_storage_size
+    if image_data.size > capacity
+      errors.add(:image, "ストレージ容量がありません")
     end
   end
 end

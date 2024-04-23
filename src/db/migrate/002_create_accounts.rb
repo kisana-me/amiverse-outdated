@@ -45,8 +45,8 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       t.json :defaults, null: false, default: {}#itemなど投稿時のデフォ
       t.json :settings, null: false, default: {}
       # cache
-      t.string :icon_id, null: false, default: ''# なくす
-      t.string :banner_id, null: false, default: ''# なくす
+      t.string :icon_key, null: false, default: ''
+      t.string :banner_key, null: false, default: ''
       t.bigint :followers_counter, null: false, default: 0
       t.bigint :following_counter, null: false, default: 0
       t.bigint :items_counter, null: false, default: 0
@@ -74,8 +74,8 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       t.integer :score, null: false, default: 0
       # other
       t.text :moderation_note, null: false, default: ''
-      t.bigint :storage_size, null: false, default: 0
-      t.bigint :storage_max_size, null: false, default: 1000000000
+      t.bigint :used_storage_size, null: false, default: 0
+      t.bigint :max_storage_size, null: false, default: 1000000000
       t.string :password_digest
       t.boolean :deleted, null: false, default: false
       t.datetime :deleted_at
