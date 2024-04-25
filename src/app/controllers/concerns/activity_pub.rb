@@ -207,16 +207,16 @@ module ActivityPub
   end
   def account(uri)
     #サーバー判定
-    if URI.parse(uri).host == URI.parse(ENV['APP_HOST']).host
-      account = Account.find_by(name_id: uri.split(/[@]/).last)
-    else
-      server = server(URI.parse(uri).host)
+    #if URI.parse(uri).host == URI.parse(ENV['APP_HOST']).host
+    #  account = Account.find_by(name_id: uri.split(/[@]/).last)
+    #else
+      #server = server(URI.parse(uri).host)
       #アカウントあるかないか
       if account = Account.find_by(activitypub_id: uri)
       else
         account = explore_account(uri)
       end
-    end
+    #end
     return account
   end
   def deliver(actor:, body:, to_url:, from_url: ENV['APP_HOST'])
@@ -262,11 +262,44 @@ module ActivityPub
   end
   private
   def explore_account(uri)
+    host = URI.parse(uri).host
+    path = URI.parse(uri).path
+    current_time = Time.now.utc.httpdate
     #server確認紐づけ
+    headers = {
+      'Host': host,
+      'Date': current_time,
+    } 
+    statement_headers = '(request-target) host date'
+    signed_string = build_signed_string(headers: headers, statement_headers: statement_headers, request_target: 'get', path: path)
+    
+    signature = generate_signature(Account.find_by(name_id: 'kisana').private_key, signed_string)
+    statement = [
+      "keyId=\"https://#{URI.parse(ENV['APP_HOST']).host}/@#{actor.name_id}#main-key\"",
+      'algorithm="rsa-sha256"',
+      "headers=\"#{statement_headers}\"",
+      "signature=\"#{signature}\""
+    ].join(',')
+    headers.merge({
+      'Signature': statement,
+      'Authorization': "Signature #{statement}",
+      'User-Agent': "Amiverse v.0.0.5 (+https://#{URI.parse(ENV['APP_HOST']).host}/)"
+    }) # {'Accept' => 'application/activity+json'} ??
     req,res = https_get(
       uri,
-      {'Accept' => 'application/activity+json'}
+      headers
     )
+    
+    ActivityPubDelivered.create(
+      to_url: uri,
+      digest: '',
+      to_be_signed: statement_headers,
+      signature: http_signature[3],
+      statement: statement,
+      content: body.to_json,
+      response: res.body
+    )
+
     res.code == 200
     data = JSON.parse(res.body)
     account = Account.new(

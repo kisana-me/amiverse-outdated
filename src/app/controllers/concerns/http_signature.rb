@@ -31,7 +31,7 @@ module HttpSignature
     headers = {
       'Host': URI.parse(to_url).host,
       'Date': http_signature[0],
-      'Digest': "SHA-256=#{http_signature[1]}",
+      'Digest': "SHA-256=#{http_signature[1]}",# いらないときもある
       'Signature': statement,
       'Authorization': "Signature #{statement}",
       #'Accept': 'application/json',
@@ -46,15 +46,18 @@ module HttpSignature
     # verify here
   end
 
-  private
-  def build_signed_string(headers, signed_headers, path)
+  def build_signed_string(headers:, statement_headers:, request_target:, path:)
+    array = statement_headers.split(" ")
     signed_headers.map do |signed_header|
       case signed_header
-      when 'path'
-        "(request-target): post #{path}"
+      when '(request-target)'
+        "(request-target): #{request_target}} #{path}"
       else
         "#{signed_header}: #{headers[to_header_name(signed_header)]}"
       end
     end.join("\n")
+  end
+  def to_header_name(str)
+    str.split('-').map(&:capitalize).join('-')
   end
 end
