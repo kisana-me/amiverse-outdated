@@ -11,7 +11,7 @@ export async function getServerSideProps({req, res, context, query}) {
   const accept = req.headers.accept
   // application/activity+jsonが含まれているかチェック
   const isActivity = accept.includes('application/activity+json')
-  if(isActivity){
+  if(true){
     let accountData = {}
     //問い合わせ
     await axios.post('http://app:3000/v1/@' + query.name_id)

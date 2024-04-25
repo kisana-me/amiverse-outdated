@@ -265,42 +265,40 @@ module ActivityPub
     host = URI.parse(uri).host
     path = URI.parse(uri).path
     current_time = Time.now.utc.httpdate
+    actor = Account.find_by(name_id: 'kisana')
     #server確認紐づけ
     headers = {
       'Host': host,
-      'Date': current_time,
+      'Date': current_time
     } 
     statement_headers = '(request-target) host date'
     signed_string = build_signed_string(headers: headers, statement_headers: statement_headers, request_target: 'get', path: path)
     
-    signature = generate_signature(Account.find_by(name_id: 'kisana').private_key, signed_string)
+    signature = generate_signature(actor.private_key, signed_string)
     statement = [
       "keyId=\"https://#{URI.parse(ENV['APP_HOST']).host}/@#{actor.name_id}#main-key\"",
       'algorithm="rsa-sha256"',
       "headers=\"#{statement_headers}\"",
       "signature=\"#{signature}\""
     ].join(',')
-    headers.merge({
+    headers = headers.merge({
       'Signature': statement,
       'Authorization': "Signature #{statement}",
-      'User-Agent': "Amiverse v.0.0.5 (+https://#{URI.parse(ENV['APP_HOST']).host}/)"
-    }) # {'Accept' => 'application/activity+json'} ??
+      'User-Agent': "Amiverse v.0.0.5 (+https://#{URI.parse(ENV['APP_HOST']).host}/)",
+      'Accept' => 'application/activity+json'
+    })
     req,res = https_get(
       uri,
       headers
     )
-    
     ActivityPubDelivered.create(
       to_url: uri,
       digest: '',
       to_be_signed: statement_headers,
-      signature: http_signature[3],
+      signature: headers.to_json,
       statement: statement,
-      content: body.to_json,
       response: res.body
     )
-
-    res.code == 200
     data = JSON.parse(res.body)
     account = Account.new(
       name: data['name'].present? ? data['name'] : '',
@@ -311,7 +309,7 @@ module ActivityPub
       foreigner: true,
       activitypub: true,
       activated: true,
-      summary: data['summary'].present? ? data['summary'] : '',
+      description: data['summary'].present? ? data['summary'] : '',
       discoverable: data['discoverable'].nil? ? true : data['discoverable'].present?,
       locked: data['manuallyApprovesFollowers'].nil? ? true : data['manuallyApprovesFollowers'].present?,
       public_key: data['publicKey']['publicKeyPem']

@@ -48,7 +48,7 @@ module HttpSignature
 
   def build_signed_string(headers:, statement_headers:, request_target:, path:)
     array = statement_headers.split(" ")
-    signed_headers.map do |signed_header|
+    array.map do |signed_header|
       case signed_header
       when '(request-target)'
         "(request-target): #{request_target}} #{path}"

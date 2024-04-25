@@ -48,9 +48,6 @@ class V1::ApplicationController < ApplicationController
       :aid,
       :name,
       :name_id,
-      :icon_id,
-      :banner_id,
-      :summary,
       :location,
       :followers_counter,
       :following_counter,
@@ -63,8 +60,9 @@ class V1::ApplicationController < ApplicationController
       :kind,
       :public_key
     ])
-    account_data_json['icon_url'] = image_url(aid: account.icon_id, type: 'icons')
-    account_data_json['banner_url'] = image_url(aid: account.banner_id, type: 'banners')
+    account_data_json['icon_url'] = ''
+    account_data_json['banner_url'] = ''
+    account_data_json['summary'] = account.description
     account_data_json['items'] = items_data(account.items)
     return account_data_json
   end
