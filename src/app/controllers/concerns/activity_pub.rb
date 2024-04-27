@@ -13,11 +13,11 @@ module ActivityPub
     {
       "@context": ["https://www.w3.org/ns/activitystreams", {}],
       "type": "Create",
-      "id": File.join(ENV['APP_HOST'], id),
+      "id": File.join(ENV['APP_URL'], id),
       "published": published.utc.iso8601,
       "to": to,
       "cc": cc,
-      "actor": File.join(ENV['APP_HOST'], '@'+ actor.name_id),
+      "actor": File.join(ENV['APP_URL'], '@'+ actor.name_id),
       "object": object
     }
   end
@@ -207,7 +207,7 @@ module ActivityPub
   end
   def account(uri)
     #サーバー判定
-    #if URI.parse(uri).host == URI.parse(ENV['APP_HOST']).host
+    #if URI.parse(uri).host == URI.parse(ENV['APP_URL']).host
     #  account = Account.find_by(name_id: uri.split(/[@]/).last)
     #else
       #server = server(URI.parse(uri).host)
@@ -219,7 +219,7 @@ module ActivityPub
     #end
     return account
   end
-  def deliver(actor:, body:, to_url:, from_url: ENV['APP_HOST'])
+  def deliver(actor:, body:, to_url:, from_url: ENV['APP_URL'])
     headers, statement, http_signature = create_signed_headers(actor: actor, body: body, to_url: to_url, from_url: from_url)
     req,res = https_post(
       to_url,
@@ -276,7 +276,7 @@ module ActivityPub
     
     signature = generate_signature(actor.private_key, signed_string)
     statement = [
-      "keyId=\"https://#{URI.parse(ENV['APP_HOST']).host}/@#{actor.name_id}#main-key\"",
+      "keyId=\"https://#{URI.parse(ENV['APP_URL']).host}/@#{actor.name_id}#main-key\"",
       'algorithm="rsa-sha256"',
       "headers=\"#{statement_headers}\"",
       "signature=\"#{signature}\""
@@ -284,7 +284,7 @@ module ActivityPub
     headers = headers.merge({
       'Signature': statement,
       'Authorization': "Signature #{statement}",
-      'User-Agent': "Amiverse v.0.0.5 (+https://#{URI.parse(ENV['APP_HOST']).host}/)",
+      'User-Agent': "Amiverse v.0.0.5 (+https://#{URI.parse(ENV['APP_URL']).host}/)",
       'Accept' => 'application/activity+json'
     })
     req,res = https_get(

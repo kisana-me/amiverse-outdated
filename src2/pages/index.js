@@ -38,7 +38,7 @@ export default function Home() {
       fetchItems()
       async function created(){
         const ActionCable = await import('actioncable')
-        const cable = ActionCable.createConsumer(process.env.NEXT_PUBLIC_WSNAME)
+        const cable = ActionCable.createConsumer(process.env.NEXT_PUBLIC_FRONT_WS_URL)
         cable.subscriptions.create( "ItemsChannel",{
           connected() {
             console.log('connected')

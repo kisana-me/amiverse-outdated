@@ -19,7 +19,7 @@ module AccountsHelper
     else
       name_id = str
     end
-    return name_id, host, (host.blank? || host == URI.parse(ENV['APP_HOST']).host)
+    return name_id, host, (host.blank? || host == URI.parse(ENV['APP_URL']).host)
   end
   def find_account_by_nid(nid)
     name_id, host, own_server = name_id_host_separater(nid)

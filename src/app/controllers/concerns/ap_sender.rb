@@ -86,7 +86,7 @@ module ApSender
       "object": object
     }
     to_url = File.join(destination.activitypub_id, 'inbox')
-    from_url = ENV['APP_HOST']
+    from_url = ENV['APP_URL']
     headers, statement, http_signature = create_signed_headers(actor: actor, body: body, to_url: to_url, from_url: from_url)
     req,res = https_post(
       to_url,

@@ -19,12 +19,12 @@ module ApplicationHelper
   private
   def object_url(path_key)
     bucket_key = File.join(ENV["S3_BUCKET"], path_key)
-    url = File.join(ENV["S3_ENDPOINT_1"], bucket_key)
+    url = File.join(ENV["S3_PUBLIC_ENDPOINT"], bucket_key)
     return url
   end
   def signed_object_url(path_key)
     s3 = Aws::S3::Client.new(
-      endpoint: ENV["S3_ENDPOINT_1"],
+      endpoint: ENV["S3_PUBLIC_ENDPOINT"],
       region: ENV["S3_REGION"],
       access_key_id: ENV["S3_USER"],
       secret_access_key: ENV["S3_PASSWORD"],

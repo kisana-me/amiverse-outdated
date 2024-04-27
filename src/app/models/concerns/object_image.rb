@@ -41,7 +41,7 @@ module ObjectImage
       return
     end
     s3 = Aws::S3::Client.new(
-      endpoint: ENV["S3_ENDPOINT_0"],
+      endpoint: ENV["S3_LOCAL_ENDPOINT"],
       region: ENV["S3_REGION"],
       access_key_id: ENV["S3_USER"],
       secret_access_key: ENV["S3_PASSWORD"],

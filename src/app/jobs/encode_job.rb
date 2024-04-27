@@ -7,7 +7,7 @@ class EncodeJob < ApplicationJob
       downloaded_video = Tempfile.new(['downloaded_video', '.mp4'])
       encoded_video = Tempfile.new(['encoded_video', '.mp4'])
       s3 = Aws::S3::Client.new(
-        endpoint: ENV["S3_ENDPOINT_0"],
+        endpoint: ENV["S3_LOCAL_ENDPOINT"],
         region: ENV["S3_REGION"],
         access_key_id: ENV["S3_USER"],
         secret_access_key: ENV["S3_PASSWORD"],
@@ -38,7 +38,7 @@ class EncodeJob < ApplicationJob
   
   def s3_upload(key:, file:, content_type:)
     s3 = Aws::S3::Resource.new(
-      endpoint: ENV["S3_ENDPOINT_0"],
+      endpoint: ENV["S3_LOCAL_ENDPOINT"],
       region: ENV["S3_REGION"],
       access_key_id: ENV["S3_USER"],
       secret_access_key: ENV["S3_PASSWORD"],

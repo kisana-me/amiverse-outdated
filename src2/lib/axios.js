@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_APINAME
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_FRONT_API_URL
 axios.defaults.xsrfCookieName = 'CSRF-TOKEN'
 axios.defaults.xsrfHeaderName = 'X-CSRF-Token'
 axios.defaults.withCredentials = true
