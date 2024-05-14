@@ -31,7 +31,7 @@ module ApReceiver
         follow_params = {
           followed: followed,
           follower: follower,
-          uuid: id # uuidではなくid
+          uid: id
         }
         if Follow.exists?(follow_params)
           status = 'Info:フォロー済み'
