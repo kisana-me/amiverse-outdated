@@ -7,8 +7,8 @@ class V1::AccountsController < V1::ApplicationController
     render json: {
       name_id: @account.name_id,
       name: @account.name,
-      icon_url: generate_ati_url(@account.account_id, 'icon', @account.icon_id),
-      banner_url: generate_ati_url(@account.account_id, 'banner', @account.banner_id),
+      icon_url: generate_ati_url(@account.account_id, 'icon', @account.icon_key),
+      banner_url: generate_ati_url(@account.account_id, 'banner', @account.banner_key),
       bio: @account.bio,
       location: @account.location,
       birthday: @account.birthday,
@@ -56,11 +56,11 @@ class V1::AccountsController < V1::ApplicationController
     }
   end
   def update
-    pre_icon_id = @account.icon_id
-    pre_banner_id = @account.banner_id
+    pre_icon_key = @account.icon_key
+    pre_banner_key = @account.banner_key
     if @account.update(account_update_params)
-      generate_varinat_image(params[:account][:icon_id], pre_icon_id, 'icon')
-      generate_varinat_image(params[:account][:banner_id], pre_banner_id, 'banner')
+      generate_varinat_image(params[:account][:icon_key], pre_icon_key, 'icon')
+      generate_varinat_image(params[:account][:banner_key], pre_banner_key, 'banner')
       flash[:success] = "更新成功!"
       redirect_to account_path(@account.name_id)
     else
@@ -76,8 +76,8 @@ class V1::AccountsController < V1::ApplicationController
     params.require(:account).permit(
       :name,
       :name_id,
-      :icon_id,
-      :banner_id,
+      :icon_key,
+      :banner_key,
       :bio,
       :location,
       :birthday,

@@ -7,7 +7,7 @@
     <div class="top-container">
       <div class="banner-container" id="banner-container" >
         <% if @account.banner_key.present? %>
-          <%= image_tag image_url(aid: @account.banner_id, type: 'banners'), class: 'account-banner' %>
+          <%= image_tag image_url(aid: @account.banner_key, type: 'banners'), class: 'account-banner' %>
         <% else %>
           <%= image_tag 'banner.webp', class: 'account-banner' %>
         <% end %>

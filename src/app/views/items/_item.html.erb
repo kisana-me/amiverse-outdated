@@ -17,7 +17,7 @@
       <%= link_to account_path(item.account.name_id) do %>
         <div class="ioa-link">
           <% if false %>
-            <%= image_tag image_url(aid: item.account.icon_id, type: 'icons'), class: 'ioa-icon' %>
+            <%= image_tag image_url(aid: item.account.icon_key, type: 'icons'), class: 'ioa-icon' %>
           <% else %>
             <%= image_tag 'icon.webp', class: 'ioa-icon' %>
           <% end %>

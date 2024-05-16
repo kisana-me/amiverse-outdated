@@ -4,8 +4,8 @@ module Format
       :aid,
       :name,
       :name_id,
-      :icon_id,
-      :banner_id,
+      :icon_key,
+      :banner_key,
       :followers_counter,
       :following_counter,
       :meta,
@@ -19,8 +19,8 @@ module Format
       :aid,
       :name,
       :name_id,
-      :icon_id,
-      :banner_id,
+      :icon_key,
+      :banner_key,
       :summary,
       :location,
       :followers_counter,
@@ -33,8 +33,8 @@ module Format
       :bot,
       :kind
     ])
-    account_data_json['icon_url'] = image_url(account.icon_id, 'icon')
-    account_data_json['banner_url'] = image_url(account.banner_id, 'banner')
+    account_data_json['icon_url'] = image_url(account.icon_key, 'icon')
+    account_data_json['banner_url'] = image_url(account.banner_key, 'banner')
     account_data_json['items'] = items_data(account.items)
     return account_data_json
   end
@@ -43,8 +43,8 @@ module Format
       :aid,
       :name,
       :name_id,
-      :icon_id,
-      :banner_id,
+      :icon_key,
+      :banner_key,
       :meta,
       :cache,
       :bot,

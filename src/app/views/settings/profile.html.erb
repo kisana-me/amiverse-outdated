@@ -12,7 +12,7 @@
         <%= f.file_field :icon_data %>
         <% @images.each do |image| %>
           <div>
-            <%= f.radio_button :icon_id, image.aid %>
+            <%= f.radio_button :icon_key, image.aid %>
             名前:<%= image.name %>
             ID:<%= image.aid %>
             説明:<%= image.description %>
@@ -26,7 +26,7 @@
         <summary>バナー</summary>
         <% @images.each do |image| %>
           <div>
-            <%= f.radio_button :banner_id, image.aid %>
+            <%= f.radio_button :banner_key, image.aid %>
             名前:<%= image.name %>
             ID:<%= image.aid %>
             説明:<%= image.description %>

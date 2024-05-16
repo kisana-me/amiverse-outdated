@@ -33,8 +33,8 @@ class V1::ApplicationController < ApplicationController
       :aid,
       :name,
       :name_id,
-      :icon_id,
-      :banner_id,
+      :icon_key,
+      :banner_key,
       :followers_counter,
       :following_counter,
       :meta,
@@ -71,15 +71,15 @@ class V1::ApplicationController < ApplicationController
       :aid,
       :name,
       :name_id,
-      :icon_id,
-      :banner_id,
+      :icon_key,
+      :banner_key,
       :meta,
       :cache,
       :bot,
       :kind
     ])
-    account_data_json['icon_url'] = image_url(aid: account.icon_id, type: 'icons')
-    account_data_json['banner_url'] = image_url(aid: account.banner_id, type: 'banners')
+    account_data_json['icon_url'] = image_url(aid: account.icon_key, type: 'icons')
+    account_data_json['banner_url'] = image_url(aid: account.banner_key, type: 'banners')
     return account_data_json
   end
   def ap_account_data(account)

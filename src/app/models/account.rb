@@ -104,10 +104,10 @@ class Account < ApplicationRecord
   end
   def valid_images
     if self.icon_key_changed?
-      validate_using_image(self, icon_id, self.id)
+      validate_using_image(self, icon_key, self.id)
     end
     if self.banner_key_changed?
-      validate_using_image(self, banner_id, self.id)
+      validate_using_image(self, banner_key, self.id)
     end
   end
 end
