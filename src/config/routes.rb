@@ -143,8 +143,8 @@ Rails.application.routes.draw do
   get 'release_notes' => 'resources#release_notes'
   get 'blog' => 'resources#blog'
 
-  # administorator
-  namespace :admin do
+  # administrator
+  namespace :administrator do
 
     # dashboard
     root 'dashboard#index'

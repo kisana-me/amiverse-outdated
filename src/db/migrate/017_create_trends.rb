@@ -1,17 +1,17 @@
-class CreateAchievements < ActiveRecord::Migration[7.0]
+class CreateTrends < ActiveRecord::Migration[7.0]
   def change
-    create_table :achievements do |t|
+    create_table :trends do |t|
       t.string :aid, null: false
       t.string :name, null: false, default: ''
       t.text :description, null: false, default: ''
-      t.bigint :counter, null: false, default: 0
-      t.string :kind, null: false, default: ''
+      t.bigint :associated_counter, null: false, default: 0
+      t.integer :status, limit: 1, null: false, default: 0
       t.json :meta, null: false, default: []
       t.json :cache, null: false, default: []
       t.boolean :deleted, null: false, default: false
       t.datetime :deleted_at
       t.timestamps
     end
-    add_index :achievements, [:aid], unique: true
+    add_index :trends, [:aid], unique: true
   end
 end

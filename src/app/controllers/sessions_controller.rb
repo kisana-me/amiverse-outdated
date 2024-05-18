@@ -6,13 +6,7 @@ class SessionsController < ApplicationController
   def new
   end
   def create
-    account = Account.find_by(name_id: params[:session][:name_id].downcase,
-      activated: true,
-      locked: false,
-      silenced: false,
-      suspended: false,
-      frozen: false,
-      deleted: false)
+    account = Account.find_by(name_id: params[:session][:name_id].downcase, deleted: false)
     if account && account.authenticate(params[:session][:password])
       log_in account
       flash[:success] = t('.success')

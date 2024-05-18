@@ -1,9 +1,9 @@
-class CreateReactions < ActiveRecord::Migration[7.0]
+class CreatePolymorphicReactions < ActiveRecord::Migration[7.0]
   def change
-    create_table :reactions do |t|
+    create_table :polymorphic_reactions do |t|
       t.references :account, null: false, foreign_key: true
       t.references :emoji, null: false, polymorphic: true
-      t.references :item, null: false, foreign_key: true
+      t.references :target, null: false, polymorphic: true
       t.boolean :effect, null: false, default: false
       t.json :meta, null: false, default: []
       t.json :cache, null: false, default: []

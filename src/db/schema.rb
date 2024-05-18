@@ -22,6 +22,15 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.check_constraint "json_valid(`content`)", name: "content"
   end
 
+  create_table "account_achievements", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "achievement_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_achievements_on_account_id"
+    t.index ["achievement_id"], name: "index_account_achievements_on_achievement_id"
+  end
+
   create_table "account_badges", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "badge_id", null: false
@@ -58,6 +67,15 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_account_invitations_on_account_id"
     t.index ["invitation_id"], name: "index_account_invitations_on_invitation_id"
+  end
+
+  create_table "account_permissions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "permission_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_permissions_on_account_id"
+    t.index ["permission_id"], name: "index_account_permissions_on_permission_id"
   end
 
   create_table "account_roles", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -97,40 +115,31 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.string "name_id", null: false
-    t.boolean "foreigner", default: false, null: false
-    t.boolean "activitypub", default: false, null: false
-    t.string "activitypub_url", default: "", null: false
-    t.string "activitypub_id", default: "", null: false
-    t.datetime "ap_last_fetched_at"
-    t.text "ap_meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "public_key", default: "", null: false
-    t.text "private_key", default: "", null: false
     t.boolean "sensitive", default: false, null: false
     t.string "caution_message", default: "", null: false
-    t.string "online_status", default: "offline", null: false
+    t.integer "online_status", limit: 1, default: 0, null: false
+    t.integer "online_visibility", limit: 1, default: 0, null: false
     t.datetime "last_online"
-    t.string "online_visibility", default: "public", null: false
     t.text "description", default: "", null: false
     t.text "additional_informations", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
     t.string "location", default: "", null: false
-    t.datetime "birthday"
-    t.string "birthyear_visibility", default: "public", null: false
-    t.string "birthmonthday_visibility", default: "public", null: false
+    t.date "birth"
+    t.integer "birth_year_visibility", limit: 1, default: 0, null: false
+    t.integer "birth_month_visibility", limit: 1, default: 0, null: false
+    t.integer "birth_day_visibility", limit: 1, default: 0, null: false
     t.text "pinned_items", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "languages", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.string "followers_visibility", default: "public", null: false
-    t.string "following_visibility", default: "public", null: false
-    t.string "reactions_visibility", default: "public", null: false
+    t.integer "followers_visibility", limit: 1, default: 0, null: false
+    t.integer "following_visibility", limit: 1, default: 0, null: false
+    t.integer "reactions_visibility", limit: 1, default: 0, null: false
+    t.boolean "scoping", default: false, null: false
     t.boolean "discoverable", default: true, null: false
     t.boolean "auto_accept_follow", default: true, null: false
-    t.boolean "no_crawle", default: false, null: false
-    t.boolean "prevent_ai_learning", default: false, null: false
-    t.text "mutes", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
     t.string "email", default: "", null: false
     t.boolean "email_verified", default: false, null: false
-    t.boolean "use_login_id", default: false, null: false
     t.string "login_id", default: "", null: false
-    t.string "usage_type", default: "", null: false
+    t.boolean "use_login_id", default: false, null: false
+    t.integer "usage_type", limit: 1, default: 0, null: false
     t.text "defaults", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
     t.text "settings", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
     t.string "icon_key", default: "", null: false
@@ -139,49 +148,43 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.bigint "following_counter", default: 0, null: false
     t.bigint "items_counter", default: 0, null: false
     t.bigint "reactions_counter", default: 0, null: false
-    t.text "badges", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "roles", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "permissions", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "checker", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.boolean "administrator", default: false, null: false
-    t.boolean "moderator", default: false, null: false
-    t.boolean "activated", default: false, null: false
-    t.boolean "hibernation", default: false, null: false
-    t.boolean "locked", default: false, null: false
-    t.boolean "silenced", default: false, null: false
-    t.boolean "suspended", default: false, null: false
-    t.boolean "frozen", default: false, null: false
-    t.boolean "suggestion_ban", default: false, null: false
-    t.text "achievements", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "features", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "curious", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.integer "reacted_counter", default: 0, null: false
+    t.integer "viewed_counter", default: 0, null: false
+    t.text "checker", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
+    t.text "cache", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
+    t.boolean "shadow_banned", default: false, null: false
+    t.integer "status", limit: 1, default: 1, null: false
+    t.text "account_topics", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "interest_topics", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "meta", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
     t.integer "score", default: 0, null: false
-    t.text "moderation_note", default: "", null: false
     t.bigint "used_storage_size", default: 0, null: false
     t.bigint "max_storage_size", default: 1000000000, null: false
     t.string "password_digest"
     t.boolean "deleted", default: false, null: false
     t.datetime "deleted_at"
+    t.boolean "foreigner", default: false, null: false
+    t.boolean "activitypub", default: false, null: false
+    t.boolean "ap_scoping", default: false, null: false
+    t.string "ap_uri", default: "", null: false
+    t.string "ap_url", default: "", null: false
+    t.datetime "ap_last_fetched_at"
+    t.text "ap_meta", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
+    t.text "ap_public_key", default: "", null: false
+    t.text "ap_private_key", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["aid", "name_id", "activitypub_id"], name: "index_accounts_on_aid_and_name_id_and_activitypub_id", unique: true
-    t.check_constraint "json_valid(`achievements`)", name: "achievements"
+    t.index ["aid", "name_id", "ap_uri"], name: "index_accounts_on_aid_and_name_id_and_ap_uri", unique: true
+    t.check_constraint "json_valid(`account_topics`)", name: "account_topics"
     t.check_constraint "json_valid(`additional_informations`)", name: "additional_informations"
     t.check_constraint "json_valid(`ap_meta`)", name: "ap_meta"
-    t.check_constraint "json_valid(`badges`)", name: "badges"
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`checker`)", name: "checker"
-    t.check_constraint "json_valid(`curious`)", name: "curious"
     t.check_constraint "json_valid(`defaults`)", name: "defaults"
-    t.check_constraint "json_valid(`features`)", name: "features"
+    t.check_constraint "json_valid(`interest_topics`)", name: "interest_topics"
     t.check_constraint "json_valid(`languages`)", name: "languages"
     t.check_constraint "json_valid(`meta`)", name: "meta"
-    t.check_constraint "json_valid(`mutes`)", name: "mutes"
-    t.check_constraint "json_valid(`permissions`)", name: "permissions"
     t.check_constraint "json_valid(`pinned_items`)", name: "pinned_items"
-    t.check_constraint "json_valid(`roles`)", name: "roles"
     t.check_constraint "json_valid(`settings`)", name: "settings"
   end
 
@@ -189,8 +192,8 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
-    t.bigint "counter", default: 0, null: false
-    t.string "kind", default: "", null: false
+    t.bigint "associated_counter", default: 0, null: false
+    t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.boolean "deleted", default: false, null: false
@@ -369,12 +372,15 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.text "description", default: "", null: false
     t.boolean "sensitive", default: false, null: false
     t.string "caution_message", default: "", null: false
-    t.boolean "scope", default: false, null: false
-    t.boolean "limit", default: false, null: false
+    t.boolean "scoping", default: false, null: false
+    t.boolean "limiting", default: false, null: false
     t.boolean "private", default: false, null: false
-    t.string "kind", default: "", null: false
+    t.string "original_key", default: "", null: false
+    t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.bigint "data_size", default: 0, null: false
     t.boolean "deleted", default: false, null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
@@ -383,14 +389,15 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.index ["aid"], name: "index_audios_on_aid", unique: true
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
   create_table "badges", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
-    t.bigint "counter", default: 0, null: false
-    t.string "kind", default: "", null: false
+    t.bigint "associated_counter", default: 0, null: false
+    t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.boolean "deleted", default: false, null: false
@@ -400,6 +407,33 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.index ["aid"], name: "index_badges_on_aid", unique: true
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`meta`)", name: "meta"
+  end
+
+  create_table "banners", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "aid", null: false
+    t.string "name", default: "", null: false
+    t.text "description", default: "", null: false
+    t.boolean "sensitive", default: false, null: false
+    t.string "caution_message", default: "", null: false
+    t.boolean "scoping", default: false, null: false
+    t.boolean "limiting", default: false, null: false
+    t.boolean "private", default: false, null: false
+    t.string "original_key", default: "", null: false
+    t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.integer "status", limit: 1, default: 0, null: false
+    t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.bigint "data_size", default: 0, null: false
+    t.boolean "deleted", default: false, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_banners_on_account_id"
+    t.index ["aid"], name: "index_banners_on_aid", unique: true
+    t.check_constraint "json_valid(`cache`)", name: "cache"
+    t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
   create_table "bills", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -428,8 +462,8 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
-    t.bigint "counter", default: 0, null: false
-    t.string "kind", default: "", null: false
+    t.bigint "associated_counter", default: 0, null: false
+    t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.boolean "deleted", default: false, null: false
@@ -467,6 +501,32 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.index ["aid"], name: "index_communities_on_aid", unique: true
   end
 
+  create_table "custom_emojis", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "aid", null: false
+    t.string "name", default: "", null: false
+    t.string "name_id", default: "", null: false
+    t.text "description", default: "", null: false
+    t.boolean "official", default: false, null: false
+    t.boolean "sensitive", default: false, null: false
+    t.boolean "local", default: false, null: false
+    t.boolean "scoping", default: false, null: false
+    t.boolean "limiting", default: false, null: false
+    t.boolean "private", default: false, null: false
+    t.string "license", default: "", null: false
+    t.integer "status", limit: 1, default: 0, null: false
+    t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.boolean "deleted", default: false, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_custom_emojis_on_account_id"
+    t.index ["aid", "name_id"], name: "index_custom_emojis_on_aid_and_name_id", unique: true
+    t.check_constraint "json_valid(`cache`)", name: "cache"
+    t.check_constraint "json_valid(`meta`)", name: "meta"
+  end
+
   create_table "diffusions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "diffused", null: false
     t.bigint "diffuser", null: false
@@ -477,47 +537,23 @@ ActiveRecord::Schema[7.0].define(version: 993) do
   end
 
   create_table "emoji_categories", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "emoji_type", null: false
     t.bigint "emoji_id", null: false
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_emoji_categories_on_category_id"
-    t.index ["emoji_id"], name: "index_emoji_categories_on_emoji_id"
+    t.index ["emoji_type", "emoji_id"], name: "index_emoji_categories_on_emoji"
   end
 
   create_table "emoji_tags", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "emoji_type", null: false
     t.bigint "emoji_id", null: false
     t.bigint "tag_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["emoji_id"], name: "index_emoji_tags_on_emoji_id"
+    t.index ["emoji_type", "emoji_id"], name: "index_emoji_tags_on_emoji"
     t.index ["tag_id"], name: "index_emoji_tags_on_tag_id"
-  end
-
-  create_table "emojis", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "account_id", null: false
-    t.string "aid", null: false
-    t.string "name", default: "", null: false
-    t.string "name_id", default: "", null: false
-    t.text "description", default: "", null: false
-    t.boolean "custom", default: false, null: false
-    t.boolean "official", default: false, null: false
-    t.boolean "sensitive", default: false, null: false
-    t.boolean "local", default: false, null: false
-    t.boolean "scope", default: false, null: false
-    t.boolean "limit", default: false, null: false
-    t.boolean "private", default: false, null: false
-    t.string "kind", default: "", null: false
-    t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.boolean "deleted", default: false, null: false
-    t.datetime "deleted_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_emojis_on_account_id"
-    t.index ["aid", "name_id"], name: "index_emojis_on_aid_and_name_id", unique: true
-    t.check_constraint "json_valid(`cache`)", name: "cache"
-    t.check_constraint "json_valid(`meta`)", name: "meta"
   end
 
   create_table "entries", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -560,6 +596,33 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.index ["aid"], name: "index_groups_on_aid", unique: true
   end
 
+  create_table "icons", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "aid", null: false
+    t.string "name", default: "", null: false
+    t.text "description", default: "", null: false
+    t.boolean "sensitive", default: false, null: false
+    t.string "caution_message", default: "", null: false
+    t.boolean "scoping", default: false, null: false
+    t.boolean "limiting", default: false, null: false
+    t.boolean "private", default: false, null: false
+    t.string "original_key", default: "", null: false
+    t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.integer "status", limit: 1, default: 0, null: false
+    t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.bigint "data_size", default: 0, null: false
+    t.boolean "deleted", default: false, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_icons_on_account_id"
+    t.index ["aid"], name: "index_icons_on_aid", unique: true
+    t.check_constraint "json_valid(`cache`)", name: "cache"
+    t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`variants`)", name: "variants"
+  end
+
   create_table "images", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
@@ -567,12 +630,12 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.text "description", default: "", null: false
     t.boolean "sensitive", default: false, null: false
     t.string "caution_message", default: "", null: false
-    t.boolean "scope", default: false, null: false
-    t.boolean "limit", default: false, null: false
+    t.boolean "scoping", default: false, null: false
+    t.boolean "limiting", default: false, null: false
     t.boolean "private", default: false, null: false
     t.string "original_key", default: "", null: false
     t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.string "kind", default: "", null: false
+    t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.bigint "data_size", default: 0, null: false
@@ -666,37 +729,55 @@ ActiveRecord::Schema[7.0].define(version: 993) do
   create_table "items", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
-    t.string "rendering_type", default: "", null: false
+    t.integer "rendering_type", limit: 1, default: 0, null: false
     t.text "content", default: "", null: false
     t.boolean "sensitive", default: false, null: false
     t.string "caution_message", default: "", null: false
     t.integer "score", default: 0, null: false
+    t.boolean "scoping", default: false, null: false
+    t.integer "reply_limiting", limit: 1, default: 0, null: false
+    t.integer "diffution_limiting", limit: 1, default: 0, null: false
+    t.integer "quote_limiting", limit: 1, default: 0, null: false
+    t.integer "reaction_limiting", limit: 1, default: 0, null: false
+    t.integer "viewed_counter", default: 0, null: false
+    t.integer "replied_counter", default: 0, null: false
+    t.integer "diffused_counter", default: 0, null: false
+    t.integer "quoted_counter", default: 0, null: false
+    t.integer "reacted_counter", default: 0, null: false
+    t.text "cache", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
+    t.integer "status", limit: 1, default: 0, null: false
+    t.text "meta", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
+    t.boolean "deleted", default: false, null: false
+    t.datetime "deleted_at"
     t.boolean "foreign", default: false, null: false
-    t.string "original_url", default: "", null: false
-    t.boolean "federation", default: false, null: false
-    t.boolean "scope", default: false, null: false
-    t.boolean "reply_limit", default: false, null: false
-    t.boolean "diffution_limit", default: false, null: false
-    t.boolean "quote_limit", default: false, null: false
-    t.boolean "reaction_limit", default: false, null: false
-    t.integer "reply_counter", default: 0, null: false
-    t.integer "diffution_counter", default: 0, null: false
-    t.integer "quote_counter", default: 0, null: false
-    t.integer "reaction_counter", default: 0, null: false
-    t.string "usage_type", default: "", null: false
-    t.boolean "ai_generated", default: false, null: false
-    t.boolean "private", default: false, null: false
-    t.boolean "draft", default: false, null: false
-    t.boolean "scheduled", default: false, null: false
-    t.datetime "scheduled_at"
+    t.boolean "activitypub", default: false, null: false
+    t.boolean "ap_scoping", default: false, null: false
+    t.string "ap_uri", default: "", null: false
+    t.string "ap_url", default: "", null: false
+    t.datetime "ap_last_fetched_at"
+    t.text "ap_meta", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_items_on_account_id"
+    t.index ["aid"], name: "index_items_on_aid", unique: true
+    t.check_constraint "json_valid(`ap_meta`)", name: "ap_meta"
+    t.check_constraint "json_valid(`cache`)", name: "cache"
+    t.check_constraint "json_valid(`meta`)", name: "meta"
+  end
+
+  create_table "limits", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "aid", null: false
+    t.string "name", default: "", null: false
+    t.text "description", default: "", null: false
+    t.bigint "associated_counter", default: 0, null: false
+    t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.boolean "deleted", default: false, null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_items_on_account_id"
-    t.index ["aid"], name: "index_items_on_aid", unique: true
+    t.index ["aid"], name: "index_limits_on_aid", unique: true
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`meta`)", name: "meta"
   end
@@ -785,52 +866,6 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.index ["group_id"], name: "index_messages_on_group_id"
   end
 
-  create_table "model_audios", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "model", default: "", null: false
-    t.string "aid", default: "", null: false
-    t.bigint "audio_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["audio_id"], name: "index_model_audios_on_audio_id"
-  end
-
-  create_table "model_images", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "model", default: "", null: false
-    t.string "aid", default: "", null: false
-    t.bigint "image_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["image_id"], name: "index_model_images_on_image_id"
-  end
-
-  create_table "model_reactions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "account_id", null: false
-    t.bigint "emoji_id", null: false
-    t.string "model", default: "", null: false
-    t.string "aid", default: "", null: false
-    t.string "effect_type", default: "", null: false
-    t.string "kind", default: "", null: false
-    t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.boolean "deleted", default: false, null: false
-    t.datetime "deleted_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_model_reactions_on_account_id"
-    t.index ["emoji_id"], name: "index_model_reactions_on_emoji_id"
-    t.check_constraint "json_valid(`cache`)", name: "cache"
-    t.check_constraint "json_valid(`meta`)", name: "meta"
-  end
-
-  create_table "model_videos", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "model", default: "", null: false
-    t.string "aid", default: "", null: false
-    t.bigint "video_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["video_id"], name: "index_model_videos_on_video_id"
-  end
-
   create_table "mutes", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "muted", null: false
     t.bigint "muter", null: false
@@ -854,6 +889,23 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.index ["account_id"], name: "index_notifications_on_account_id"
   end
 
+  create_table "permissions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "aid", null: false
+    t.string "name", default: "", null: false
+    t.text "description", default: "", null: false
+    t.bigint "associated_counter", default: 0, null: false
+    t.integer "status", limit: 1, default: 0, null: false
+    t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.boolean "deleted", default: false, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["aid"], name: "index_permissions_on_aid", unique: true
+    t.check_constraint "json_valid(`cache`)", name: "cache"
+    t.check_constraint "json_valid(`meta`)", name: "meta"
+  end
+
   create_table "places", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "uuid", null: false
@@ -865,6 +917,106 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_places_on_account_id"
+  end
+
+  create_table "polymorphic_audios", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "target_type", null: false
+    t.bigint "target_id", null: false
+    t.bigint "audio_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["audio_id"], name: "index_polymorphic_audios_on_audio_id"
+    t.index ["target_type", "target_id"], name: "index_polymorphic_audios_on_target"
+  end
+
+  create_table "polymorphic_banners", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "target_type", null: false
+    t.bigint "target_id", null: false
+    t.bigint "banner_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["banner_id"], name: "index_polymorphic_banners_on_banner_id"
+    t.index ["target_type", "target_id"], name: "index_polymorphic_banners_on_target"
+  end
+
+  create_table "polymorphic_icons", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "target_type", null: false
+    t.bigint "target_id", null: false
+    t.bigint "icon_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["icon_id"], name: "index_polymorphic_icons_on_icon_id"
+    t.index ["target_type", "target_id"], name: "index_polymorphic_icons_on_target"
+  end
+
+  create_table "polymorphic_images", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "target_type", null: false
+    t.bigint "target_id", null: false
+    t.bigint "image_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["image_id"], name: "index_polymorphic_images_on_image_id"
+    t.index ["target_type", "target_id"], name: "index_polymorphic_images_on_target"
+  end
+
+  create_table "polymorphic_limits", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "target_type", null: false
+    t.bigint "target_id", null: false
+    t.bigint "limit_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["limit_id"], name: "index_polymorphic_limits_on_limit_id"
+    t.index ["target_type", "target_id"], name: "index_polymorphic_limits_on_target"
+  end
+
+  create_table "polymorphic_reactions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "emoji_type", null: false
+    t.bigint "emoji_id", null: false
+    t.string "target_type", null: false
+    t.bigint "target_id", null: false
+    t.boolean "effect", default: false, null: false
+    t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.boolean "deleted", default: false, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_polymorphic_reactions_on_account_id"
+    t.index ["emoji_type", "emoji_id"], name: "index_polymorphic_reactions_on_emoji"
+    t.index ["target_type", "target_id"], name: "index_polymorphic_reactions_on_target"
+    t.check_constraint "json_valid(`cache`)", name: "cache"
+    t.check_constraint "json_valid(`meta`)", name: "meta"
+  end
+
+  create_table "polymorphic_scopes", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "target_type", null: false
+    t.bigint "target_id", null: false
+    t.bigint "scope_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["scope_id"], name: "index_polymorphic_scopes_on_scope_id"
+    t.index ["target_type", "target_id"], name: "index_polymorphic_scopes_on_target"
+  end
+
+  create_table "polymorphic_system_images", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "target_type", null: false
+    t.bigint "target_id", null: false
+    t.bigint "system_image_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["system_image_id"], name: "index_polymorphic_system_images_on_system_image_id"
+    t.index ["target_type", "target_id"], name: "index_polymorphic_system_images_on_target"
+  end
+
+  create_table "polymorphic_videos", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "target_type", null: false
+    t.bigint "target_id", null: false
+    t.bigint "video_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["target_type", "target_id"], name: "index_polymorphic_videos_on_target"
+    t.index ["video_id"], name: "index_polymorphic_videos_on_video_id"
   end
 
   create_table "products", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -908,10 +1060,10 @@ ActiveRecord::Schema[7.0].define(version: 993) do
 
   create_table "reactions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
+    t.string "emoji_type", null: false
     t.bigint "emoji_id", null: false
     t.bigint "item_id", null: false
-    t.string "effect_type", default: "", null: false
-    t.string "kind", default: "", null: false
+    t.boolean "effect", default: false, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.boolean "deleted", default: false, null: false
@@ -919,7 +1071,7 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_reactions_on_account_id"
-    t.index ["emoji_id"], name: "index_reactions_on_emoji_id"
+    t.index ["emoji_type", "emoji_id"], name: "index_reactions_on_emoji"
     t.index ["item_id"], name: "index_reactions_on_item_id"
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`meta`)", name: "meta"
@@ -980,9 +1132,8 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
-    t.text "permissions", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.bigint "counter", default: 0, null: false
-    t.string "kind", default: "", null: false
+    t.bigint "associated_counter", default: 0, null: false
+    t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.boolean "deleted", default: false, null: false
@@ -992,7 +1143,6 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.index ["aid"], name: "index_roles_on_aid", unique: true
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`meta`)", name: "meta"
-    t.check_constraint "json_valid(`permissions`)", name: "permissions"
   end
 
   create_table "rooms", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -1008,6 +1158,23 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_rooms_on_account_id"
     t.index ["aid"], name: "index_rooms_on_aid", unique: true
+  end
+
+  create_table "scopes", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "aid", null: false
+    t.string "name", default: "", null: false
+    t.text "description", default: "", null: false
+    t.bigint "associated_counter", default: 0, null: false
+    t.integer "status", limit: 1, default: 0, null: false
+    t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.boolean "deleted", default: false, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["aid"], name: "index_scopes_on_aid", unique: true
+    t.check_constraint "json_valid(`cache`)", name: "cache"
+    t.check_constraint "json_valid(`meta`)", name: "meta"
   end
 
   create_table "server_Logs", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -1085,12 +1252,37 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.check_constraint "json_valid(`content`)", name: "content"
   end
 
+  create_table "system_images", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "aid", null: false
+    t.string "name", default: "", null: false
+    t.text "description", default: "", null: false
+    t.boolean "sensitive", default: false, null: false
+    t.string "caution_message", default: "", null: false
+    t.boolean "scoping", default: false, null: false
+    t.boolean "limiting", default: false, null: false
+    t.boolean "private", default: false, null: false
+    t.string "original_key", default: "", null: false
+    t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.integer "status", limit: 1, default: 0, null: false
+    t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.bigint "data_size", default: 0, null: false
+    t.boolean "deleted", default: false, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["aid"], name: "index_system_images_on_aid", unique: true
+    t.check_constraint "json_valid(`cache`)", name: "cache"
+    t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`variants`)", name: "variants"
+  end
+
   create_table "tags", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
-    t.bigint "counter", default: 0, null: false
-    t.string "kind", default: "", null: false
+    t.bigint "associated_counter", default: 0, null: false
+    t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.boolean "deleted", default: false, null: false
@@ -1118,8 +1310,8 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
-    t.bigint "counter", default: 0, null: false
-    t.string "kind", default: "", null: false
+    t.bigint "associated_counter", default: 0, null: false
+    t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.boolean "deleted", default: false, null: false
@@ -1132,19 +1324,18 @@ ActiveRecord::Schema[7.0].define(version: 993) do
   end
 
   create_table "trends", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "uuid", null: false
+    t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
-    t.bigint "word_counter", default: 0, null: false
-    t.bigint "search_counter", default: 0, null: false
-    t.string "kind", default: "", null: false
+    t.bigint "associated_counter", default: 0, null: false
+    t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.boolean "deleted", default: false, null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["uuid"], name: "index_trends_on_uuid", unique: true
+    t.index ["aid"], name: "index_trends_on_aid", unique: true
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`meta`)", name: "meta"
   end
@@ -1156,12 +1347,15 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.text "description", default: "", null: false
     t.boolean "sensitive", default: false, null: false
     t.string "caution_message", default: "", null: false
-    t.boolean "scope", default: false, null: false
-    t.boolean "limit", default: false, null: false
+    t.boolean "scoping", default: false, null: false
+    t.boolean "limiting", default: false, null: false
     t.boolean "private", default: false, null: false
-    t.string "kind", default: "", null: false
+    t.string "original_key", default: "", null: false
+    t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.bigint "data_size", default: 0, null: false
     t.boolean "deleted", default: false, null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
@@ -1170,6 +1364,7 @@ ActiveRecord::Schema[7.0].define(version: 993) do
     t.index ["aid"], name: "index_videos_on_aid", unique: true
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
   create_table "wallets", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -1204,6 +1399,8 @@ ActiveRecord::Schema[7.0].define(version: 993) do
 
   add_foreign_key "Polls", "accounts"
   add_foreign_key "Polls", "surveys"
+  add_foreign_key "account_achievements", "accounts"
+  add_foreign_key "account_achievements", "achievements"
   add_foreign_key "account_badges", "accounts"
   add_foreign_key "account_badges", "badges"
   add_foreign_key "account_curious", "accounts"
@@ -1212,6 +1409,8 @@ ActiveRecord::Schema[7.0].define(version: 993) do
   add_foreign_key "account_features", "topics"
   add_foreign_key "account_invitations", "accounts"
   add_foreign_key "account_invitations", "invitations"
+  add_foreign_key "account_permissions", "accounts"
+  add_foreign_key "account_permissions", "permissions"
   add_foreign_key "account_roles", "accounts"
   add_foreign_key "account_roles", "roles"
   add_foreign_key "account_rooms", "accounts"
@@ -1230,22 +1429,22 @@ ActiveRecord::Schema[7.0].define(version: 993) do
   add_foreign_key "activity_pub_subscriptions", "activity_pub_servers"
   add_foreign_key "applications", "accounts"
   add_foreign_key "audios", "accounts"
+  add_foreign_key "banners", "accounts"
   add_foreign_key "bills", "accounts"
   add_foreign_key "blocks", "accounts", column: "blocked"
   add_foreign_key "blocks", "accounts", column: "blocker"
   add_foreign_key "communities", "accounts"
+  add_foreign_key "custom_emojis", "accounts"
   add_foreign_key "diffusions", "items", column: "diffused"
   add_foreign_key "diffusions", "items", column: "diffuser"
   add_foreign_key "emoji_categories", "categories"
-  add_foreign_key "emoji_categories", "emojis"
-  add_foreign_key "emoji_tags", "emojis"
   add_foreign_key "emoji_tags", "tags"
-  add_foreign_key "emojis", "accounts"
   add_foreign_key "entries", "accounts"
   add_foreign_key "entries", "groups"
   add_foreign_key "follows", "accounts", column: "followed"
   add_foreign_key "follows", "accounts", column: "follower"
   add_foreign_key "groups", "accounts"
+  add_foreign_key "icons", "accounts"
   add_foreign_key "images", "accounts"
   add_foreign_key "invitations", "accounts"
   add_foreign_key "item_audios", "audios"
@@ -1268,22 +1467,25 @@ ActiveRecord::Schema[7.0].define(version: 993) do
   add_foreign_key "mentions", "items"
   add_foreign_key "messages", "accounts"
   add_foreign_key "messages", "groups"
-  add_foreign_key "model_audios", "audios"
-  add_foreign_key "model_images", "images"
-  add_foreign_key "model_reactions", "accounts"
-  add_foreign_key "model_reactions", "emojis"
-  add_foreign_key "model_videos", "videos"
   add_foreign_key "mutes", "accounts", column: "muted"
   add_foreign_key "mutes", "accounts", column: "muter"
   add_foreign_key "notifications", "accounts"
   add_foreign_key "places", "accounts"
+  add_foreign_key "polymorphic_audios", "audios"
+  add_foreign_key "polymorphic_banners", "banners"
+  add_foreign_key "polymorphic_icons", "icons"
+  add_foreign_key "polymorphic_images", "images"
+  add_foreign_key "polymorphic_limits", "limits"
+  add_foreign_key "polymorphic_reactions", "accounts"
+  add_foreign_key "polymorphic_scopes", "scopes"
+  add_foreign_key "polymorphic_system_images", "system_images"
+  add_foreign_key "polymorphic_videos", "videos"
   add_foreign_key "products", "accounts"
   add_foreign_key "purchases", "accounts"
   add_foreign_key "purchases", "products"
   add_foreign_key "quotes", "items", column: "quoted"
   add_foreign_key "quotes", "items", column: "quoter"
   add_foreign_key "reactions", "accounts"
-  add_foreign_key "reactions", "emojis"
   add_foreign_key "reactions", "items"
   add_foreign_key "read_items", "accounts"
   add_foreign_key "read_items", "items"

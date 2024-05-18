@@ -1,6 +1,6 @@
-class CreateCategories < ActiveRecord::Migration[7.0]
+class CreatePermissions < ActiveRecord::Migration[7.0]
   def change
-    create_table :categories do |t|
+    create_table :permissions do |t|
       t.string :aid, null: false
       t.string :name, null: false, default: ''
       t.text :description, null: false, default: ''
@@ -12,6 +12,6 @@ class CreateCategories < ActiveRecord::Migration[7.0]
       t.datetime :deleted_at
       t.timestamps
     end
-    add_index :categories, [:aid], unique: true
+    add_index :permissions, [:aid], unique: true
   end
 end
