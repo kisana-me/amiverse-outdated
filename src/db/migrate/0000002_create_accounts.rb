@@ -14,7 +14,7 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       t.datetime :last_online
       ## info
       t.text :description, null: false, default: ''
-      t.json :additional_informations, null: false, default: {}
+      t.json :additional_informations, null: false, default: []
       t.string :location, null: false, default: ''
       t.date :birth
       t.integer :birth_year_visibility, limit: 1, null: false, default: 0
@@ -26,7 +26,6 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       t.integer :followers_visibility, limit: 1, null: false, default: 0
       t.integer :following_visibility, limit: 1, null: false, default: 0
       t.integer :reactions_visibility, limit: 1, null: false, default: 0
-      t.boolean :scoping, null: false, default: false
       # setting
       t.boolean :discoverable, null: false, default: true
       t.boolean :auto_accept_follow, null: false, default: true
@@ -35,8 +34,8 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       t.string :login_id, null: false, default: ''
       t.boolean :use_login_id, null: false, default: false
       t.integer :usage_type, limit: 1, null: false, default: 0
-      t.json :defaults, null: false, default: {}#itemなど投稿時のデフォ
-      t.json :settings, null: false, default: {}#frontのレイアウトなどの設定群
+      t.json :defaults, null: false, default: []#itemなど投稿時のデフォ
+      t.json :settings, null: false, default: []#frontのレイアウトなどの設定群
       # cache
       t.string :icon_key, null: false, default: ''
       t.string :banner_key, null: false, default: ''
@@ -44,8 +43,8 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       t.bigint :following_counter, null: false, default: 0
       t.bigint :items_counter, null: false, default: 0
       t.bigint :reactions_counter, null: false, default: 0
-      t.integer :reacted_counter, null: false, default: 0
-      t.integer :viewed_counter, null: false, default: 0
+      t.bigint :reacted_counter, null: false, default: 0
+      t.bigint :viewed_counter, null: false, default: 0
       #t.json :mutes, null: false, default: {}
       #t.json :badges, null: false, default: []# 表示のみの称号
       #t.json :roles, null: false, default: []# 権限あり
@@ -61,10 +60,10 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       #t.boolean :suspended, null: false, default: false# 不具合など一時的な処置 5
       #t.boolean :frozen, null: false, default: false# 違反などで利用できなくする処置 6
       t.boolean :shadow_banned, null: false, default: false# 公然の目に表示されにくい
-      t.integer :status, limit: 1, null: false, default: 1
+      t.integer :status, limit: 1, null: false, default: 0
       # property
-      t.json :account_topics, null: false, default: [] # 活動内容のtopic
-      t.json :interest_topics, null: false, default: [] # 興味のあるtopic
+      #t.json :account_topics, null: false, default: [] # 活動内容のtopic
+      #t.json :interest_topics, null: false, default: [] # 興味のあるtopic
       t.json :meta, null: false, default: {}
       t.integer :score, null: false, default: 0
       # other
@@ -77,7 +76,7 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       t.boolean :foreigner, null: false, default: false
       ## activitypub
       t.boolean :activitypub, null: false, default: false
-      t.boolean :ap_scoping, null: false, default: false # apから見れる
+      t.boolean :ap_status, null: false, default: false # apから見れる
       t.string :ap_uri, null: false, default: ''
       t.string :ap_url, null: false, default: ''
       t.datetime :ap_last_fetched_at

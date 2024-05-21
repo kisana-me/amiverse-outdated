@@ -1,14 +1,15 @@
 class SignupController < ApplicationController
   def index
+    Rails.logger.info("======#{Rails.application.config.x.initial}======")
   end
   def check # 招待コードの入力
-    if Account.first.blank?
+    if Rails.application.config.x.initial
       @account = Account.new
       render 'entry'
     end
   end
   def entry # アカウント情報の入力
-    if Account.first.blank?
+    if Rails.application.config.x.initial
       @account = Account.new
     else
       invitation = check_invitation_code(params[:code])
@@ -22,7 +23,7 @@ class SignupController < ApplicationController
   end
   def create
     @account = Account.new(account_params)
-    if Account.first.blank?
+    if Rails.application.config.x.initial
       #@account.activated = true
       # adminにする
     else

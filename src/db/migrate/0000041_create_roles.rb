@@ -1,6 +1,6 @@
-class CreateTrends < ActiveRecord::Migration[7.0]
+class CreateRoles < ActiveRecord::Migration[7.0]
   def change
-    create_table :trends do |t|
+    create_table :roles do |t|
       t.string :aid, null: false
       t.string :name, null: false, default: ''
       t.text :description, null: false, default: ''
@@ -12,6 +12,6 @@ class CreateTrends < ActiveRecord::Migration[7.0]
       t.datetime :deleted_at
       t.timestamps
     end
-    add_index :trends, [:aid], unique: true
+    add_index :roles, [:aid], unique: true
   end
 end

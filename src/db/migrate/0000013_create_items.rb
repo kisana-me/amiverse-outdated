@@ -8,14 +8,9 @@ class CreateItems < ActiveRecord::Migration[7.0]
       t.boolean :sensitive, null: false, default: false
       t.string :caution_message, null: false, default: ''
       t.integer :score, null: false, default: 0
-      # 制限
-      t.boolean :scoping, null: false, default: false
-      t.integer :reply_limiting, limit: 1, null: false, default: 0
-      t.integer :diffution_limiting, limit: 1, null: false, default: 0
-      t.integer :quote_limiting, limit: 1, null: false, default: 0
-      t.integer :reaction_limiting, limit: 1, null: false, default: 0
+      t.integer :usage_type, limit: 1, null: false, default: 0
       # cache
-      t.integer :viewed_counter, null: false, default: 0
+      t.bigint :viewed_counter, null: false, default: 0
       t.integer :replied_counter, null: false, default: 0
       t.integer :diffused_counter, null: false, default: 0
       t.integer :quoted_counter, null: false, default: 0
@@ -30,7 +25,7 @@ class CreateItems < ActiveRecord::Migration[7.0]
       t.boolean :foreign, null: false, default: false
       ## activitypub
       t.boolean :activitypub, null: false, default: false
-      t.boolean :ap_scoping, null: false, default: false # apから見れる
+      t.boolean :ap_status, null: false, default: false
       t.string :ap_uri, null: false, default: ''
       t.string :ap_url, null: false, default: ''
       t.datetime :ap_last_fetched_at
