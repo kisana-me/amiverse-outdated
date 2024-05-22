@@ -1,12 +1,49 @@
+---
 development:
   initial: true
   administrators:
   - kisana
-  name: Aaaaaerse
-  version: v0.0.5
+  server_name: Amiverse
+  server_version: v0.0.5
+  server_description: 開発中
+  open_registrations: false
+  languages: ['ja', 'en']
+  theme_color: '#FFF'
+  urls: ['amiverse.net/tos', 'amiverse.net/privacy']
+  others: ['other']
+  maintainer_name: 'kisana'
+  maintainer_email: 'kisana@amiverse.net'
+  accounts: 1
+  items: 1
+  images: 1
+  audios: 1
+  videos: 1
+  emojis: 1
+  reactions: 1
+  meta: {'key': 'value'}
+  activitypub: false
+  ap_meta: {'ap': 'meta'}
 production:
   initial: true
   administrators:
   - kisana
-  name: Aaaaaerse
-  version: v0.0.5
+  server_name: Amiverse
+  server_version: v0.0.5
+  server_description: 開発中
+  open_registrations: false
+  languages: ['ja', 'en']
+  theme_color: '#FFF'
+  urls: ['amiverse.net/tos', 'amiverse.net/privacy']
+  others: ['other']
+  maintainer_name: 'kisana'
+  maintainer_email: 'kisana@amiverse.net'
+  accounts: 1
+  items: 1
+  images: 1
+  audios: 1
+  videos: 1
+  emojis: 1
+  reactions: 1
+  meta: {'key': 'value'}
+  activitypub: false
+  ap_meta: {'ap': 'meta'}

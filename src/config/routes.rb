@@ -169,6 +169,10 @@ Rails.application.routes.draw do
     post 'test/generate'
     post 'test/verify'
     post 'test/digest'
+
+    # custom config
+    get 'custom-config' => 'custom_config#index', as: 'custom_config'
+    post 'custom-config' => 'custom_config#update', as: 'update_custom_config'
   end
 
   # api v1

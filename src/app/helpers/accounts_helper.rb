@@ -28,12 +28,10 @@ module AccountsHelper
     else
       search_id = name_id + '@' + host
     end
-    Account.find_by(name_id: search_id,
-      activated: true,
-      locked: false,
-      silenced: false,
-      suspended: false,
-      frozen: false,
-      deleted: false)
+    Account.find_by(
+      name_id: search_id,
+      status: :activated,
+      deleted: false
+    )
   end
 end

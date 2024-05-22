@@ -3,13 +3,13 @@
 <% provide(:title, '管理者制御盤') %>
 
 <ul>
-  <li><%= link_to 'アカウント', admin_accounts_path %></li>
-  <li><%= link_to 'セッション', admin_sessions_path %></li>
-  <li><%= link_to '招待', admin_invitations_path %></li>
-  <li><%= link_to 'アイテム', administrator_root_path %></li>
-  <li><%= link_to '画像', administrator_root_path %></li>
-  <li><%= link_to '動画', administrator_root_path %></li>
-  <li><%= link_to '絵文字', administrator_root_path %></li>
+  <li><%= link_to '⭕アカウント', administrator_accounts_path %></li>
+  <li><%= link_to '⭕セッション', administrator_sessions_path %></li>
+  <li><%= link_to '⭕招待', administrator_invitations_path %></li>
+  <li><%= link_to '❌アイテム', administrator_root_path %></li>
+  <li><%= link_to '❌画像', administrator_root_path %></li>
+  <li><%= link_to '❌動画', administrator_root_path %></li>
+  <li><%= link_to '❌絵文字', administrator_root_path %></li>
   <li><%= link_to '通知', administrator_root_path %></li>
   <li><%= link_to 'メッセージ', administrator_root_path %></li>
   <li><%= link_to 'グループ', administrator_root_path %></li>
@@ -27,11 +27,14 @@
   <li><%= link_to 'ワールド', administrator_root_path %></li>
   <li><%= link_to 'アプリケーション', administrator_root_path %></li>
   <li><%= link_to 'サブスクリプション', administrator_root_path %></li>
-
-  <li><%= link_to 'ActivityPub', administrator_root_path %></li>
-  <li><%= link_to 'AT Protocol', administrator_root_path %></li>
-
-  <li><%= link_to 'Announcements', administrator_root_path %></li>
-  <li><%= link_to 'Advertisement', administrator_root_path %></li>
-  <li><%= link_to 'Report', administrator_root_path %></li>
+  <br />
+  <li><%= link_to '❌ActivityPub', administrator_root_path %></li>
+  <li><%= link_to '❌AT Protocol', administrator_root_path %></li>
+  <br />
+  <li><%= link_to '❌Announcements', administrator_root_path %></li>
+  <li><%= link_to '❌Advertisement', administrator_root_path %></li>
+  <li><%= link_to '❌Report', administrator_root_path %></li>
+  <br />
+  <li><%= link_to '⭕test', administrator_test_path %></li>
+  <li><%= link_to '⭕custom_config', administrator_custom_config_path %></li>
 </ul>

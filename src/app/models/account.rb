@@ -1,4 +1,14 @@
 class Account < ApplicationRecord
+  enum online_status: { online: 0, offline: 1, idle: 2, busy: 3 }
+  enum online_visibility: { o_share: 0, o_personal: 1, o_followers: 2, o_scopings: 3 }
+  enum birth_year_visibility: { by_share: 0, by_personal: 1, by_followers: 2, by_scopings: 3 }
+  enum birth_month_visibility: { bm_share: 0, bm_personal: 1, bm_followers: 2, bm_scopings: 3 }
+  enum birth_day_visibility: { bd_share: 0, bd_personal: 1, bd_followers: 2, bd_scopings: 3 }
+  enum followers_visibility: { fr_share: 0, fr_personal: 1, fr_followers: 2, fr_scopings: 3 }
+  enum following_visibility: { fi_share: 0, fi_personal: 1, fi_followers: 2, fi_scopings: 3 }
+  enum reactions_visibility: { r_share: 0, r_personal: 1, r_followers: 2, r_scopings: 3 }
+  enum usage_type: { personal: 0, bot: 1, commercial: 2 }
+  enum status: { activated: 0, waiting: 1, hibernated: 2, locked: 3, silenced: 4, suspended: 5, frozen: 6 }
   has_many :sessions
   has_many :invitations
   has_many :items
