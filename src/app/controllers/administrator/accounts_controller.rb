@@ -1,4 +1,4 @@
-class Admin::AccountsController < Admin::ApplicationController
+class Administrator::AccountsController < Administrator::ApplicationController
   before_action :set_account, except: %i[ index ]
 
   def index

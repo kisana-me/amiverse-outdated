@@ -1,4 +1,4 @@
-class Admin::InvitationsController < Admin::ApplicationController
+class Administrator::InvitationsController < Administrator::ApplicationController
   def index
     @invitations = Invitation.all
   end

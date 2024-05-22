@@ -1,4 +1,4 @@
-class Admin::TestController < Admin::ApplicationController
+class Administrator::TestController < Administrator::ApplicationController
   include ActivityPub
   include Tools
 

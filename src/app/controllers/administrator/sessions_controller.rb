@@ -1,4 +1,4 @@
-class Admin::SessionsController < Admin::ApplicationController
+class Administrator::SessionsController < Administrator::ApplicationController
   before_action :set_session, except: %i[ index ]
 
   def index

@@ -1,4 +1,4 @@
-class Admin::ItemsController < Admin::ApplicationController
+class AdministratorAdministrator::ItemsController < Administrator::ApplicationController
   before_action :set_item, only: %i[ ]
   def index
     @items = Item.all
