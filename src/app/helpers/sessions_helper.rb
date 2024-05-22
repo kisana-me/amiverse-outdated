@@ -4,11 +4,11 @@ module SessionsHelper
     # 古参
     if cookies.signed[:amiverse_uid].present? &&
     cookies.signed[:amiverse_rtk].present? &&
-    doubt_session = Session.find_by(
+    doubt_session = Client.find_by(
       uuid: cookies.signed[:amiverse_uid],
       deleted: false
     )
-      if BCrypt::Password.new(doubt_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
+      if BCrypt::Password.new(doubt_session.client_digest).is_password?(cookies.signed[:amiverse_rtk])
         db_session = doubt_session
         new_session = false
       end
@@ -16,32 +16,32 @@ module SessionsHelper
     if new_session # 新規
       uuid = SecureRandom.uuid
       token = SecureRandom.urlsafe_base64
-      db_session = Session.create!(
+      db_session = Client.create!(
         uuid: uuid,
-        session_digest: digest(token)
+        client_digest: digest(token)
       )
-      AccountSession.create(
+      Session.create(
         account: account,
-        session: db_session,
+        client: db_session,
         ip_address: '',
         user_agent: request.user_agent,
         current: true
       )
     else # 古参紐づけ
-      AccountSession.where(
-        session: db_session
+      Session.where(
+        client: db_session
       ).update_all(current: false)
-      if current_account_session = AccountSession.find_by(
+      if current_account_session = Session.find_by(
         account: account,
-        session: db_session
+        client: db_session
       )
         unless current_account_session.current?
           current_account_session.update(current: true)
         end
       else
-        AccountSession.create(
+        Session.create(
           account: account,
-          session: db_session,
+          client: db_session,
           ip_address: '',
           user_agent: request.user_agent,
           current: true
@@ -81,13 +81,13 @@ module SessionsHelper
       return account
     else
       if cookies.signed[:amiverse_uid].present? && cookies.signed[:amiverse_rtk].present? &&
-      db_session = Session.find_by(
+      db_session = Client.find_by(
         uuid: cookies.signed[:amiverse_uid],
         deleted: false
       )
-        if BCrypt::Password.new(db_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
-          sessions = AccountSession.where(
-            session: db_session
+        if BCrypt::Password.new(db_session.client_digest).is_password?(cookies.signed[:amiverse_rtk])
+          sessions = Session.where(
+            client: db_session
           )
           account_session = sessions.order(current: :desc).first
           account = Account.find_by(
@@ -115,13 +115,13 @@ module SessionsHelper
     return {status: false, message: 'ブラウザのログイン情報が読み込めません'} unless cookies.signed[:amiverse_uid].present? || cookies.signed[:amiverse_rtk].present?
     return {status: false, message: 'ログイン中のアカウントです'} if account == @current_account
     begin
-      db_session = Session.find_by(
+      db_session = Client.find_by(
         uuid: cookies.signed[:amiverse_uid],
         deleted: false
       )
-      if BCrypt::Password.new(db_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
-        AccountSession.where(session: db_session).update_all(current: false)
-        AccountSession.where(session: db_session).find_by(account: account).update(current: true)
+      if BCrypt::Password.new(db_session.client_digest).is_password?(cookies.signed[:amiverse_rtk])
+        Session.where(client: db_session).update_all(current: false)
+        Session.where(client: db_session).find_by(account: account).update(current: true)
         session[:current_account_aid] = account.aid
         return {status: true, message: '変更しました'}
       else
@@ -132,14 +132,14 @@ module SessionsHelper
     end
   end
   def log_out(account)
-    db_session = Session.find_by(
+    db_session = Client.find_by(
       uuid: cookies.signed[:amiverse_uid],
       deleted: false
     ) if cookies.signed[:amiverse_uid].present?
-    if BCrypt::Password.new(db_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
-      AccountSession.where(session: db_session, account: account).delete_all
-      if AccountSession.exists?(session: db_session)
-        account_sessions = AccountSession.where(session: db_session)
+    if BCrypt::Password.new(db_session.client_digest).is_password?(cookies.signed[:amiverse_rtk])
+      Session.where(client: db_session, account: account).delete_all
+      if Session.exists?(client: db_session)
+        account_sessions = Session.where(client: db_session)
         new_account_session = account_sessions.order(current: :desc).first
         account_sessions.update_all(current: false)
         new_account_session.update(current: true)
@@ -153,12 +153,12 @@ module SessionsHelper
     end
   end
   def all_log_out
-    db_session = Session.find_by(
+    db_session = Client.find_by(
       uuid: cookies.signed[:amiverse_uid],
       deleted: false
     ) if cookies.signed[:amiverse_uid].present?
-    if BCrypt::Password.new(db_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
-      AccountSession.where(session: db_session).delete_all
+    if BCrypt::Password.new(db_session.client_digest).is_password?(cookies.signed[:amiverse_rtk])
+      Session.where(client: db_session).delete_all
       db_session.delete
     end
     session.delete

@@ -1,0 +1,12 @@
+development:
+  initial: true
+  administrators:
+  - kisana
+  name: Aaaaaerse
+  version: v0.0.5
+production:
+  initial: true
+  administrators:
+  - kisana
+  name: Aaaaaerse
+  version: v0.0.5

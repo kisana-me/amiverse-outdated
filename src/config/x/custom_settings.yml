@@ -1,0 +1,11 @@
+development:
+  custom_key: new value
+  administrators:
+  - a
+  - i
+  - d
+  name: Aaaaaerse
+  version: v0.0.5
+  AAmi: new value
+production:
+  custom_key: initial value

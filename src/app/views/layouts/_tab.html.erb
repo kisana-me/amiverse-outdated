@@ -6,7 +6,7 @@
     <% if @current_account %>
       現在のトレンド！
       <% if @current_account.administrator? %>
-        <%= link_to '管理画面', admin_root_path %>
+        <%= link_to '管理画面', administrator_root_path %>
       <% end %>
       <br />
       <%= link_to 'ストレージ', storage_path %>

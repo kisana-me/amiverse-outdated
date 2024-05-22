@@ -1,14 +1,15 @@
 class SignupController < ApplicationController
   def index
+    Rails.logger.info("======#{Rails.application.config.x.initial}======")
   end
   def check # 招待コードの入力
-    if Account.first.blank?
+    if Rails.application.config.x.initial
       @account = Account.new
       render 'entry'
     end
   end
   def entry # アカウント情報の入力
-    if Account.first.blank?
+    if Rails.application.config.x.initial
       @account = Account.new
     else
       invitation = check_invitation_code(params[:code])
@@ -22,10 +23,9 @@ class SignupController < ApplicationController
   end
   def create
     @account = Account.new(account_params)
-    if Account.first.blank?
-      @account.activated = true
-      @account.administrator = true
-      @account.roles = ['administrator'].to_json
+    if Rails.application.config.x.initial
+      #@account.activated = true
+      # adminにする
     else
       invitation = check_invitation_code(session[:code])
       unless invitation
@@ -34,10 +34,10 @@ class SignupController < ApplicationController
       end
     end
     @account.aid = generate_aid(Account, 'aid')
-    @account.activitypub_id = URI.join(ENV['APP_URL'], '@' + params[:account][:name_id])
-    key_pair = generate_rsa_key_pair
-    @account.private_key = key_pair[:private_key]
-    @account.public_key = key_pair[:public_key]
+    #@account.activitypub_id = URI.join(ENV['APP_URL'], '@' + params[:account][:name_id])
+    #key_pair = generate_rsa_key_pair
+    #@account.private_key = key_pair[:private_key]
+    #@account.public_key = key_pair[:public_key]
     if @account.save
       if invitation
         invitation.update(uses: invitation.uses + 1)
@@ -57,7 +57,7 @@ class SignupController < ApplicationController
       :name_id,
       :description,
       :location,
-      :birthday,
+      :birth,
       :password,
       :password_confirmation
     )

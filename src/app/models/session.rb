@@ -1,3 +1,4 @@
 class Session < ApplicationRecord
-  has_many :account_sessions
+  belongs_to :account
+  belongs_to :client
 end
