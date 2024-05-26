@@ -40,9 +40,11 @@ class ImagesController < ApplicationController
       :image_data,
       :name,
       :description,
+      :render_type,
       :sensitive,
-      :warning_message,
-      :private
+      :caution_message,
+      :visibility,
+      :limiting
     )
   end
 end

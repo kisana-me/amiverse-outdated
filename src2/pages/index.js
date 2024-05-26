@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useRef } from 'react'
 import axios from '@/lib/axios'
 import Link from 'next/link'
 import {appContext} from '@/pages/_app'
-import {MaterialSymbols10k, MaterialSymbolsHomeRounded, JisakuMenuBar} from '@/lib/svg'
+import {MaterialSymbols10k, MaterialSymbolsHomeRounded, JisakuMenuBar, HomeSvg, HomeFrameSvg} from '@/lib/svg'
 import HeaderText from '@/components/header_text'
 import Items from '@/components/items'
 
@@ -83,6 +83,7 @@ export default function Home() {
           <MaterialSymbols10k width="2em" height="2em" />
           <MaterialSymbolsHomeRounded width="2em" height="2em" />
           <JisakuMenuBar width="2em" height="2em" />
+          <HomeSvg width="2em" height="2em" />
         </div>
         <div>
           <Items items={items} loadItems={loadItems} />

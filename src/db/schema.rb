@@ -76,6 +76,16 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.index ["invitation_id"], name: "index_account_invitations_on_invitation_id"
   end
 
+  create_table "account_item_impressions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "item_id", null: false
+    t.integer "status", limit: 1, default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_item_impressions_on_account_id"
+    t.index ["item_id"], name: "index_account_item_impressions_on_item_id"
+  end
+
   create_table "account_list_relations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "account_list_id", null: false
@@ -136,7 +146,9 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.integer "online_status", limit: 1, default: 0, null: false
     t.integer "online_visibility", limit: 1, default: 0, null: false
     t.datetime "last_online"
+    t.integer "layout_type", limit: 1, default: 0, null: false
     t.text "description", default: "", null: false
+    t.integer "render_type", limit: 1, default: 0, null: false
     t.text "additional_informations", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.string "location", default: "", null: false
     t.date "birth"
@@ -249,11 +261,13 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
-    t.integer "usage_type", limit: 1, default: 0, null: false
+    t.integer "render_type", limit: 1, default: 0, null: false
     t.boolean "sensitive", default: false, null: false
     t.string "caution_message", default: "", null: false
     t.string "original_key", default: "", null: false
     t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.integer "visibility", limit: 1, default: 0, null: false
+    t.boolean "limiting", default: false, null: false
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -291,10 +305,13 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
+    t.integer "render_type", limit: 1, default: 0, null: false
     t.boolean "sensitive", default: false, null: false
     t.string "caution_message", default: "", null: false
     t.string "original_key", default: "", null: false
     t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.integer "visibility", limit: 1, default: 0, null: false
+    t.boolean "limiting", default: false, null: false
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -339,11 +356,47 @@ ActiveRecord::Schema[7.0].define(version: 203) do
   create_table "clients", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "uuid", null: false
     t.string "client_digest", null: false
+    t.bigint "primary_session", default: 0, null: false
+    t.string "name", default: "", null: false
+    t.string "ip_address", default: "", null: false
+    t.string "user_agent", default: "", null: false
     t.boolean "deleted", default: false, null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["uuid"], name: "index_clients_on_uuid", unique: true
+  end
+
+  create_table "custom_configs", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "aid", null: false
+    t.string "server_name", default: "", null: false
+    t.string "server_version", default: "", null: false
+    t.text "server_description", default: "", null: false
+    t.boolean "open_registrations", default: false, null: false
+    t.text "languages", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.string "theme_color", default: "", null: false
+    t.text "urls", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "others", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.string "maintainer_name", default: "", null: false
+    t.string "maintainer_email", default: "", null: false
+    t.bigint "accounts", default: 0, null: false
+    t.bigint "items", default: 0, null: false
+    t.bigint "images", default: 0, null: false
+    t.bigint "audios", default: 0, null: false
+    t.bigint "videos", default: 0, null: false
+    t.bigint "emojis", default: 0, null: false
+    t.bigint "reactions", default: 0, null: false
+    t.text "meta", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
+    t.datetime "published_at"
+    t.boolean "activitypub", default: false, null: false
+    t.text "ap_meta", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.check_constraint "json_valid(`ap_meta`)", name: "ap_meta"
+    t.check_constraint "json_valid(`languages`)", name: "languages"
+    t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`others`)", name: "others"
+    t.check_constraint "json_valid(`urls`)", name: "urls"
   end
 
   create_table "diffusions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -409,10 +462,13 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
+    t.integer "render_type", limit: 1, default: 0, null: false
     t.boolean "sensitive", default: false, null: false
     t.string "caution_message", default: "", null: false
     t.string "original_key", default: "", null: false
     t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.integer "visibility", limit: 1, default: 0, null: false
+    t.boolean "limiting", default: false, null: false
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -433,11 +489,13 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
-    t.integer "usage_type", limit: 1, default: 0, null: false
+    t.integer "render_type", limit: 1, default: 0, null: false
     t.boolean "sensitive", default: false, null: false
     t.string "caution_message", default: "", null: false
     t.string "original_key", default: "", null: false
     t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.integer "visibility", limit: 1, default: 0, null: false
+    t.boolean "limiting", default: false, null: false
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -542,19 +600,25 @@ ActiveRecord::Schema[7.0].define(version: 203) do
   create_table "items", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
-    t.integer "rendering_type", limit: 1, default: 0, null: false
     t.text "content", default: "", null: false
     t.boolean "sensitive", default: false, null: false
     t.string "caution_message", default: "", null: false
-    t.integer "score", default: 0, null: false
+    t.boolean "silent", default: false, null: false
+    t.integer "rendering_type", limit: 1, default: 0, null: false
+    t.integer "layout_type", limit: 1, default: 0, null: false
+    t.integer "visibility", limit: 1, default: 0, null: false
     t.integer "usage_type", limit: 1, default: 0, null: false
+    t.integer "status", limit: 1, default: 0, null: false
+    t.integer "language", limit: 1, default: 0, null: false
     t.bigint "viewed_counter", default: 0, null: false
     t.integer "replied_counter", default: 0, null: false
     t.integer "diffused_counter", default: 0, null: false
     t.integer "quoted_counter", default: 0, null: false
     t.integer "reacted_counter", default: 0, null: false
+    t.integer "listed_counter", default: 0, null: false
     t.text "cache", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
-    t.integer "status", limit: 1, default: 0, null: false
+    t.datetime "last_cached_at"
+    t.integer "score", default: 0, null: false
     t.text "meta", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
     t.boolean "deleted", default: false, null: false
     t.datetime "deleted_at"
@@ -695,7 +759,6 @@ ActiveRecord::Schema[7.0].define(version: 203) do
 
   create_table "polymorphic_reactions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
-    t.string "emoji_type", null: false
     t.bigint "emoji_id", null: false
     t.string "target_type", null: false
     t.bigint "target_id", null: false
@@ -705,18 +768,8 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_polymorphic_reactions_on_account_id"
-    t.index ["emoji_type", "emoji_id"], name: "index_polymorphic_reactions_on_emoji"
+    t.index ["emoji_id"], name: "index_polymorphic_reactions_on_emoji_id"
     t.index ["target_type", "target_id"], name: "index_polymorphic_reactions_on_target"
-  end
-
-  create_table "polymorphic_system_images", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "target_type", null: false
-    t.bigint "target_id", null: false
-    t.bigint "system_image_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["system_image_id"], name: "index_polymorphic_system_images_on_system_image_id"
-    t.index ["target_type", "target_id"], name: "index_polymorphic_system_images_on_target"
   end
 
   create_table "polymorphic_tags", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -760,7 +813,6 @@ ActiveRecord::Schema[7.0].define(version: 203) do
 
   create_table "reactions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
-    t.string "emoji_type", null: false
     t.bigint "emoji_id", null: false
     t.bigint "item_id", null: false
     t.integer "usage_type", limit: 1, default: 0, null: false
@@ -769,7 +821,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_reactions_on_account_id"
-    t.index ["emoji_type", "emoji_id"], name: "index_reactions_on_emoji"
+    t.index ["emoji_id"], name: "index_reactions_on_emoji_id"
     t.index ["item_id"], name: "index_reactions_on_item_id"
   end
 
@@ -821,38 +873,13 @@ ActiveRecord::Schema[7.0].define(version: 203) do
   create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "client_id", null: false
-    t.string "name", default: "", null: false
-    t.string "ip_address", default: "", null: false
-    t.string "user_agent", default: "", null: false
-    t.boolean "current", default: false, null: false
+    t.string "uuid", null: false
     t.boolean "deleted", default: false, null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_sessions_on_account_id"
     t.index ["client_id"], name: "index_sessions_on_client_id"
-  end
-
-  create_table "system_images", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "aid", null: false
-    t.string "name", default: "", null: false
-    t.text "description", default: "", null: false
-    t.boolean "sensitive", default: false, null: false
-    t.string "caution_message", default: "", null: false
-    t.string "original_key", default: "", null: false
-    t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.integer "status", limit: 1, default: 0, null: false
-    t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.bigint "data_size", default: 0, null: false
-    t.boolean "deleted", default: false, null: false
-    t.datetime "deleted_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["aid"], name: "index_system_images_on_aid", unique: true
-    t.check_constraint "json_valid(`cache`)", name: "cache"
-    t.check_constraint "json_valid(`meta`)", name: "meta"
-    t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
   create_table "tags", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -929,11 +956,13 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
-    t.integer "usage_type", limit: 1, default: 0, null: false
+    t.integer "render_type", limit: 1, default: 0, null: false
     t.boolean "sensitive", default: false, null: false
     t.string "caution_message", default: "", null: false
     t.string "original_key", default: "", null: false
     t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.integer "visibility", limit: 1, default: 0, null: false
+    t.boolean "limiting", default: false, null: false
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -963,6 +992,8 @@ ActiveRecord::Schema[7.0].define(version: 203) do
   add_foreign_key "account_icons", "icons"
   add_foreign_key "account_invitations", "accounts"
   add_foreign_key "account_invitations", "invitations"
+  add_foreign_key "account_item_impressions", "accounts"
+  add_foreign_key "account_item_impressions", "items"
   add_foreign_key "account_list_relations", "account_lists"
   add_foreign_key "account_list_relations", "accounts"
   add_foreign_key "account_lists", "accounts"
@@ -1014,13 +1045,14 @@ ActiveRecord::Schema[7.0].define(version: 203) do
   add_foreign_key "polymorphic_icons", "icons"
   add_foreign_key "polymorphic_images", "images"
   add_foreign_key "polymorphic_reactions", "accounts"
-  add_foreign_key "polymorphic_system_images", "system_images"
+  add_foreign_key "polymorphic_reactions", "emojis"
   add_foreign_key "polymorphic_tags", "tags"
   add_foreign_key "polymorphic_topics", "topics"
   add_foreign_key "polymorphic_videos", "videos"
   add_foreign_key "quotes", "items", column: "quoted"
   add_foreign_key "quotes", "items", column: "quoter"
   add_foreign_key "reactions", "accounts"
+  add_foreign_key "reactions", "emojis"
   add_foreign_key "reactions", "items"
   add_foreign_key "read_items", "accounts"
   add_foreign_key "read_items", "items"

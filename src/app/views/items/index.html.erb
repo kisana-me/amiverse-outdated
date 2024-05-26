@@ -2,9 +2,11 @@
 <% provide(:header_text, 'TL') %>
 <% provide(:title, 'TL') %>
 
+<%= render "items/form" %>
 <div id="items">
-  <% @items.each do |item| %>
-    <%= render 'items/item', item: item, reactions: @reactions %>
-  <% end %>
+  <%= render partial: 'items/item',
+    collection: @items,
+    as: :item,
+    locals: {reactions: @reactions}
+  %>
 </div>
-<%= link_to "New item", new_item_path %>

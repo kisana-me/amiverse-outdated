@@ -13,7 +13,9 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       t.integer :online_visibility, limit: 1, null: false, default: 0
       t.datetime :last_online
       ## info
+      t.integer :layout_type, limit: 1, null: false, default: 0
       t.text :description, null: false, default: ''
+      t.integer :render_type, limit: 1, null: false, default: 0
       t.json :additional_informations, null: false, default: []
       t.string :location, null: false, default: ''
       t.date :birth
@@ -21,7 +23,7 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       t.integer :birth_month_visibility, limit: 1, null: false, default: 0
       t.integer :birth_day_visibility, limit: 1, null: false, default: 0
       t.json :pinned_items, null: false, default: []
-      t.json :languages, null: false, default: []
+      t.integer :language, limit: 1, null: false, default: 0
       ## data
       t.integer :followers_visibility, limit: 1, null: false, default: 0
       t.integer :following_visibility, limit: 1, null: false, default: 0

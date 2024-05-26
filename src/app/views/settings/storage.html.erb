@@ -4,28 +4,23 @@
 <% provide(:selected_settings_menu, 'storage') %>
 
 <% content_for :settings_content do %>
-  <div>ストレージ</div>
+  <h1>ストレージ</h1>
+  <h2>追加する</h2>
   <details>
-    <summary>画像</summary>
-    <div>
-      <%= form_with model: @image, url: images_path, data: { turbo: false } do |f| %>
-        <%= render 'shared/error_messages', instead: @image %>
-        <%= f.label :image_data, 'image' %>
-        <%= f.file_field :image_data %>
-        <br/>
-        <div class="text-field-group">
-          <%= f.text_field :name, class: 'text-field-field', placeholder: '名前' %>
-          <%= f.label :name, '名前', class: 'text-field-label' %>
-        </div>
-        <br/>
-        <div class="text-field-group">
-          <%= f.text_field :description, class: 'text-field-field', placeholder: 'description' %>
-          <%= f.label :description, 'description', class: 'text-field-label' %>
-        </div>
-        <br/>
-        <%= f.submit '送信' %>
-      <% end %>
-    </div>
+    <summary>画像を追加</summary>
+    <%= render 'images/form' %>
+  </details>
+  <details>
+    <summary>音源を追加</summary>
+    <%= render 'audios/form' %>
+  </details>
+  <details>
+    <summary>動画を追加</summary>
+    <%= render 'videos/form' %>
+  </details>
+  <h2>一覧を見る</h2>
+  <details>
+    <summary>画像一覧</summary>
     <% @images.each do |image| %>
       <div>
         名前:<%= image.name %>
@@ -37,44 +32,103 @@
     <% end %>
   </details>
   <details>
-    <summary>動画</summary>
-    <div>
-      <%= form_with model: @video, url: videos_path, data: { turbo: false } do |f| %>
-      <%= render 'shared/error_messages', instead: @video %>
-      <%= f.label :video_data, 'video' %>
-      <%= f.file_field :video_data %>
-      <br/>
-      <div class="text-field-group">
-        <%= f.text_field :name, class: 'text-field-field', placeholder: ' ' %>
-        <%= f.label :name, '名前', class: 'text-field-label' %>
+    <summary>音源一覧</summary>
+    <% @audios.each do |audio| %>
+      <div>
+        名前:<%= audio.name %>
+        ID:<%= audio.aid %>
+        説明:<%= audio.description %>
+        <%= button_to("削除", audio_path(audio.aid), method: :delete) %>
+        <%# image_tag image_url(id: image.aid), class: 'storage-images-image' %>
       </div>
-      <br/>
-      <div class="text-field-group">
-        <%= f.text_field :description, class: 'text-field-field', placeholder: ' ' %>
-        <%= f.label :description, 'description', class: 'text-field-label' %>
-      </div>
-      <br/>
-      <%= f.submit '送信' %>
-    <% end %>
-    </div>
-    <% @videos.each do |video| %>
-      <%= video.name %>
-      <%= video.aid %>
-      <%= video_tag(video_url(aid: video.aid), controls: true) %>
-      <%= video.description %>
     <% end %>
   </details>
   <details>
-    <summary>既定値</summary>
+    <summary>動画一覧</summary>
+    <% @videos.each do |video| %>
+      <div>
+        名前:<%= video.name %>
+        ID:<%= video.aid %>
+        説明:<%= video.description %>
+        <%= button_to("削除", video_path(video.aid), method: :delete) %>
+        <%= video_tag(video_url(aid: video.aid), controls: true) %>
+      </div>
+    <% end %>
+  </details>
+  <h2>その他</h2>
+  <h3>既定値</h3>
+  <details>
+    <summary>表示の種類</summary>
     <%= form_with model: @current_account, url: update_account_path(@current_account.name_id), data: { turbo: false } do |f| %>
-      <div>
-        <%= f.label :image_sensitive, 'アップロード時、画像をsensitiveに設定する' %>
-        <%= f.radio_button :image_sensitive, 'アップロード時、画像をsensitiveに設定する' %>
-      </div>
-      <div>
-        <%= f.label :video_sensitive, 'アップロード時、動画をsensitiveに設定する' %>
-        <%= f.radio_button :video_sensitive, 'アップロード時、動画をsensitiveに設定する' %>
-      </div>
+      <%= f.label :image_render_type, '画像' %>
+      <%= f.select :image_render_type, Image.render_types.keys.map { |i| [i.humanize, i] } %>
+      <br />
+      <%= f.label :audio_render_type, '音源' %>
+      <%= f.select :audio_render_type, Audio.render_types.keys.map { |i| [i.humanize, i] } %>
+      <br />
+      <%= f.label :video_srender_type, '動画' %>
+      <%= f.select :video_srender_type, Video.render_types.keys.map { |i| [i.humanize, i] } %>
+      <br />
+      <%= f.submit '保存' %>
+    <% end %>
+  </details>
+  <details>
+    <summary>センシティブ</summary>
+    <%= form_with model: @current_account, url: update_account_path(@current_account.name_id), data: { turbo: false } do |f| %>
+      <%= f.label :image_sensitive, '画像' %>
+      <%= f.check_box :image_sensitive %>
+      <br />
+      <%= f.label :audio_sensitive, '音源' %>
+      <%= f.check_box :audio_sensitive %>
+      <br />
+      <%= f.label :video_sensitive, '動画' %>
+      <%= f.check_box :video_sensitive %>
+      <br />
+      <%= f.submit '保存' %>
+    <% end %>
+  </details>
+  <details>
+    <summary>注意書き</summary>
+    <%= form_with model: @current_account, url: update_account_path(@current_account.name_id), data: { turbo: false } do |f| %>
+      <%= f.label :image_caution_message, '画像' %>
+      <%= f.text_field :image_caution_message %>
+      <br />
+      <%= f.label :audio_caution_message, '音源' %>
+      <%= f.text_field :audio_caution_message %>
+      <br />
+      <%= f.label :video_caution_message, '動画' %>
+      <%= f.text_field :video_caution_message %>
+      <br />
+      <%= f.submit '保存' %>
+    <% end %>
+  </details>
+  <details>
+    <summary>公開範囲</summary>
+    <%= form_with model: @current_account, url: update_account_path(@current_account.name_id), data: { turbo: false } do |f| %>
+      <%= f.label :image_visibility, '画像' %>
+      <%= f.select :image_visibility, Image.visibilities.keys.map { |i| [i.humanize, i] } %>
+      <br />
+      <%= f.label :audio_visibility, '音源' %>
+      <%= f.select :audio_visibility, Audio.visibilities.keys.map { |i| [i.humanize, i] } %>
+      <br />
+      <%= f.label :video_visibility, '動画' %>
+      <%= f.select :video_visibility, Video.visibilities.keys.map { |i| [i.humanize, i] } %>
+      <br />
+      <%= f.submit '保存' %>
+    <% end %>
+  </details>
+  <details>
+    <summary>使用制限</summary>
+    <%= form_with model: @current_account, url: update_account_path(@current_account.name_id), data: { turbo: false } do |f| %>
+      <%= f.label :image_limiting, '画像' %>
+      <%= f.check_box :image_limiting %>
+      <br />
+      <%= f.label :audio_limiting, '音源' %>
+      <%= f.check_box :audio_limiting %>
+      <br />
+      <%= f.label :video_limiting, '動画' %>
+      <%= f.check_box :video_limiting %>
+      <br />
       <%= f.submit '保存' %>
     <% end %>
   </details>

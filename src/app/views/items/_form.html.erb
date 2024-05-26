@@ -1,52 +1,97 @@
 <% if @current_account.present? %>
   <% item = Item.new %>
-  <%= form_with model: item, url: create_item_path do |form| %>
+  <%= form_with model: item, url: create_item_path do |f| %>
     <%= render "shared/error_messages", instead: item %>
     <% if (defined? initial_replied) %>
-      <%= form.hidden_field :replied, value: initial_replied %>
+      <%= f.hidden_field :replied, value: initial_replied %>
       投稿:<%= initial_replied %>への返信
     <% end %>
     <% if (defined? initial_quoted) %>
-      <%= form.hidden_field :quoted, value: initial_quoted %>
+      <%= f.hidden_field :quoted, value: initial_quoted %>
       投稿:<%= initial_quoted %>への引用
     <% end %>
 
     <div>
-      <%= form.label :content, style: "display: block" %>
-      <%= form.text_area :content %>
+      <%= f.label :visibility %>
+      <%= f.select :visibility, Item.visibilities.keys.map { |i| [i.humanize, i] } %>
+      <%= f.label :silent %>
+      <%= f.check_box :silent %>
+      <%= f.label :draft %>
+      <%= f.check_box :draft %>
     </div>
 
     <div>
-      <%= form.label :sensitive, style: "display: block" %>
-      <%= form.check_box :sensitive %>
+      <%= f.label :content, style: "display: block" %>
+      <%= f.text_area :content %>
     </div>
 
-    <details>
-      <summary>画像を添付</summary>
-      <% Image.where(account_id: @current_account.id).each do |image| %>
-        <%= form.check_box :selected_images, { multiple: true }, image.aid, nil %>
-        <%= form.label image.aid %>
-      <% end %>
-    </details>
-    <details>
-      <summary>動画を添付</summary>
-      <% Video.where(account_id: @current_account.id).each do |video| %>
-        <%= form.check_box :selected_videos, { multiple: true }, video.video_id, nil %>
-        <%= form.label video.video_id %>
-      <% end %>
-    </details>
+    <div>
+      <details>
+        <summary>メディア</summary>
+        <%= f.label :media %>
+        <%= f.file_field :media, multiple: true, accept: 'image/*,audio/*,video/*' %>
+        <details>
+          <summary>画像を添付</summary>
+          <% @current_account.images.each do |image| %>
+            <%= f.check_box :selected_images, { multiple: true }, image.aid, nil %>
+            <%= f.label image.aid %>
+          <% end %>
+        </details>
+        <details>
+          <summary>動画を添付</summary>
+          <% @current_account.videos.each do |video| %>
+            <%= f.check_box :selected_videos, { multiple: true }, video.video_id, nil %>
+            <%= f.label video.video_id %>
+          <% end %>
+        </details>
+      </details>
+      <details>
+        <summary>センシティブ</summary>
+        <%= f.label :sensitive %>
+        <%= f.check_box :sensitive %>
+        <%= f.label :caution_message %>
+        <%= f.text_field :caution_message %>
+      </details>
+      <details>
+        <summary>投票</summary>
+        <%= f.label :poll %>
+        <%= f.check_box :poll %>
+      </details>
+      <details>
+        <summary>予約</summary>
+        <%= f.label :yoyaku %>
+        <%= f.check_box :yoyaku %>
+      </details>
+      <details>
+        <summary>場所</summary>
+        <%= f.label :location %>
+        <%= f.check_box :location %>
+      </details>
+    </div>
+
+    
     <details>
       <summary>設定</summary>
       <div>
-        <%= form.label :publish, '公開範囲' %>
-        <%= form.select :publish, [['全世界', 1], ['ローカル', 2], ['フォロワー', 3], ['直接', 4], ['限定', 5]], { selected: 1 } %>
-        <%= form.label :to_url, style: "display: block" %>
-        <%= form.text_field :to_url %>
+        <%= f.label :render_type %>
+        <%= f.select :render_type, Item.render_types.keys.map { |i| [i.humanize, i] } %>
+        <br />
+        <%= f.label :layout_type %>
+        <%= f.select :layout_type, Item.layout_types.keys.map { |i| [i.humanize, i] } %>
+        <br />
+        <%= f.label :usage_type %>
+        <%= f.select :usage_type, Item.usage_types.keys.map { |i| [i.humanize, i] } %>
+        <br />
+        <%= f.label :activitypub %>
+        <%= f.check_box :activitypub %>
+        <br />
+        <%= f.label :language %>
+        <%= f.select :language, Item.languages.keys.map { |i| [i.humanize, i] } %>
       </div>
     </details>
 
     <div>
-      <%= form.submit %>
+      <%= f.submit %>
     </div>
   <% end %>
 <% else %>

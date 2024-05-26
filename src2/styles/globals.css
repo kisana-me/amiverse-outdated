@@ -58,7 +58,7 @@ body, h1, h2, h3, p {
   --blur-color: #0008;
   --primary-color: darkblue;
 }
-.all a {
+a {
   color: var(--link-color);
   text-decoration: none;
   display: inline-block;

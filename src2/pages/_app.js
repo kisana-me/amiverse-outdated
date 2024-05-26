@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }) {
     if(!loggedIn){
       setFlashKind('info')
       setFlashMessage(`${router.pathname}へアクセスするにはログインしてください`)
-      console.log(flash)
+      console.log(flashMessage)
       router.push('/')
       return
     }

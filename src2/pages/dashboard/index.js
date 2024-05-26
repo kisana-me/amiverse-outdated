@@ -3,10 +3,12 @@ import axios from '@/lib/axios'
 import {appContext} from '@/pages/_app'
 import ItemAccount from '@/components/item_account'
 import Post from '@/components/post'
+import Link from 'next/link'
 
 export default function Dashboard() {
   const loggedIn = useContext(appContext).loggedIn
   const loggedInPage = useContext(appContext).loggedInPage
+  const account = useContext(appContext).account
   let ignore = false
   useEffect(() => {
     loggedInPage()
@@ -20,28 +22,10 @@ export default function Dashboard() {
     <>
       <h1>Amiverse</h1>
       <div className="div_1">
-        <h2>お財布</h2>
-      </div>
-      <div className="div_1">
-        <h2>現在地</h2>
-      </div>
-      <div className="div_1">
-        <h2>とおりすがり交信</h2>
-      </div>
-      <div className="div_1">
-        <h2>ワールド</h2>
-      </div>
-      <div className="div_1">
-        <h2>aShop</h2>
-      </div>
-      <div className="div_1">
-        <h2>なめらか紙芝居</h2>
-      </div>
-      <div className="div_1">
-        <h2>アプリ</h2>
-      </div>
-      <div className="div_1">
-        <h2>グループ</h2>
+        <h2>アカウント</h2>
+        <Link href={loggedIn ? '/@' + account.name_id : '/login'}>
+          あかうんと
+        </Link>
       </div>
       <style jsx>{`
         .div_1 {

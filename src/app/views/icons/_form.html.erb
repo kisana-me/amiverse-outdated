@@ -1,0 +1,38 @@
+<%= form_with model: @icon, url: icons_path, data: { turbo: false } do |f| %>
+  <%= render 'shared/error_messages', instead: @icon %>
+  <br/>
+
+  <%= f.label :icon_data %>
+  <%= f.file_field :icon_data %>
+  <br/>
+
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <br/>
+
+  <%= f.label :description %>
+  <%= f.text_area :description %>
+  <br/>
+
+  <%= f.label :render_type %>
+  <%= f.select :render_type, Icon.render_types.keys.map { |i| [i.humanize, i] } %>
+  <br />
+
+  <%= f.label :sensitive %>
+  <%= f.check_box :sensitive %>
+  <br />
+
+  <%= f.label :caution_message %>
+  <%= f.text_field :caution_message %>
+  <br/>
+
+  <%= f.label :visibility %>
+  <%= f.select :visibility, Icon.render_types.keys.map { |i| [i.humanize, i] } %>
+  <br />
+
+  <%= f.label :limiting %>
+  <%= f.check_box :limiting %>
+  <br />
+
+  <%= f.submit '送信' %>
+<% end %>

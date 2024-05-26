@@ -6,13 +6,13 @@ module ApplicationCable
     end
     protected
     def current_account
-      return unless cookies.signed[:amiverse_uid].present?
-      return unless cookies.signed[:amiverse_rtk].present?
+      return unless cookies.signed[:a_uid].present?
+      return unless cookies.signed[:a_rtk].present?
       db_session = Session.find_by(
-        uuid: cookies.signed[:amiverse_uid],
+        uuid: cookies.signed[:a_uid],
         deleted: false
       )
-      if BCrypt::Password.new(db_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
+      if BCrypt::Password.new(db_session.session_digest).is_password?(cookies.signed[:a_rtk])
         sessions = AccountSession.where(
           session: db_session
         )

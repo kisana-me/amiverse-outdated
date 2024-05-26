@@ -111,7 +111,8 @@ Rails.application.routes.draw do
   # session
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create', as: 'create_session'
-  post 'change-account' => 'sessions#change_account', as: 'change_account'
+  post 'sessions/change' => 'sessions#change'
+  post 'sessions/destroy' => 'sessions#destroy'
   delete 'logout' => 'sessions#logout'
 
   # setting
@@ -169,10 +170,13 @@ Rails.application.routes.draw do
     post 'test/generate'
     post 'test/verify'
     post 'test/digest'
+    get 'new_accounts' => 'test#new_accounts'
+    post 'create_accounts' => 'test#create_accounts'
 
     # custom config
-    get 'custom-config' => 'custom_config#index', as: 'custom_config'
-    post 'custom-config' => 'custom_config#update', as: 'update_custom_config'
+    resources :custom_configs, param: :aid, except: %i[ destroy ]
+    #get 'custom-config' => 'custom_config#index', as: 'custom_config'
+    #post 'custom-config' => 'custom_config#update', as: 'update_custom_config'
   end
 
   # api v1

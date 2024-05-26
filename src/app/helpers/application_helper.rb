@@ -1,7 +1,11 @@
 module ApplicationHelper
+  include AccountsHelper
+  include ItemsHelper
+  include ImagesHelper
+  include VideosHelper
   require 'aws-sdk-s3'
   def full_title(page_title = '')
-    base_title = "Amiverse"
+    base_title = Rails.application.config.x.custom_config.server_name
     if page_title.empty?
       base_title
     else

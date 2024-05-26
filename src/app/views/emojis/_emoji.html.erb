@@ -6,12 +6,5 @@
     name_id:<%= emoji.name_id %><br />
     説明:<%= emoji.description %><br />
     sensitive:<%= emoji.sensitive %><br />
-    local:<%= emoji.local %><br />
-    <% if emoji.image.attached? %>
-      <%= image_tag image_url(model: 'emojis', type: 'emojis', aid: emoji.aid), class: '' %>
-      <%= image_tag image_url(model: 'emojis', type: 'tb-emojis', aid: emoji.aid), class: '' %>
-    <% else %>
-      <div>のいまげ</div>
-    <% end %>
   </div>
 </div>

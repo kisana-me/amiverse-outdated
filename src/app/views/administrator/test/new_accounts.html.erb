@@ -1,0 +1,16 @@
+
+<%= form_with url: administrator_create_accounts_path, data: { turbo: false } do |f| %>
+  <%= f.label :account_times %>
+  <%= f.number_field :account_times %>
+  <br/>
+  <%= f.label :account_offset %>
+  <%= f.number_field :account_offset %>
+  <br/>
+  <%= f.label :item_times %>
+  <%= f.number_field :item_times %>
+  <br/>
+  <%= f.label :item_offset %>
+  <%= f.number_field :item_offset %>
+  <br/>
+  <%= f.submit '実行' %>
+<% end %>

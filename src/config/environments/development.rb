@@ -20,7 +20,7 @@ Rails.application.configure do
   secure: secure_cookies,
   httponly: true,
   servers: %w(redis://redis:6379/0), # env
-  key: 'amiverse_ses',
+  key: 'a_ses',
   redis: {
     key_prefix: "sessions:"
   }

@@ -17,7 +17,17 @@ export default function Layout({ children }) {
   const setFlashMessage = useContext(appContext).setFlashMessage
   const loginForm = useContext(appContext).loginForm
   const [removeFlash, setRemoveFlash] = useState(false)
-  
+  const [showLoading, setShowLoading] = useState(loading)
+
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(() => {
+        setShowLoading(false)
+      }, 390)
+      return () => clearTimeout(timer)
+    }
+  }, [loading])
+
   const handleClick = () => {
     if(removeFlash){
       setFlashMessage('')
@@ -31,20 +41,14 @@ export default function Layout({ children }) {
   
   return (
     <div className={`all ${darkThreme ? "dark-mode" : "light-mode"} ${loading ? "loading-top" : ""}`}>
-      <div className={`${loading ? "loading" : "loading-hide"}`}>
-        <div className='loading-info'>
-          <div className="loading-logo">
-            <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="50" cy="50" r="29" fill="#8BFFB2"/>
-              <path d="M22 58C8.00001 76.5 99.5 53 78.5 45M21 55.5C-30 96.5 138.5 51 77.5 42" stroke="white"/>
-            </svg>
-            <br />
-            Amiverse
-          </div>
-          <div className="loading-status">{loadingMessage}</div>
+      <div className={`${showLoading ? "loading-expose" : "loading-hide"}`}>
+        <div className="loading-logo">
+          <div className={`loading-logo-ring1 ${loading ? "" : "loading-logo-ring2"}`}></div>
+          <img className="loading-logo-amiverse" src="/amiverse.svg" />
         </div>
-        <div className='loading-detail'>
-          <div className='close-loading' onClick={closeLoading} >閉じる</div>
+        <div className='loading-details'>
+          <div className="loading-status">{loadingMessage}</div>
+          <div className='loading-close-button' onClick={closeLoading} >閉じる</div>
         </div>
       </div>
       <div className="main-container">
@@ -66,53 +70,99 @@ export default function Layout({ children }) {
           height: 100svh;
           overflow: hidden;
         }
-        .loading-hide {
-          display: none;
-        }
-        .loading {
+        .loading-expose{
           z-index: 10;
-          display: inline-block;
           position: fixed;
-          top: 0;
-          left: 0;
           width: 100vw;
           height: 100svh;
-          background: rgb(22,22,22);
-        }
-        .loading-info {
+          background: var(--background-color);
           display: flex;
           align-items: center;
           justify-content: center;
-          flex-direction: column;
-          height: calc(100svh - 100px);
+          text-align: center;
+        }
+        .loading-hide {
+          display: none;
         }
         .loading-logo {
           font-size: 32px;
           font-family: math;
           color: #b057e8;
+          display: block;
+          width: 50px;
+          height: 50px;
+          background: #04DDFD00;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+        .loading-logo-ring1 {
+          background: rgba(181, 244, 253, 1);
+          position: absolute;
+          z-index:-1;
+          border-radius: 100px;
+          height: 70px;
+          width: 70px;
+          top: -10px;  /*A.中心*/
+          left: -10px;  /*A.中心*/
+          animation: pulsate1 1s ease-in-out;  /* スピードなど */
+          animation-iteration-count: infinite;
+        }
+        .loading-logo-ring2 {
+          animation: pulsate2 0.4s ease-in-out;  /* スピードなど */
+        }
+        @keyframes pulsate1 {
+          0% { transform: scale(1, 1); opacity: 0.1; }
+          50% { transform: scale(2, 2); opacity: 0.1; }
+          100%  { transform: scale(1, 1); opacity: 0.1; }
+        }
+        @keyframes pulsate2 {
+          0% { opacity: 0.1; }
+          100%  { transform: scale(3, 3); opacity: 0.0; }
+        }
+        .loading-logo-amiverse {
+          width: 50px;
+          height: 50px;
+        }
+        .loading-details {
+          position: absolute;
+          bottom: 10%;
         }
         .loading-status {
           color: #64a5fc;
         }
-        .close-loading {
+        .loading-close-button {
           display: inline;
         }
-        main {
-          flex-grow: 1;
-          box-sizing: border-box;
-          width: 100%;
-          min-height: 100svh;
+
+        /* MAIN */
+
+        /* FORM-2 */
+        .main-container {
+          display: flex;
+          background-color: var(--background-color);
+          color: var(--font-color);
         }
-        @media (min-width: 400px) {
+        main {
+          width: calc(100% - 30px);
+          border-left: 0.5px solid;
+          box-sizing: border-box;
+          background-color: var(--main-background-color);
+        }
+        @media (max-width: 700px) {
+          /* FORM-1 */
           main {
-            border-left: 0.5px solid var(--border-color);
-            width: calc(100% - 30px);
+            border: none;
+            width: 100%;
+            min-height: 100svh;
+            padding-bottom: 46px;
           }
         }
-        @media (min-width: 600px) {
+        @media (min-width: 1000px) {
           main {
             border-right: 0.5px solid var(--border-color);
-            width: calc(100% - 100px - 100px);
+            width: calc(100% - 160px);
           }
         }
         .main-container {

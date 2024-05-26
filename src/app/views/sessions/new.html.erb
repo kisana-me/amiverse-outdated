@@ -17,7 +17,7 @@
     </div>
     <%= f.submit "ログイン" %>
   <% end %>
-  <% if logged_in? %>
+  <% if @current_account %>
     追加のアカウントを作成しますか？
   <% else %>
   アカウントをお持ちでないですか？

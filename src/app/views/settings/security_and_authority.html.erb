@@ -5,26 +5,38 @@
 
 <% content_for :settings_content do %>
   <div>ログイン履歴</div>
-  <div>セッション一覧</div>
-    <div>
-      <%= form_with(url: change_account_path, data: { turbo: false }) do |f| %>
-        <div class="">
-          <div class="">
-            ログイン中のアカウント:
-            <% @logged_in_accounts.each do | account | %>
-              <br />
-              - なまえ：<%= account.name %>
-              <br />
-              - ID：<%= account.name_id %>
-              <br />
-              <%= f.radio_button :aid, account.aid %>
-            <% end %>
-          </div>
-        </div>
-        <%= f.submit "変更" %>
+  <div>
+    <%= form_with(url: sessions_destroy_path, data: { turbo: false }) do |f| %>
+      セッション一覧:
+      <% @current_clients.each do |client| %>
+        <br />
+        - なまえ：<%= client.name %>
+        <br />
+        - IPアドレス：<%= client.ip_address %>
+        <br />
+        - クライアント名：<%= client.user_agent %>
+        <br />
+        <%= f.radio_button :uuid, client.uuid %>
+        <br />
       <% end %>
-    </div>  
-  <%# render 'sessions/session', sessions: @sessions %>
+      <%= f.submit "強制ログアウト" %>
+    <% end %>
+  </div>
+  <div>
+    <%= form_with(url: sessions_change_path, data: { turbo: false }) do |f| %>
+      ログイン中のアカウント:
+      <% @current_accounts.each do |account| %>
+        <br />
+        - なまえ：<%= account.name %>
+        <br />
+        - ID：<%= account.name_id %>
+        <br />
+        <%= f.radio_button :aid, account.aid %>
+        <br />
+      <% end %>
+      <%= f.submit "変更" %>
+    <% end %>
+  </div>
   <div>二段階認証</div>
   <div>連携サービス</div>
 <% end %>

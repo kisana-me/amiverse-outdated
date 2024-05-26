@@ -4,6 +4,45 @@ class Administrator::TestController < Administrator::ApplicationController
 
   def index
   end
+  def new_accounts
+  end
+  def create_accounts
+    account_times = params[:account_times].to_i || 0
+    account_offset = params[:account_offset].to_i || 0
+    item_times = params[:item_times].to_i || 0
+    item_offset = params[:item_offset].to_i || 0
+    account_times.times do |i|
+      i += account_offset
+      account = Account.new(
+        name: "test#{i}",
+        name_id: "test#{i}",
+        password: "testtest#{i}",
+        password_confirmation: "testtest#{i}",
+        status: :activated,
+        aid: generate_aid(Account, 'aid')
+      )
+      if account.save
+        Rails.logger.info "Account #{i} created successfully."
+        item_times.times do |i|
+          i += item_offset
+          item = Item.new(
+            account: account,
+            content: "test-item-#{i}",
+            aid: generate_aid(Item, 'aid')
+          )
+          if item.save
+            Rails.logger.info "Item #{i} created successfully."
+          else
+            Rails.logger.info "Failed to create item #{i}: #{item.errors.full_messages.join(", ")}"
+          end
+        end
+      else
+        Rails.logger.info "Failed to create account #{i}: #{account.errors.full_messages.join(", ")}"
+      end
+    end
+    flash[:success] = 'end'
+    redirect_to administrator_new_accounts_path
+  end
   def explore
   end
   def show

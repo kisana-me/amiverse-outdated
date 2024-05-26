@@ -1,7 +1,17 @@
 class Item < ApplicationRecord
+  enum render_type: { plane: 0, markdown: 1, html: 2, mfm: 3}
+  enum layout_type: { text: 0, image: 1, audio: 2, video: 3}
+  enum visibility: { public_share: 0, do_not_share: 1, followers_share: 2, scopings_share: 3, direct_share: 4 }
+  enum usage_type: { personal: 0, bot: 1, commercial: 2 }
+  enum status: { shared: 0, waiting: 1, doubt: 2, reported: 3, suspended: 4, violated: 5 }
+  enum language: { japanese: 0, english: 1, korean: 2 }
   belongs_to :account
   has_many :item_images
   has_many :images, through: :item_images
+  has_many :item_audios
+  has_many :audios, through: :item_audios
+  has_many :item_videos
+  has_many :videos, through: :item_videos
   # reply
   has_many :replied, class_name: 'Reply', foreign_key: 'replied'
   has_many :replier, class_name: 'Reply', foreign_key: 'replier'

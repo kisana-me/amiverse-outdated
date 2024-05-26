@@ -5,11 +5,13 @@ class CreateAudios < ActiveRecord::Migration[7.0]
       t.string :aid, null: false
       t.string :name, null: false, default: ''
       t.text :description, null: false, default: ''
-      t.integer :usage_type, limit: 1, null: false, default: 0
+      t.integer :render_type, limit: 1, null: false, default: 0
       t.boolean :sensitive, null: false, default: false
       t.string :caution_message, null: false, default: ''
       t.string :original_key, null: false, default: ''
       t.json :variants, null: false, default: []
+      t.integer :visibility, limit: 1, null: false, default: 0
+      t.boolean :limiting, null: false, default: false
       t.integer :status, limit: 1, null: false, default: 0
       t.json :meta, null: false, default: []
       t.json :cache, null: false, default: []

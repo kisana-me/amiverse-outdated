@@ -1,15 +1,17 @@
 class Account < ApplicationRecord
   enum online_status: { online: 0, offline: 1, idle: 2, busy: 3 }
-  enum online_visibility: { o_share: 0, o_personal: 1, o_followers: 2, o_scopings: 3 }
-  enum birth_year_visibility: { by_share: 0, by_personal: 1, by_followers: 2, by_scopings: 3 }
-  enum birth_month_visibility: { bm_share: 0, bm_personal: 1, bm_followers: 2, bm_scopings: 3 }
-  enum birth_day_visibility: { bd_share: 0, bd_personal: 1, bd_followers: 2, bd_scopings: 3 }
-  enum followers_visibility: { fr_share: 0, fr_personal: 1, fr_followers: 2, fr_scopings: 3 }
-  enum following_visibility: { fi_share: 0, fi_personal: 1, fi_followers: 2, fi_scopings: 3 }
-  enum reactions_visibility: { r_share: 0, r_personal: 1, r_followers: 2, r_scopings: 3 }
+  enum online_visibility: { online_share: 0, online_personal: 1, online_followers: 2, online_scopings: 3, online_followers_scopings: 4 }
+  enum birth_year_visibility: { birth_year_share: 0, birth_year_personal: 1, birth_year_followers: 2, birth_year_scopings: 3, birth_year_followers_scopings: 4 }
+  enum birth_month_visibility: { birth_month_share: 0, birth_month_personal: 1, birth_month_followers: 2, birth_month_scopings: 3, birth_month_followers_scopings: 4 }
+  enum birth_day_visibility: { birth_day_share: 0, birth_day_personal: 1, birth_day_followers: 2, birth_day_scopings: 3, birth_day_followers_scopings: 4 }
+  enum followers_visibility: { followers_share: 0, followers_personal: 1, followers_followers: 2, followers_scopings: 3, followers_followers_scopings: 4 }
+  enum following_visibility: { following_share: 0, following_personal: 1, following_followers: 2, following_scopings: 3, following_followers_scopings: 4 }
+  enum reactions_visibility: { reactions_share: 0, reactions_personal: 1, reactions_followers: 2, reactions_scopings: 3, reactions_followers_scopings: 4 }
   enum usage_type: { personal: 0, bot: 1, commercial: 2 }
-  enum status: { activated: 0, waiting: 1, hibernated: 2, locked: 3, silenced: 4, suspended: 5, frozen: 6 }
+  enum status: { activated: 0, waiting: 1, doubt: 2, silenced: 3, locked: 4, hibernated: 5, suspended: 6, frozen: 7 }
+  enum language: { japanese: 0, english: 1, korean: 2 }
   has_many :sessions
+  has_many :clients, through: :sessions
   has_many :invitations
   has_many :items
   has_many :images

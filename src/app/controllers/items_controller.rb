@@ -89,10 +89,25 @@ class ItemsController < ApplicationController
   end
   private
     def set_item
-      @item = Item.where('BINARY aid = ?', params[:aid]).first
+      @item = Item.find_by(
+        aid: params[:aid],
+        visibility: :public_share,
+        status: :shared,
+        deleted: false
+      )
     end
     def item_params
-      params.require(:item).permit(:content,
-                                  :sensitive)
+      params.require(:item).permit(
+        :rendering_type,
+        :layout_type,
+        :visibility,
+        :language,
+        :content,
+        :sensitive,
+        :caution_message,
+        :silent,
+        :usage_type,
+        :activitypub
+      )
     end
 end

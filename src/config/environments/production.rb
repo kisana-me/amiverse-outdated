@@ -1,6 +1,8 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  # ipアドレスを取得
+  config.action_dispatch.trusted_proxies
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -29,7 +31,7 @@ Rails.application.configure do
   secure: secure_cookies,
   httponly: true,
   servers: %w(redis://redis:6379/0),
-  key: 'amiverse_ses',
+  key: 'a_ses',
   redis: {
     key_prefix: "sessions:"
   }

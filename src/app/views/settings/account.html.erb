@@ -5,30 +5,60 @@
 
 <% content_for :settings_content do %>
   <%= form_with model: @current_account, url: update_account_path(@current_account.name_id), data: { turbo: false } do |f| %>
-    <div class="text-field-group">
-      <%= f.text_field :email, class: 'text-field-field', placeholder: ' ' %>
-      <%= f.label :email, 'Eメール', class: 'text-field-label' %>
-    </div>
+    <%= f.label :discoverable %>
+    <%= f.check_box :discoverable %>
+    <br />
+
+    <%= f.label :auto_accept_follow %>
+    <%= f.check_box :auto_accept_follow %>
+    <br />
+
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+    <br />
+
+    <%= f.label :login_id, 'ログインID' %>
+    <%= f.text_field :login_id %>
+    <br />
+
+    <%= f.label :use_login_id, 'ログインIDを使用' %>
+    <%= f.check_box :use_login_id %>
+    <br />
+
+    <%= f.label :usage_type %>
+    <%= f.select :usage_type, Account.usage_types.keys.map { |i| [i.humanize, i] } %>
+    <br />
+
+    <%= f.label :activitypub, 'ActivityPubでフェディバースに参加' %>
+    <%= f.check_box :activitypub %>
+    <br />
+
     <div>
-      <details>
-        <summary>共同運用</summary>
-        <div class="text-field-group">
-          <%= f.text_field :aaa, class: 'text-field-field', placeholder: ' ' %>
-          <%= f.label :aaa, 'アカウント', class: 'text-field-label' %>
-        </div>
-      </details>
+      パスワードを変更
+      <br />
+      <%= f.label :current_password %>
+      <%= f.text_field :current_password %>
+      <br />
+      <%= f.label :new_password %>
+      <%= f.text_field :new_password %>
+      <br />
+      <%= f.label :new_password_confirm %>
+      <%= f.text_field :new_password_confirm %>
+      <br />
+      <%= link_to 'パスワードを忘れた', settings_path %>
     </div>
-    <div>
-      <%= f.label :lang, '運用区分' %>
-      <%= f.select :lang, [['個人', 1], ['BOT', 2], ['営利', 3]], { selected: 1 } %>
-    </div>
-    <div>データダウンロード</div>
-    <div>データ移行</div>
-    <div>アカウント凍結</div>
-    <div>アカウント削除</div>
-    <div>
-      固有ID:<%= @current_account.aid %>
-    </div>
+
+    データダウンロード
+    <br />
+
+    アカウントを休眠状態にする
+    <br />
+
+    アカウントを削除する
+    <br />
+
+    固有ID:<%= @current_account.aid %>
+    <br />
     <%= f.submit '保存' %>
   <% end %>
 <% end %>

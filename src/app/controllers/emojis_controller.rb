@@ -15,19 +15,19 @@ class EmojisController < ApplicationController
     @emoji = Emoji.new(emoji_params)
     @emoji.account = @current_account
     @emoji.aid = generate_aid(Emoji, 'aid')
-    if @emoji.custom
-      extension = File.extname(params[:emoji][:image].original_filename).delete_prefix(".")
-      @emoji.image.attach(
-        key: "/emojis/#{@emoji.aid}.#{extension}",
-        io: (params[:emoji][:image]),
-        filename: "#{@emoji.aid}.#{extension}"
-      )
-    end
+    #if @emoji.custom
+    #  extension = File.extname(params[:emoji][:image].original_filename).delete_prefix(".")
+    #  @emoji.image.attach(
+    #    key: "/emojis/#{@emoji.aid}.#{extension}",
+    #    io: (params[:emoji][:image]),
+    #    filename: "#{@emoji.aid}.#{extension}"
+    #  )
+    #end
     if @emoji.save
-      if @emoji.custom
-        treat_image(@emoji.aid, 'emojis', Emoji)
-        treat_image(@emoji.aid, 'tb-emojis', Emoji)
-      end
+      #if @emoji.custom
+      #  treat_image(@emoji.aid, 'emojis', Emoji)
+      #  treat_image(@emoji.aid, 'tb-emojis', Emoji)
+      #end
       flash[:success] = '作成しました'
       redirect_to emojis_path
     else
@@ -47,12 +47,7 @@ class EmojisController < ApplicationController
       :name,
       :name_id,
       :description,
-      :custom,
-      :sensitive,
-      :local,
-      :scope,
-      :limit,
-      :private
+      :sensitive
     )
   end
 end

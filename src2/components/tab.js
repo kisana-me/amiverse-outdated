@@ -3,29 +3,40 @@ import { appContext } from '@/pages/_app'
 import Logout from './logout'
 
 export default function Tab() {
-  const isDark = useContext(appContext).isDark
+  const darkThreme = useContext(appContext).darkThreme
   const loggedIn = useContext(appContext).loggedIn
   const setLoggedIn = useContext(appContext).setLoggedIn
-  const modeTrigger = useContext(appContext).modeTrigger
+  const darkThremeTrigger = useContext(appContext).darkThremeTrigger
 
   return (
-    <div className="tab">
+    <div className="tab-container">
       <p>content here</p>
-      <button onClick={modeTrigger}>{isDark ? '🌙' : '☀'}</button>
+      <button onClick={darkThremeTrigger}>{darkThreme ? '🌙' : '☀'}</button>
       <Logout />
       <style jsx>{`
-        .tab {
-          display: none;
-          position: sticky;
+        /* FORM-2 */
+        .tab-container {
+          width: 260px;
+          height: 100svh;
           top: 0px;
-          height: 100vh;
+          position: sticky;
           flex-shrink: 0;
+          z-index: 4;
+          display: inline-block;
         }
-        @media (min-width: 600px) {
-          /* FORM-2 */
-          .tab {
+
+        @media (max-width: 999.9px) {
+          /* FORM-1 */
+          .tab-container {
+            display: none;
+          }
+        }
+
+        @media (min-width: 1150px) {
+          /* FORM-3 */
+          .tab-container {
+            width: 340px;
             display: inline-block;
-            width: 100px;
           }
         }
       `}</style>

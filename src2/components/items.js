@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import ItemAccount from '@/components/item_account'
+import Item from '@/components/item'
+import SkeletonItem from '@/components/skeleton_item'
 
 export default function Items({ items = [], loadItems = false }) {
 
@@ -8,13 +9,27 @@ export default function Items({ items = [], loadItems = false }) {
       <div className="items">
         {(() => {
           if (loadItems) {
-            return <p>Loading...</p>;
+            return (
+              <>
+                {[...Array(5)].map((_, index) => (
+                  <SkeletonItem key={index} />
+                ))}
+              </>
+            )
           } else if (items.length > 0) {
-            return items.map(item => (
-              <ItemAccount key={item.aid} item={item} />
-            ));
+            return (
+              <>
+                {items.map(item => (
+                  <Item key={item.aid} item={item} />
+                ))}
+              </>
+            )
           } else {
-            return <p>Nothing Here</p>;
+            return (
+              <>
+                <p>アイテムはありません。</p>
+              </>
+            )
           }
         })()}
       </div>

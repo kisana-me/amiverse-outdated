@@ -8,7 +8,7 @@ class V1::SessionsController < V1::ApplicationController
     render body: nil
   end
   def check
-    if logged_in?
+    if @current_account
       render json: {
         logged_in: true,
         account: login_account_data(@current_account)
@@ -34,7 +34,7 @@ class V1::SessionsController < V1::ApplicationController
     end
   end
   def logout
-    log_out if logged_in?
+    log_out if @current_account
     render json: { logged_in: false }
   end
   # 確認用

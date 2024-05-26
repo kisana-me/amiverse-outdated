@@ -4,37 +4,39 @@
 <% provide(:selected_settings_menu, 'profile') %>
 
 <% content_for :settings_content do %>
+  <details>
+    <summary>アイコンを追加</summary>
+    <%# render 'icons/form' %>
+  </details>
+  <details>
+    <summary>バナーを追加</summary>
+    <%# render 'icons/form' %>
+  </details>
   <%= form_with model: @current_account, url: update_account_path(@current_account.name_id), data: { turbo: false } do |f| %>
-    <div>
-      <details>
-        <summary>アイコン</summary>
-        <%= f.label :icon_data, 'icon_data' %>
-        <%= f.file_field :icon_data %>
-        <% @images.each do |image| %>
-          <div>
-            <%= f.radio_button :icon_key, image.aid %>
-            名前:<%= image.name %>
-            ID:<%= image.aid %>
-            説明:<%= image.description %>
-            <%= image_tag image_url(id: image.aid), class: 'storage-images-image' %>
-          </div>
-        <% end %>
-      </details>
-    </div>
-    <div>
-      <details>
-        <summary>バナー</summary>
-        <% @images.each do |image| %>
-          <div>
-            <%= f.radio_button :banner_key, image.aid %>
-            名前:<%= image.name %>
-            ID:<%= image.aid %>
-            説明:<%= image.description %>
-              <%= image_tag image_url(id: image.aid), class: 'storage-images-image' %>
-          </div>
-        <% end %>
-      </details>
-    </div>
+    <details>
+      <summary>アイコン一覧</summary>
+      <% @images.each do |image| %>
+        <div>
+          <%= f.radio_button :icon_key, image.aid %>
+          名前:<%= image.name %>
+          ID:<%= image.aid %>
+          説明:<%= image.description %>
+          <%= image_tag image_url(id: image.aid), class: 'storage-images-image' %>
+        </div>
+      <% end %>
+    </details>
+    <details>
+      <summary>バナー</summary>
+      <% @images.each do |image| %>
+        <div>
+          <%= f.radio_button :banner_key, image.aid %>
+          名前:<%= image.name %>
+          ID:<%= image.aid %>
+          説明:<%= image.description %>
+          <%= image_tag image_url(id: image.aid), class: 'storage-images-image' %>
+        </div>
+      <% end %>
+    </details>
     <%= f.label :name, '名前', class: '' %>
     <%= f.text_field :name, class: '' %>
     <br />
@@ -44,17 +46,32 @@
     <%= f.label :location, '場所', class: '' %>
     <%= f.text_field :location, class: '' %>
     <br />
-    <%= f.label :birthday, '誕生日' %>
-    <%= f.datetime_field :birthday %>
+    <%= f.label :birth, '誕生日' %>
+    <%= f.date_field :birth %>
     <br />
     <%= f.label :description, '紹介文' %>
     <%= f.text_area :description %>
     <br />
-    <%# f.label :lang, '言語' %>
-    <%# f.select :lang, [['日本語', 1], ['English', 2]], { include_blank: false, selected: 0 } %>
+    <%= f.label :online_visibility %>
+    <%= f.select :online_visibility, Account.online_visibilities.keys.map { |i| [i.humanize, i] } %>
     <br />
-    <%# f.label :public_visibility, '公開情報' %>
-    <%# f.radio_button :public_visibility, '非公開' %>
+    <%= f.label :birth_year_visibility %>
+    <%= f.select :birth_year_visibility, Account.birth_year_visibilities.keys.map { |i| [i.humanize, i] } %>
+    <br />
+    <%= f.label :birth_month_visibility %>
+    <%= f.select :birth_month_visibility, Account.birth_month_visibilities.keys.map { |i| [i.humanize, i] } %>
+    <br />
+    <%= f.label :birth_day_visibility %>
+    <%= f.select :birth_day_visibility, Account.birth_day_visibilities.keys.map { |i| [i.humanize, i] } %>
+    <br />
+    <%= f.label :followers_visibility %>
+    <%= f.select :followers_visibility, Account.followers_visibilities.keys.map { |i| [i.humanize, i] } %>
+    <br />
+    <%= f.label :following_visibility %>
+    <%= f.select :following_visibility, Account.following_visibilities.keys.map { |i| [i.humanize, i] } %>
+    <br />
+    <%= f.label :reactions_visibility %>
+    <%= f.select :reactions_visibility, Account.reactions_visibilities.keys.map { |i| [i.humanize, i] } %>
     <br />
     <%= f.submit '保存' %>
   <% end %>

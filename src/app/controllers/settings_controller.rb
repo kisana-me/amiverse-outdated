@@ -8,26 +8,15 @@ class SettingsController < ApplicationController
   end
   
   def storage
-    @images = Image.where(account_id: @current_account.id)
-    @videos = Video.where(account_id: @current_account.id)
+    @images = Image.where(account_id: @current_account.id, deleted: false)
+    @audios = Audio.where(account_id: @current_account.id, deleted: false)
+    @videos = Video.where(account_id: @current_account.id, deleted: false)
     @image = Image.new
+    @audio = Audio.new
     @video = Video.new
   end
   def security_and_authority
-    begin
-      db_session = Session.find_by(
-        uuid: cookies.signed[:amiverse_uid],
-        deleted: false
-      )
-      if BCrypt::Password.new(db_session.session_digest).is_password?(cookies.signed[:amiverse_rtk])
-        account_sessions = AccountSession.where(session: db_session)
-        account_ids = account_sessions.pluck(:account_id)
-        @logged_in_accounts = Account.where(id: account_ids)
-      else
-        @logged_in_accounts = []
-      end
-    rescue
-      @logged_in_accounts = []
-    end
+    @current_accounts = current_accounts()
+    @current_clients = current_clients()
   end
 end

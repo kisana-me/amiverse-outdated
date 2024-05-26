@@ -3,8 +3,10 @@
     <div class="nav-li">
       <%= link_to root_path do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon"><%= render 'svgs/amiverse', width: '50px', height: '50px' %></div>
-          <div class="nav-list-info">APIv0.0.1</div>
+          <div class="nav-list-icon">
+              <%= image_tag 'amiverse-v3-alpha.svg', class: 'nav-list-logo-svg' %>
+          </div>
+          <div class="nav-list-info"><%= Rails.application.config.x.custom_config.server_name %></div>
         </div>
       <% end %>
     </div>
@@ -12,10 +14,17 @@
   <div class="nav-ul">
     <% icons_width = '36px' %>
     <% icons_height = '36px' %>
+    <% selected_nav = yield(:selected_nav).present? ? yield(:selected_nav) : '' %>
     <div class="nav-li">
       <%= link_to root_path do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon"><%= render 'svgs/home', width: icons_width, height: icons_height %></div>
+          <div class="nav-list-icon">
+            <% if selected_nav == 'home' %>
+              <%= image_tag 'home.svg', class: 'nav-list-svg' %>
+            <% else%>
+              <%= render 'svgs/home_frame', width: icons_width, height: icons_height %>
+            <% end %>
+          </div>
           <div class="nav-list-info">Home</div>
         </div>
       <% end %>

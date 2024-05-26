@@ -3,10 +3,7 @@ class CreateSessions < ActiveRecord::Migration[7.0]
     create_table :sessions do |t|
       t.references :account, null: false, foreign_key: true
       t.references :client, null: false, foreign_key: true
-      t.string :name, null: false, default: ''
-      t.string :ip_address, null: false, default: ''
-      t.string :user_agent, null: false, default: ''
-      t.boolean :current, null: false, default: false
+      t.string :uuid, null: false
       t.boolean :deleted, null: false, default: false
       t.datetime :deleted_at
       t.timestamps

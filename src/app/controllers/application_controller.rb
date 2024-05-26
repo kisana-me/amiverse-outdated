@@ -1,11 +1,9 @@
 class ApplicationController < ActionController::Base
+  # concerns
   include Tools
-  include ImageTreatment
+  include SessionManagement
+  # helpers
   include ApplicationHelper
-  include AccountsHelper
-  include SessionsHelper
-  include ItemsHelper
-  include ImagesHelper
   before_action :set_current_account
 
   private
@@ -13,25 +11,19 @@ class ApplicationController < ActionController::Base
     @current_account = current_account
   end
   def admin_account
-    unless logged_in? && @current_account.administrator?
+    unless @current_account && @current_account.administrator?
       render :file => "#{Rails.root}/public/404.html",  layout: false, status: :not_found
     end
   end
   def logged_in_account
-    unless logged_in?
+    unless @current_account
       flash[:danger] = "ログインしてください"
       redirect_to login_path
     end
   end
   def logged_out_account
-    unless !logged_in?
+    unless !@current_account
       flash[:danger] = "ログイン済みです"
-      redirect_to root_path
-    end
-  end
-  def correct_account(account)
-    unless current_account?(account)
-      flash[:danger] = "正しいユーザーでログインしてください"
       redirect_to root_path
     end
   end
