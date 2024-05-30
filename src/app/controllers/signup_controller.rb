@@ -1,6 +1,5 @@
 class SignupController < ApplicationController
   def index
-    Rails.logger.info("======#{Rails.application.config.x.initial}======")
   end
   def check # 招待コードの入力
     if Rails.application.config.x.initial
@@ -23,9 +22,8 @@ class SignupController < ApplicationController
   end
   def create
     @account = Account.new(account_params)
-    if Rails.application.config.x.initial
+    if Rails.application.config.x.open_registrations || Rails.application.config.x.initial
       #@account.activated = true
-      # adminにする
     else
       invitation = check_invitation_code(session[:code])
       unless invitation
@@ -42,6 +40,9 @@ class SignupController < ApplicationController
       if invitation
         invitation.update(uses: invitation.uses + 1)
         session[:code].clear
+      end
+      if Rails.application.config.x.initial
+        Rails.application.config.x.initial = false
       end
       flash[:success] = "アカウントが作成されました"
       redirect_to login_path

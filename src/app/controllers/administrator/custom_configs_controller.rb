@@ -1,7 +1,6 @@
 class Administrator::CustomConfigsController < Administrator::ApplicationController
   def index
     @custom_configs = CustomConfig.all
-    Rails.logger.info("==========#{Rails.application.config.x.custom_config.server_name}")
   end
   def new
     @custom_config = CustomConfig.new

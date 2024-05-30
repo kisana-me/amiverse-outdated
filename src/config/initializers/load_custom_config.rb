@@ -1,7 +1,6 @@
 Rails.application.config.to_prepare do
   begin
-    if ActiveRecord::Base.connection.table_exists?('custom_configs')  
-        Rails.logger.info("AAAAAAAAAAAAAAa")
+    if ActiveRecord::Base.connection.table_exists?('custom_configs')
         if custom_config = CustomConfig.last
           Rails.application.config.x.custom_config = custom_config
           Rails.application.config.x.initial = false

@@ -47,8 +47,11 @@ export default function SkeletonItem({  }) {
       </div>
       <style jsx>{`
 
-
         .item-skeleton {
+          background: var(--background-color);
+          border-radius: 7px;
+        }
+        .no-item-skeleton {
           position: absolute;
           display: block;
           background: var(--background-color);
@@ -65,7 +68,7 @@ export default function SkeletonItem({  }) {
             transform: translateX(100%);
           }
         }
-        .item-skeleton::before {
+        .no-item-skeleton::before {
           position: absolute;
           top: 0;
           left: 0;

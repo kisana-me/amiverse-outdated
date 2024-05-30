@@ -64,27 +64,29 @@ module SessionManagement
   # ACCOUNT
 
   def current_account
-    if cookies.signed[:a_uid].present? && cookies.signed[:a_rtk].present?
-      client = Client.find_by(uuid: cookies.signed[:a_uid], deleted: false)
-      if BCrypt::Password.new(client.client_digest).is_password?(cookies.signed[:a_rtk])
-        #client.accounts.where(sessions: { deleted: false }, deleted: false)
-        db_sessions = Session.where(client: client, deleted: false)
-        if primary_session = db_sessions.include?(id: client.primary_session)
-          account_session = primary_session
-        else
-          account_session = db_sessions.first
+    begin
+      if cookies.signed[:a_uid].present? && cookies.signed[:a_rtk].present?
+        client = Client.find_by(uuid: cookies.signed[:a_uid], deleted: false)
+        if BCrypt::Password.new(client.client_digest).is_password?(cookies.signed[:a_rtk])
+          #client.accounts.where(sessions: { deleted: false }, deleted: false)
+          db_sessions = Session.where(client: client, deleted: false)
+          if primary_session = db_sessions.include?(id: client.primary_session)
+            account_session = primary_session
+          else
+            account_session = db_sessions.first
+          end
+          account = account_session.account
+          account = nil if account.deleted # 生きたアカウントを
+          session[:logged_in] = true if account
+          return account if account
         end
-        account = account_session.account
-        account = nil if account.deleted # 生きたアカウントを
-        session[:logged_in] = true
-        return account if account
       end
+      endcookies_logout
+      nil
+    rescue
+      cookies_logout
+      nil
     end
-    session[:logged_in] = false
-    cookies.delete(:a_uid)
-    cookies.delete(:a_rtk)
-    @current_account = nil
-    return nil
   end
 
   # CHANGE
@@ -130,7 +132,7 @@ module SessionManagement
         session[:logged_in] = true
       else
         client.update(deleted: true)
-        session[:logged_in] = false
+        cookies_logout
       end
     end
   end
@@ -146,11 +148,7 @@ module SessionManagement
       Session.where(client: client).update_all(deleted: true)
       client.update(deleted: true)
     end
-    session.delete
-    session[:logged_in] = false
-    cookies.delete(:a_uid)
-    cookies.delete(:a_rtk)
-    @current_account = nil
+    cookies_logout
   end
 
   # ACCOUNTS
@@ -178,5 +176,12 @@ module SessionManagement
     cost = ActiveModel::SecurePassword.min_cost ?
       BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
+  end
+  def cookies_logout
+    #session.delete(:?)
+    session[:logged_in] = false
+    cookies.delete(:a_uid)
+    cookies.delete(:a_rtk)
+    @current_account = nil
   end
 end
