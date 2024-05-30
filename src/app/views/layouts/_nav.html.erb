@@ -3,8 +3,8 @@
     <div class="nav-li">
       <%= link_to root_path do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon">
-              <%= image_tag 'amiverse-v3-alpha.svg', class: 'nav-list-logo-svg' %>
+          <div class="nav-list-logo">
+              <%= render 'svgs/amiverse' %>
           </div>
           <div class="nav-list-info"><%= Rails.application.config.x.custom_config.server_name %></div>
         </div>
@@ -20,9 +20,9 @@
         <div class="nav-list-container">
           <div class="nav-list-icon">
             <% if selected_nav == 'home' %>
-              <%= image_tag 'home.svg', class: 'nav-list-svg' %>
+              <%= render 'svgs/home' %>
             <% else%>
-              <%= render 'svgs/home_frame', width: icons_width, height: icons_height %>
+              <%= render 'svgs/home_frame' %>
             <% end %>
           </div>
           <div class="nav-list-info">Home</div>
@@ -40,7 +40,13 @@
     <div class="nav-li">
       <%= link_to dashboard_path do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon"><%= render 'svgs/dashboard', width: icons_width, height: icons_height %></div>
+          <div class="nav-list-icon">
+            <% if selected_nav == 'dashboard' %>
+              <%= render 'svgs/dashboard' %>
+            <% else%>
+              <%= render 'svgs/dashboard_frame' %>
+            <% end %>
+          </div>
           <div class="nav-list-info">Dashboard</div>
         </div>
       <% end %>

@@ -26,7 +26,7 @@ export default function DefaultHead({ children,
       <meta name="color-scheme" content={dark ? '' : ''} /> {/* jsで管理 */}
       <meta name="viewport" content="width=device-width" />
       <meta name="author" content={author} />
-      <meta name="generator" content="Next.js" />
+      <meta name="generator" content="amiverse" />
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <meta name="robots" content={robots} />
@@ -51,7 +51,7 @@ export default function DefaultHead({ children,
       <meta name="twitter:image:alt" content={alt} />
       <meta name="twitter:creator" content={author} />
       <meta name="twitter:creator:id" content={id} />
-      <link rel="icon" href="/dub.ico" />
+      <link rel="icon" href="/favicon.ico" />
       {children}
     </Head>
   )
