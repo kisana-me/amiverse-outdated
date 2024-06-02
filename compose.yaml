@@ -122,3 +122,4 @@ volumes:
   db-vol:
   minio-vol:
   redis-vol:
+  meili-vol:
