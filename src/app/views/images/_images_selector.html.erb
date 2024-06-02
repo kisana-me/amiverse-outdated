@@ -1,0 +1,5 @@
+<% images.each do |image| %>
+  <%= f.check_box :selected_images, { multiple: true }, image.aid, nil %>
+  <%= f.label image.aid %>
+  <%= image_tag image.image_url, class: 'storage-images-image' %>
+<% end %>

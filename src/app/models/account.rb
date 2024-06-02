@@ -9,6 +9,7 @@ class Account < ApplicationRecord
   enum reactions_visibility: { reactions_share: 0, reactions_personal: 1, reactions_followers: 2, reactions_scopings: 3, reactions_followers_scopings: 4 }
   enum usage_type: { personal: 0, bot: 1, commercial: 2 }
   enum status: { activated: 0, waiting: 1, doubt: 2, silenced: 3, locked: 4, hibernated: 5, suspended: 6, frozen: 7 }
+  # 1:承認待ち 2:報告あがってるので確認まで一時停止 3:他人から極力見えないように 4:不審な行動を検出したので一時停止 5:自らアカウントを停止 6:当分利用停止 7:永久利用停止
   enum language: { japanese: 0, english: 1, korean: 2 }
   has_many :sessions
   has_many :clients, through: :sessions
@@ -66,7 +67,6 @@ class Account < ApplicationRecord
   validate :type_and_capacity
   before_create :upload_icon
   before_update :upload_icon
-  include ObjectImage
 
   def upload_icon
     Rails.logger.info('アップロード')
@@ -92,10 +92,10 @@ class Account < ApplicationRecord
   end
   # other
   def add_roles(add_roles_array)
-    add_mca_data(self, 'roles', add_roles_array)
+    add_array(object: self, column: 'roles', add_array: add_roles_array)
   end
   def remove_roles(remove_roles_array)
-    remove_mca_data(self, 'roles', remove_roles_array)
+    remove_array(object: self, column: 'roles', add_array: remove_roles_array)
   end
   def administrator?
     #roles.include?('administrator')

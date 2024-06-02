@@ -58,6 +58,15 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.index ["topic_id"], name: "index_account_features_on_topic_id"
   end
 
+  create_table "account_feeds", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "feed_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_feeds_on_account_id"
+    t.index ["feed_id"], name: "index_account_feeds_on_feed_id"
+  end
+
   create_table "account_icons", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "icon_id", null: false
@@ -156,7 +165,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.integer "birth_month_visibility", limit: 1, default: 0, null: false
     t.integer "birth_day_visibility", limit: 1, default: 0, null: false
     t.text "pinned_items", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "languages", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.integer "language", limit: 1, default: 0, null: false
     t.integer "followers_visibility", limit: 1, default: 0, null: false
     t.integer "following_visibility", limit: 1, default: 0, null: false
     t.integer "reactions_visibility", limit: 1, default: 0, null: false
@@ -177,9 +186,14 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.bigint "reactions_counter", default: 0, null: false
     t.bigint "reacted_counter", default: 0, null: false
     t.bigint "viewed_counter", default: 0, null: false
+    t.text "word_mutes", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "mutes", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "blocks", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "permissions", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.datetime "feed_last_created_at"
+    t.datetime "following_feed_last_created_at"
     t.text "checker", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
-    t.boolean "shadow_banned", default: false, null: false
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
     t.integer "score", default: 0, null: false
@@ -202,19 +216,24 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.index ["aid", "name_id", "ap_uri"], name: "index_accounts_on_aid_and_name_id_and_ap_uri", unique: true
     t.check_constraint "json_valid(`additional_informations`)", name: "additional_informations"
     t.check_constraint "json_valid(`ap_meta`)", name: "ap_meta"
+    t.check_constraint "json_valid(`blocks`)", name: "blocks"
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`checker`)", name: "checker"
     t.check_constraint "json_valid(`defaults`)", name: "defaults"
-    t.check_constraint "json_valid(`languages`)", name: "languages"
     t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`mutes`)", name: "mutes"
+    t.check_constraint "json_valid(`permissions`)", name: "permissions"
     t.check_constraint "json_valid(`pinned_items`)", name: "pinned_items"
     t.check_constraint "json_valid(`settings`)", name: "settings"
+    t.check_constraint "json_valid(`word_mutes`)", name: "word_mutes"
   end
 
   create_table "achievements", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
+    t.string "original_key", default: "", null: false
+    t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.bigint "associated_counter", default: 0, null: false
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -226,6 +245,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.index ["aid"], name: "index_achievements_on_aid", unique: true
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -267,7 +287,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.string "original_key", default: "", null: false
     t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.integer "visibility", limit: 1, default: 0, null: false
-    t.boolean "limiting", default: false, null: false
+    t.integer "limitation", limit: 1, default: 0, null: false
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -287,6 +307,8 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
+    t.string "original_key", default: "", null: false
+    t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.bigint "associated_counter", default: 0, null: false
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -298,6 +320,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.index ["aid"], name: "index_badges_on_aid", unique: true
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
   create_table "banners", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -311,7 +334,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.string "original_key", default: "", null: false
     t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.integer "visibility", limit: 1, default: 0, null: false
-    t.boolean "limiting", default: false, null: false
+    t.integer "limitation", limit: 1, default: 0, null: false
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -443,6 +466,17 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
+  create_table "feeds", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "aid", null: false
+    t.integer "feed_type", limit: 1, default: 0, null: false
+    t.integer "usage_type", limit: 1, default: 0, null: false
+    t.text "data", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["aid"], name: "index_feeds_on_aid", unique: true
+    t.check_constraint "json_valid(`data`)", name: "data"
+  end
+
   create_table "follows", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "followed", null: false
     t.bigint "follower", null: false
@@ -468,7 +502,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.string "original_key", default: "", null: false
     t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.integer "visibility", limit: 1, default: 0, null: false
-    t.boolean "limiting", default: false, null: false
+    t.integer "limitation", limit: 1, default: 0, null: false
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -495,7 +529,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.string "original_key", default: "", null: false
     t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.integer "visibility", limit: 1, default: 0, null: false
-    t.boolean "limiting", default: false, null: false
+    t.integer "limitation", limit: 1, default: 0, null: false
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -604,7 +638,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.boolean "sensitive", default: false, null: false
     t.string "caution_message", default: "", null: false
     t.boolean "silent", default: false, null: false
-    t.integer "rendering_type", limit: 1, default: 0, null: false
+    t.integer "render_type", limit: 1, default: 0, null: false
     t.integer "layout_type", limit: 1, default: 0, null: false
     t.integer "visibility", limit: 1, default: 0, null: false
     t.integer "usage_type", limit: 1, default: 0, null: false
@@ -704,6 +738,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
+    t.text "properties", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
     t.bigint "associated_counter", default: 0, null: false
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -715,6 +750,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.index ["aid"], name: "index_permissions_on_aid", unique: true
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`properties`)", name: "properties"
   end
 
   create_table "polymorphic_audios", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -735,6 +771,16 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.datetime "updated_at", null: false
     t.index ["banner_id"], name: "index_polymorphic_banners_on_banner_id"
     t.index ["target_type", "target_id"], name: "index_polymorphic_banners_on_target"
+  end
+
+  create_table "polymorphic_feeds", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "target_type", null: false
+    t.bigint "target_id", null: false
+    t.bigint "feed_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feed_id"], name: "index_polymorphic_feeds_on_feed_id"
+    t.index ["target_type", "target_id"], name: "index_polymorphic_feeds_on_target"
   end
 
   create_table "polymorphic_icons", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -856,6 +902,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
   create_table "roles", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
+    t.string "name_id", default: "", null: false
     t.text "description", default: "", null: false
     t.bigint "associated_counter", default: 0, null: false
     t.integer "status", limit: 1, default: 0, null: false
@@ -865,7 +912,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["aid"], name: "index_roles_on_aid", unique: true
+    t.index ["aid", "name_id"], name: "index_roles_on_aid_and_name_id", unique: true
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`meta`)", name: "meta"
   end
@@ -899,20 +946,6 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.check_constraint "json_valid(`meta`)", name: "meta"
   end
 
-  create_table "timelines", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "aid", null: false
-    t.string "name", default: "", null: false
-    t.integer "usage_type", limit: 1, default: 0, null: false
-    t.integer "status", limit: 1, default: 0, null: false
-    t.text "data", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.datetime "start_at"
-    t.datetime "end_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["aid"], name: "index_timelines_on_aid", unique: true
-    t.check_constraint "json_valid(`data`)", name: "data"
-  end
-
   create_table "topics", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
@@ -930,13 +963,20 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.check_constraint "json_valid(`meta`)", name: "meta"
   end
 
+  create_table "trend_words", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "trend_id", null: false
+    t.bigint "word_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["trend_id"], name: "index_trend_words_on_trend_id"
+    t.index ["word_id"], name: "index_trend_words_on_word_id"
+  end
+
   create_table "trends", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
-    t.string "word", default: "", null: false
-    t.text "related_words", default: "", null: false
-    t.bigint "counter", default: 0, null: false
+    t.text "words", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -949,6 +989,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.index ["aid"], name: "index_trends_on_aid", unique: true
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`words`)", name: "words"
   end
 
   create_table "videos", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -962,7 +1003,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.string "original_key", default: "", null: false
     t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.integer "visibility", limit: 1, default: 0, null: false
-    t.boolean "limiting", default: false, null: false
+    t.integer "limitation", limit: 1, default: 0, null: false
     t.integer "status", limit: 1, default: 0, null: false
     t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
     t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
@@ -978,6 +1019,16 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
+  create_table "words", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "aid", null: false
+    t.string "name", default: "", null: false
+    t.text "description", default: "", null: false
+    t.bigint "counter", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["aid"], name: "index_words_on_aid", unique: true
+  end
+
   add_foreign_key "account_achievements", "accounts"
   add_foreign_key "account_achievements", "achievements"
   add_foreign_key "account_badges", "accounts"
@@ -988,6 +1039,8 @@ ActiveRecord::Schema[7.0].define(version: 203) do
   add_foreign_key "account_curious", "topics"
   add_foreign_key "account_features", "accounts"
   add_foreign_key "account_features", "topics"
+  add_foreign_key "account_feeds", "accounts"
+  add_foreign_key "account_feeds", "feeds"
   add_foreign_key "account_icons", "accounts"
   add_foreign_key "account_icons", "icons"
   add_foreign_key "account_invitations", "accounts"
@@ -1042,6 +1095,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
   add_foreign_key "notifications", "accounts"
   add_foreign_key "polymorphic_audios", "audios"
   add_foreign_key "polymorphic_banners", "banners"
+  add_foreign_key "polymorphic_feeds", "feeds"
   add_foreign_key "polymorphic_icons", "icons"
   add_foreign_key "polymorphic_images", "images"
   add_foreign_key "polymorphic_reactions", "accounts"
@@ -1062,5 +1116,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
   add_foreign_key "replies", "items", column: "replier"
   add_foreign_key "sessions", "accounts"
   add_foreign_key "sessions", "clients"
+  add_foreign_key "trend_words", "trends"
+  add_foreign_key "trend_words", "words"
   add_foreign_key "videos", "accounts"
 end

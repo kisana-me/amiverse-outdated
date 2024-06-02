@@ -11,7 +11,7 @@ class CreateVideos < ActiveRecord::Migration[7.0]
       t.string :original_key, null: false, default: ''
       t.json :variants, null: false, default: []
       t.integer :visibility, limit: 1, null: false, default: 0
-      t.boolean :limiting, null: false, default: false
+      t.integer :limitation, limit: 1, null: false, default: 0
       t.integer :status, limit: 1, null: false, default: 0
       t.json :meta, null: false, default: []
       t.json :cache, null: false, default: []

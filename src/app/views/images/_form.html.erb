@@ -2,8 +2,8 @@
   <%= render 'shared/error_messages', instead: @image %>
   <br/>
 
-  <%= f.label :image_data %>
-  <%= f.file_field :image_data %>
+  <%= f.label :image %>
+  <%= f.file_field :image %>
   <br/>
 
   <%= f.label :name %>
@@ -27,11 +27,11 @@
   <br/>
 
   <%= f.label :visibility %>
-  <%= f.select :visibility, Image.render_types.keys.map { |i| [i.humanize, i] } %>
+  <%= f.select :visibility, Image.visibilities.keys.map { |i| [i.humanize, i] } %>
   <br />
 
-  <%= f.label :limiting %>
-  <%= f.check_box :limiting %>
+  <%= f.label :limitation %>
+  <%= f.select :limitation, Image.limitations.keys.map { |i| [i.humanize, i] } %>
   <br />
 
   <%= f.submit '送信' %>

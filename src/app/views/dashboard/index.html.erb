@@ -2,7 +2,16 @@
 <% provide(:title, 'Dashboard') %>
 <% provide(:header_text, 'Dashboard') %>
 <% provide(:selected_nav, 'dashboard') %>
-
+<div>
+  <div>
+    <%= @current_account.name %>
+    /
+    <span>
+      @<%= @current_account.name_id %>
+    </span>
+  </div>
+  <p><%= link_to 'プロフ設定', settings_profile_path %></p>
+</div>
 <div>
   <h2>お財布</h2>
   <p>残高 000,000 AMV</p>

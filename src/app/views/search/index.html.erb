@@ -1,0 +1,21 @@
+<% provide(:layout_type, 'header_text') %>
+<% provide(:title, '検索') %>
+<% provide(:header_text, '検索') %>
+
+<h2>検索</h2>
+<%= form_with url: search_path, method: :get do |f| %>
+  <%= f.label :query, "検索" %>
+  <%= f.search_field :query, value: params[:query] %>
+  <%= f.button "検索", name: nil, type: :submit %>
+<% end %>
+
+<div id="items">
+  <%= render partial: 'items/item',
+    collection: @items,
+    as: :item,
+    locals: {reactions: Reaction.all}
+  %>
+  <% if @items.blank? %>
+    <p>検索結果がありません。</p>
+  <% end %>
+</div>

@@ -1,10 +1,20 @@
 class Administrator::TestController < Administrator::ApplicationController
   include ActivityPub
   include Tools
+  include Dummy
 
   def index
   end
   def new_accounts
+    contents = hashtag
+    100.times do |i|
+      item = Item.new(
+        account: @current_account,
+        content: contents[i],
+        aid: generate_aid(Item, 'aid')
+      )
+      item.save
+    end
   end
   def create_accounts
     account_times = params[:account_times].to_i || 0

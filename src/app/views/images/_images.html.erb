@@ -1,0 +1,9 @@
+<% images.each do |image| %>
+  <div>
+    名前:<%= image.name %>
+    ID:<%= image.aid %>
+    説明:<%= image.description %>
+    <%= button_to("削除", image_path(image.aid), method: :delete) %>
+    <%= image_tag image.image_url, class: 'storage-images-image' %>
+  </div>
+<% end %>

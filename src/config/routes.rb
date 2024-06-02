@@ -15,6 +15,9 @@ Rails.application.routes.draw do
   # discovery
   get 'discovery' => 'discovery#index'
 
+  # search
+  get 'search' => 'search#index'
+
   # dashboard
   get 'dashboard' => 'dashboard#index'
 

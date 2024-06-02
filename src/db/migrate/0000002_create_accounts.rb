@@ -36,8 +36,8 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       t.string :login_id, null: false, default: ''
       t.boolean :use_login_id, null: false, default: false
       t.integer :usage_type, limit: 1, null: false, default: 0
-      t.json :defaults, null: false, default: []#itemなど投稿時のデフォ
-      t.json :settings, null: false, default: []#frontのレイアウトなどの設定群
+      t.json :defaults, null: false, default: [] #itemなど投稿時のデフォ
+      t.json :settings, null: false, default: [] #frontのレイアウトなどの設定群
       # cache
       t.string :icon_key, null: false, default: ''
       t.string :banner_key, null: false, default: ''
@@ -47,21 +47,15 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       t.bigint :reactions_counter, null: false, default: 0
       t.bigint :reacted_counter, null: false, default: 0
       t.bigint :viewed_counter, null: false, default: 0
-      #t.json :mutes, null: false, default: {}
-      #t.json :badges, null: false, default: []# 表示のみの称号
-      #t.json :roles, null: false, default: []# 権限あり
-      #t.json :permissions, null: false, default: []# 一日の投稿数など一般的な権限
-      #t.json :achievements, null: false, default: []
-      t.json :checker, null: false, default: {}# 単位時間当たりの使用量を計測
+      t.json :word_mutes, null: false, default: []
+      t.json :mutes, null: false, default: [] # feedから除外するアカウントのidを格納
+      t.json :blocks, null: false, default: []
+      t.json :permissions, null: false, default: [] # checkerとの比較用
+      t.datetime :feed_last_created_at
+      t.datetime :following_feed_last_created_at
+      t.json :checker, null: false, default: {} # 単位時間当たりの使用量を計測
       t.json :cache, null: false, default: {}
       # flag
-      #t.boolean :activated, null: false, default: false 1
-      #t.boolean :hibernated, null: false, default: false# アカウントを無かったことにする 2
-      #t.boolean :locked, null: false, default: false# パスワード間違いすぎなどで解除待ち 3
-      #t.boolean :silenced, null: false, default: false# 長い間使用されていない 4
-      #t.boolean :suspended, null: false, default: false# 不具合など一時的な処置 5
-      #t.boolean :frozen, null: false, default: false# 違反などで利用できなくする処置 6
-      t.boolean :shadow_banned, null: false, default: false# 公然の目に表示されにくい
       t.integer :status, limit: 1, null: false, default: 0
       # property
       #t.json :account_topics, null: false, default: [] # 活動内容のtopic

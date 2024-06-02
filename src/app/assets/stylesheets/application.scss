@@ -63,7 +63,7 @@ a {
   text-decoration: none;
   display: inline-block;
 }
-.success, .notice, .alert, .danger {
+.success, .notice, .info, .alert, .danger {
   border: 1px solid #000;
   border-radius: 5px;
   padding: 3px;
@@ -76,10 +76,16 @@ a {
   background-color: #4fff67bb;
 }
 .notice {
+  background-color: #36f5ff;
+  color: black;
+}
+.info {
   background-color: #ffed00;
+  color: black;
 }
 .alert {
   background-color: #ff8f00;
+  color: black;
 }
 .danger {
   background-color: #ff403abb;

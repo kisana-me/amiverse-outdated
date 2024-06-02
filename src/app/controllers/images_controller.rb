@@ -1,5 +1,4 @@
 class ImagesController < ApplicationController
-  include DataStream
   before_action :logged_in_account
   before_action :set_image
 
@@ -7,9 +6,8 @@ class ImagesController < ApplicationController
     @image = Image.new(image_params)
     @image.account = @current_account
     @image.aid = generate_aid(Image, 'aid')
-    @image.name = @image.image_data.original_filename if @image.name.blank?
+    @image.name = @image.image.original_filename if @image.name.blank?
     if @image.save
-      @image.create_variant
       flash[:success] = "アップロードしました"
       redirect_to settings_storage_path
     else
@@ -20,7 +18,9 @@ class ImagesController < ApplicationController
   def update
   end
   def destroy
-    if @image.destroy
+    @image.deleted = true
+    @image.variants_delete
+    if @image.save
       flash[:success] = "削除しました"
       redirect_to settings_storage_path
     else
@@ -28,7 +28,9 @@ class ImagesController < ApplicationController
       redirect_to settings_storage_path
     end
   end
+
   private
+
   def set_image
     @image = Image.find_by(
       aid: params[:aid],
@@ -37,14 +39,14 @@ class ImagesController < ApplicationController
   end
   def image_params
     params.require(:image).permit(
-      :image_data,
+      :image,
       :name,
       :description,
       :render_type,
       :sensitive,
       :caution_message,
       :visibility,
-      :limiting
+      :limitation
     )
   end
 end

@@ -3,7 +3,18 @@
 <% provide(:header_text, 'みつける') %>
 
 <h2>検索</h2>
+<%= form_with url: search_path, method: :get do |f| %>
+  <%= f.label :query, "検索" %>
+  <%= f.search_field :query, value: params[:query] %>
+  <%= f.button "検索", name: nil, type: :submit %>
+<% end %>
 <h2>トレンド</h2>
+  <h3>頻出単語</h3>
+  <ul>
+    <% @frequent_words.first(30).each do |word, count| %>
+      <li><%= link_to word, search_path(query: word) %> - <%= count %>回</li>
+    <% end %>
+  </ul>
 <h2>おすすめ</h2>
 <h2>ワールド</h2>
 <h2>ニュース</h2>

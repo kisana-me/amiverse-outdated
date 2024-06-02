@@ -26,6 +26,9 @@ gem "redis"
 gem 'redis-session-store'
 # gem "kredis"
 gem 'mime-types'
+gem "meilisearch-rails"
+gem 'mecab'
+gem 'natto'
 gem 'rubyzip', '2.3.0'
 gem 'rails-i18n'
 group :development, :test do

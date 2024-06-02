@@ -32,10 +32,7 @@
         <%= f.file_field :media, multiple: true, accept: 'image/*,audio/*,video/*' %>
         <details>
           <summary>画像を添付</summary>
-          <% @current_account.images.each do |image| %>
-            <%= f.check_box :selected_images, { multiple: true }, image.aid, nil %>
-            <%= f.label image.aid %>
-          <% end %>
+          <%= render 'images/images_selector', f: f, images: @current_account.images.where(deleted: false) %>
         </details>
         <details>
           <summary>動画を添付</summary>

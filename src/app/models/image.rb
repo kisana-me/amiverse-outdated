@@ -1,62 +1,48 @@
 class Image < ApplicationRecord
   enum render_type: { plane: 0, markdown: 1, html: 2, mfm: 3}
-  enum visibility: { public_share: 0, do_not_share: 1, followers_share: 2, scopings_share: 3, direct_share: 4 }
+  enum visibility: { visibility_public_share: 0, visibility_do_not_share: 1, visibility_followers_share: 2, visibility_groups_share: 3, visibility_direct_share: 4 }
+  enum limitation: { limitation_public_share: 0, limitation_do_not_share: 1, limitation_followers_share: 2, limitation_groups_share: 3, limitation_direct_share: 4 }
   belongs_to :account
   has_many :item_images
   has_many :items, through: :item_images
-  validate :image_type
-  validate :check_storage_capacity
-  before_create :upload_image
-  before_destroy :delete_image
-  attr_accessor :image_data
-  include ObjectImage
 
-  def upload_image
-    key = image_upload(
-      image_id: aid,
-      file: image_data.tempfile,
-      extension: image_data.original_filename.split('.').last.downcase,
-      content_type: image_data.content_type
-    )
-    self.original_key = key
-    self.data_size = image_data.size
-    account.update(used_storage_size: account.used_storage_size += image_data.size)
+  validate :image_type_and_required
+  before_create :image_upload
+  before_update :image_upload
+  attr_accessor :image
+
+  def image_upload
+    if image
+      if self.original_key.present?
+        delete_variants()
+        s3_delete(key: self.original_key)
+      end
+        extension = image.original_filename.split('.').last.downcase
+        key = "/images/#{self.aid}.#{extension}"
+        self.original_key = key
+        s3_upload(key: key, file: self.image.tempfile, content_type: self.image.content_type)
+    end
   end
-  def create_variant
-    process_image(
-      image_type: 'images',
-      variant_type: 'images',
-      image_id: aid,
-      original_key: original_key,
-      json_variants_array: self.variants
-    )
-    add_mca_data(self, 'variants', ['images'])
+  def image_url(variant_type: 'images')
+    if self.original_key.present?
+      unless self.variants.include?(variant_type)
+        process_image(variant_type: variant_type)
+      end
+      return object_url(key: "/variants/#{variant_type}/images/#{self.aid}.webp")
+    else
+      return '/'
+    end
   end
-  def delete_variants_image
-    image_variants_delete(json_variants_array: variants, image_id: aid)
+  def variants_delete
+    delete_variants()
   end
-  def delete_image
-    image_delete(original_key: original_key, json_variants_array: variants, image_id: aid)
-    account.update(used_storage_size: account.used_storage_size -= data_size)
+  def image_delete
+    delete_image()
   end
 
   private
-  def image_type
-    unless image_data
-      self.errors.add(:base, "画像がありません")
-      return
-    end
-    allowed_content_types = ['image/png', 'image/jpeg', 'image/gif', 'image/webp']
-    unless allowed_content_types.include?(self.image_data.content_type)
-      self.errors.add(:base, "未対応の形式です")
-      return
-    end
-  end
-  def check_storage_capacity
-    return unless image_data
-    capacity = account.max_storage_size - account.used_storage_size
-    if image_data.size > capacity
-      errors.add(:image, "ストレージ容量がありません")
-    end
+
+  def image_type_and_required
+    varidate_image()
   end
 end

@@ -4,9 +4,8 @@ class CreateTrends < ActiveRecord::Migration[7.0]
       t.string :aid, null: false
       t.string :name, null: false, default: ''
       t.text :description, null: false, default: ''
-      t.string :word, null: false, default: ''
-      t.text :related_words, null: false, default: ''
-      t.bigint :counter, null: false, default: 0
+      #t.bigint :counter, null: false, default: 0
+      t.json :words, null: false, default: {}
       t.integer :status, limit: 1, null: false, default: 0
       t.json :meta, null: false, default: []
       t.json :cache, null: false, default: []
