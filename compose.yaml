@@ -109,6 +109,15 @@ services:
       bash -c "bundle install -j4 &&
       bundle exec sidekiq -C config/sidekiq.yml"
 
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    env_file:
+      - development.env
+    volumes:
+      - meili-vol:/data.ms
+    ports:
+      - "7700:7700"
+
 volumes:
   db-vol:
   minio-vol:
