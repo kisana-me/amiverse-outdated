@@ -112,7 +112,7 @@ services:
   meilisearch:
     image: getmeili/meilisearch:latest
     env_file:
-      - development.env
+      - production.env
     volumes:
       - meili-vol:/data.ms
     ports:
