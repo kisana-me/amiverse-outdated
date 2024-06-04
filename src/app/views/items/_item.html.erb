@@ -141,12 +141,12 @@
           <% end %>
         </div>
         <div id="aid_<%= item.aid %>_tab_replies_content" class="tab_content">
-          返信する
-          <%= render 'items/form', initial_replied: item.aid %>
+          <%= link_to '返信する', item_reply_path(item.aid) %>
+          <%# render 'items/form', initial_replied: item.aid %>
         </div>
         <div id="aid_<%= item.aid %>_tab_diffusions_content" class="tab_content">
           拡散する
-          <%= button_to 'diffusion' %>
+          <%= button_to '拡散する' %>
         </div>
         <div id="aid_<%= item.aid %>_tab_quoting_content" class="tab_content">
           引用元の表示
@@ -162,20 +162,20 @@
           <% end %>
         </div>
         <div id="aid_<%= item.aid %>_tab_quoters_content" class="tab_content">
-          引用する
-          <%= render 'items/form', initial_quoted: item.aid %>
+          <%= link_to '引用する', item_quote_path(item.aid) %>
+          <%# render 'items/form', initial_quoted: item.aid %>
         </div>
         <div id="aid_<%= item.aid %>_tab_reactions_content" class="tab_content">
-          リアクションする
-          <% Emoji.all.each do |emoji| %>
-            <%= button_to react_path(item.aid, emoji.aid), method: :post do %>
-              <% if false %>
-                <%= image_tag image_url(model: 'emojis', type: 'tb-emojis', aid: emoji.aid), class: '' %>
-              <% else %>
-                <%= emoji.name %>
-              <% end %>
-            <% end%>
-          <% end %>
+          <%= link_to 'リアクションする', item_quote_path(item.aid) %>
+          <%# Emoji.all.each do |emoji| %>
+            <%# button_to react_path(item.aid, emoji.aid), method: :post do %>
+              <%# if false %>
+                <%# image_tag image_url(model: 'emojis', type: 'tb-emojis', aid: emoji.aid), class: '' %>
+              <%# else %>
+                <%# emoji.name %>
+              <%# end %>
+            <%# end%>
+          <%# end %>
         </div>
         <div id="aid_<%= item.aid %>_tab_share_content" class="tab_content">
           共有する

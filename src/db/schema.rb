@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 203) do
+ActiveRecord::Schema[7.0].define(version: 902) do
   create_table "account_achievements", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "achievement_id", null: false
@@ -359,6 +359,36 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.index ["blocker"], name: "fk_rails_0d53fdd4e5"
   end
 
+  create_table "canvases", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "aid", null: false
+    t.string "name", default: "", null: false
+    t.text "description", default: "", null: false
+    t.integer "render_type", limit: 1, default: 0, null: false
+    t.text "canvas_data", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.integer "canvas_type", limit: 1, default: 0, null: false
+    t.boolean "sensitive", default: false, null: false
+    t.string "caution_message", default: "", null: false
+    t.string "original_key", default: "", null: false
+    t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.integer "visibility", limit: 1, default: 0, null: false
+    t.integer "limitation", limit: 1, default: 0, null: false
+    t.integer "status", limit: 1, default: 0, null: false
+    t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.bigint "data_size", default: 0, null: false
+    t.boolean "deleted", default: false, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_canvases_on_account_id"
+    t.index ["aid"], name: "index_canvases_on_aid", unique: true
+    t.check_constraint "json_valid(`cache`)", name: "cache"
+    t.check_constraint "json_valid(`canvas_data`)", name: "canvas_data"
+    t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`variants`)", name: "variants"
+  end
+
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
@@ -568,6 +598,15 @@ ActiveRecord::Schema[7.0].define(version: 203) do
     t.datetime "updated_at", null: false
     t.index ["audio_id"], name: "index_item_audios_on_audio_id"
     t.index ["item_id"], name: "index_item_audios_on_item_id"
+  end
+
+  create_table "item_canvases", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.bigint "canvas_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["canvas_id"], name: "index_item_canvases_on_canvas_id"
+    t.index ["item_id"], name: "index_item_canvases_on_item_id"
   end
 
   create_table "item_images", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -1062,6 +1101,7 @@ ActiveRecord::Schema[7.0].define(version: 203) do
   add_foreign_key "banners", "accounts"
   add_foreign_key "blocks", "accounts", column: "blocked"
   add_foreign_key "blocks", "accounts", column: "blocker"
+  add_foreign_key "canvases", "accounts"
   add_foreign_key "diffusions", "items", column: "diffused"
   add_foreign_key "diffusions", "items", column: "diffuser"
   add_foreign_key "emoji_categories", "categories"
@@ -1073,6 +1113,8 @@ ActiveRecord::Schema[7.0].define(version: 203) do
   add_foreign_key "invitations", "accounts"
   add_foreign_key "item_audios", "audios"
   add_foreign_key "item_audios", "items"
+  add_foreign_key "item_canvases", "canvases"
+  add_foreign_key "item_canvases", "items"
   add_foreign_key "item_images", "images"
   add_foreign_key "item_images", "items"
   add_foreign_key "item_list_relations", "item_lists"

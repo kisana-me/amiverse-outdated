@@ -1,12 +1,13 @@
 <% provide(:layout_type, 'header_text') %>
-<% provide(:header_text, 'TL') %>
-<% provide(:title, 'TL') %>
+<% provide(:title, 'Home - current') %>
+<% provide(:header_text, 'Home - current') %>
+<% provide(:selected_nav, 'home') %>
 
-<%= render "items/form" %>
 <div id="items">
   <%= render partial: 'items/item',
     collection: @items,
     as: :item,
     locals: {reactions: @reactions}
   %>
+  <%= render 'shared/paging', page: @page, pages: @pages, page_to: '/' %>
 </div>

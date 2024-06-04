@@ -1,0 +1,17 @@
+<% provide(:layout_type, 'header_text') %>
+<% provide(:title, 'キャンバス一覧') %>
+<% provide(:header_text, 'キャンバス一覧') %>
+
+<%= link_to 'new', new_canvas_path, data: {turbo: false} %>
+
+<div class="canvases">
+  <% @canvases.each do |c| %>
+  <div class="show-canvas">
+    <%= link_to c.account.name + ' @' + c.account.name_id, account_path(c.account.name_id) %>
+    <br />
+    <%= c.name %>
+    <br />
+    <%= image_tag c.image_url, style: 'image-rendering: pixelated;' %>
+  </div>
+  <% end %>
+</div>

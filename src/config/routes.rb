@@ -36,13 +36,20 @@ Rails.application.routes.draw do
   patch '@:name_id/upate' => 'accounts#update', as: 'update_account'
 
   # item
-  get 'items' => 'items#index'
-  get 'items/new' => 'items#new', as: 'new_item'
-  post 'items/create' => 'items#create', as: 'create_item'
-  get 'items/:aid' => 'items#show', as: 'item'
-  get 'items/:aid/edit' => 'items#edit', as: 'edit_item'
-  patch 'items/:aid/update' => 'items#update', as: 'update_item'
-  delete 'items/:aid/destroy' => 'items#destroy', as: 'destroy_item'
+  # get 'items' => 'items#index'
+  # get 'items/new' => 'items#new', as: 'new_item'
+  # post 'items/create' => 'items#create', as: 'create_item'
+  # get 'items/:aid' => 'items#show', as: 'item'
+  # get 'items/:aid/edit' => 'items#edit', as: 'edit_item'
+  # patch 'items/:aid/update' => 'items#update', as: 'update_item'
+  # delete 'items/:aid/destroy' => 'items#destroy', as: 'destroy_item'
+  resources :items, param: :aid do
+    get 'reply' => 'items#new_reply', as: 'reply'
+    get 'quote' => 'items#new_quote', as: 'quote'
+    post 'reply' => 'items#create_reply', as: 'create_reply'
+    post 'quote' => 'items#create_quote', as: 'create_quote'
+    post 'diffuse' => 'items#create_diffuse', as: 'create_diffuse'
+  end
 
   # reaction
   post 'react/:item_aid/:emoji_aid' => 'reactions#react', as: 'react'
@@ -88,6 +95,9 @@ Rails.application.routes.draw do
   get 'tags/:aid/edit' => 'tags#edit', as: 'edit_tag'
   patch 'tags/:aid/update' => 'tags#update', as: 'update_tag'
   delete 'tags/:aid/destroy' => 'tags#destroy', as: 'destroy_tag'
+
+  # canvas
+  resources :canvases, param: :aid
 
   # list
 
@@ -218,18 +228,21 @@ Rails.application.routes.draw do
     post 'activitypub/inbox' => 'activity_pub#inbox'
   end
 
-  # activity pub
-  namespace :ap do
-    # account
-    get '@:name_id' => 'accounts#show', as: 'account'
-    post '@:name_id/inbox' => 'accounts#inbox', as: 'account_inbox'
-    get '@:name_id/outbox' => 'accounts#outbox', as: 'account_outbox'
-    get '@:name_id/followers' => 'accounts#followers', as: 'account_followers'
-    get '@:name_id/following' => 'accounts#following', as: 'account_following'
-  end
+  # # activity pub
+  # namespace :ap do
+  #   # account
+  #   get '@:name_id' => 'accounts#show', as: 'account'
+  #   post '@:name_id/inbox' => 'accounts#inbox', as: 'account_inbox'
+  #   get '@:name_id/outbox' => 'accounts#outbox', as: 'account_outbox'
+  #   get '@:name_id/followers' => 'accounts#followers', as: 'account_followers'
+  #   get '@:name_id/following' => 'accounts#following', as: 'account_following'
+  # end
 
-  # .well-known
-  get '/.well-known/host-meta' => 'well_known#host_meta'
-  get '/.well-known/webfinger' => 'well_known#webfinger'
+  # # .well-known
+  # get '/.well-known/host-meta' => 'well_known#host_meta'
+  # get '/.well-known/webfinger' => 'well_known#webfinger'
 
+  # Error
+  get '*not_found', to: 'application#routing_error'
+  post '*not_found', to: 'application#routing_error'
 end

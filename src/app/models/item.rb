@@ -2,7 +2,7 @@ class Item < ApplicationRecord
   include MeiliSearch::Rails
   meilisearch do
     attribute :content
-    #displayed_attributes [:user_id, :created_at]
+    # displayed_attributes [:user_id, :created_at]
   end
   enum render_type: { plane: 0, markdown: 1, html: 2, mfm: 3}
   enum layout_type: { text: 0, image: 1, audio: 2, video: 3}
@@ -35,5 +35,53 @@ class Item < ApplicationRecord
     presence: true,
     length: { is: 17, allow_blank: true },
     uniqueness: { case_sensitive: true } # 大文字小文字の違いを確認する
+  # custom validate #
+  validate :check_allowed_content
+  # attr #
+  attr_accessor :draft
+  attr_accessor :selected_replied
+  attr_accessor :selected_quoted
+  attr_accessor :selected_images
+  attr_accessor :selected_audios
+  attr_accessor :selected_videos
+  attr_accessor :media
   # --- #
+
+  private
+
+  def check_allowed_content
+    if activitypub
+      errors.add(:activitypub, 'に対応していません')
+    end
+    if draft == 1
+      errors.add(:draft, 'に対応していません')
+    end
+    if silent
+      errors.add(:silent, 'に対応していません')
+    end
+    if !text?
+      errors.add(:layout_type, ':text以外に対応していません')
+    end
+    if !plane?
+      errors.add(:render_type, ':plane以外に対応していません')
+    end
+    if !japanese?
+      errors.add(:language, ':japanese以外に対応していません')
+    end
+    if !personal?
+      errors.add(:usage_type, ':personal以外に対応していません')
+    end
+    if media.present?
+      errors.add(:media, ':に対応していません')
+    end
+    if selected_images.present?
+      errors.add(:selected_images, ':iの設定に対応していません')
+    end
+    if selected_audios.present?
+      errors.add(:selected_audios, ':音源の設定に対応していません')
+    end
+    if selected_videos.present?
+      errors.add(:selected_videos, ':動画の設定に対応していません')
+    end
+  end
 end

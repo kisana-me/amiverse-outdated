@@ -1,19 +1,33 @@
 class ItemsController < ApplicationController
-  before_action :logged_in_account, only: %i[ index show new create update destroy ]
+  before_action :logged_in_account, except: %i[ show ]
   before_action :set_item, only: %i[ show edit update destroy ]
+  before_action :set_new_item, only: %i[ new new_reply new_quote ]
   include ActivityPub
   include Format
 
   def index
-    offset_item = 0
-    limit_item = 9
-    offset_item = params[:o_i] unless params[:o_i].nil?
-    limit_item = params[:l_i] unless params[:l_i].nil?
+    items = Item.where(
+      silent: false,
+      visibility: :public_share,
+      status: :shared,
+      deleted: false
+    ).order(id: :desc).includes(
+      :account,
+      :images,
+      :videos,
+      :reactions,
+      :emojis,
+      :replying,
+      :repliers,
+      :quoting,
+      :quoters
+    )
 
-    @items = Item.offset(offset_item.to_i).limit(limit_item.to_i)
+    @page = current_page(page_param: params[:page])
+    @pages = total_page(objects: items)
+    @items = paged_objects(page: @page, objects: items)
   end
   def show
-    # ?reactionが?個
   end
   def new
   end
@@ -23,91 +37,89 @@ class ItemsController < ApplicationController
     @item = Item.new(item_params)
     @item.account = @current_account
     @item.aid = generate_aid(Item, 'aid')
+    if params[:item][:selected_images].present?
+      params[:item][:selected_images].each do |aid|
+        image = Image.find_by(aid: aid)
+        @item.images << image
+      end
+    end
+    if params[:item][:replied].present?
+      replied = Item.find_by(aid: params[:item][:replied])
+      #@item.replying = replied
+    end
     if @item.save
-      if params[:item][:selected_images].present?
-        params[:item][:selected_images].each do |aid|
-          if image = Image.find_by(aid: aid)
-            this_item_image_params = {
-              image: image,
-              item: @item
-            }
-            ItemImage.create(this_item_image_params)
-          end
-        end
-      end
-      if params[:item][:selected_videos].present?
-        params[:item][:selected_videos].each do |aid|
-          if video = Video.find_by(aid: aid)
-            this_item_video_params = {
-              video: video,
-              item: @item
-            }
-            ItemVideo.create(this_item_video_params)
-          end
-        end
-      end
-      if replied = Item.find_by(aid: params[:item][:replied])
-        Reply.create(replier: @item, replied: replied)
-      end
+      # if replied = Item.find_by(aid: params[:item][:replied])
+      #   Reply.create(replier: @item, replied: replied)
+      # end
       if quoted = Item.find_by(aid: params[:item][:quoted])
         Quote.create(quoter: @item, quoted: quoted)
       end
       flash[:success] = '投稿しました'
       redirect_to item_url(@item.aid)
-      # 範囲が全世界ならば
-      ## APが有効ならば
-      ### 他のインスタンスにフォロワーがいれば
-      if params[:item][:to_url].present?
-        Rails.logger.info('========ap note send========')
-        deliver(
-          actor: @item.account,
-          body: ap_pre_create_note(item: @item),
-          to_url: params[:item][:to_url]
-        )
-      end
-      #ActionCable.server.broadcast('current_channel', item_data(@item))
     else
-      flash[:success] = '失敗しました。'
-      render :new
+      flash.now[:danger] = '失敗しました'
+      render 'new'
     end
   end
   def update
-    if @item.update(item_params)
-      flash[:success] = '投稿を編集しました。'
-      redirect_to item_url(@item.aid)
-    else
-      render :edit
-    end
+    redirect_to items_url, notice: "未実装" 
   end
   def destroy
-    @item.destroy
-
-    respond_to do |format|
-      format.html { redirect_to items_url, notice: "Item was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    redirect_to items_url, notice: "未実装" 
   end
+
+  def new_reply
+    @item = Item.new
+    @replied = get_item(aid: params[:item_aid])
+    render 'items/new', locals: { initial_replied: params[:item_aid] }
+  end
+  def new_quote
+    @item = Item.new
+    @quoted = get_item(aid: params[:item_aid])
+    render 'items/new', locals: { initial_quoted: params[:item_aid] }
+  end
+  def diffuse
+    @item = get_item(aid: params[:item_aid])
+    # 拡散する
+    redirect_to items_url, notice: "未実装" 
+  end
+
   private
-    def set_item
-      @item = Item.find_by(
-        aid: params[:aid],
-        visibility: :public_share,
-        status: :shared,
-        deleted: false
-      )
-    end
-    def item_params
-      params.require(:item).permit(
-        :rendering_type,
-        :layout_type,
-        :visibility,
-        :language,
-        :content,
-        :sensitive,
-        :caution_message,
-        :silent,
-        :usage_type,
-        :activitypub
-      )
-    end
+
+  def get_item(aid: params[:aid])
+    Item.find_by(
+      aid: aid,
+      visibility: :public_share,
+      status: :shared,
+      deleted: false
+    )
+  end
+  def set_item()
+    @item = get_item
+  end
+  def set_new_item
+    @item = Item.new
+  end
+  def item_params
+    params.require(:item).permit(
+      # customize #
+      :render_type,
+      :layout_type,
+      :visibility,
+      :usage_type,
+      :language,
+      # main #
+      :content,
+      :media,
+      :selected_images,
+      :selected_audios,
+      :selected_videos,
+      :sensitive,
+      :caution_message,
+      # sub #
+      :silent,
+      :draft,
+      :activitypub
+    )
+  end
 end

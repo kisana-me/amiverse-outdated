@@ -1,4 +1,20 @@
 module Tools
+  def current_page(page_param:)
+    return page_param.to_i < 1 ? 1 : page_param.to_i
+  end
+  def total_page(objects:, per_page: 30)
+    total = objects.count
+    return total.to_i > 0 ? (total.to_f / per_page.to_f).ceil : 0
+  end
+  def paged_objects(page:, objects:, per_page: 30)
+    page = page.to_i < 1 ? 1 : page.to_i
+    offset_item = (page - 1) * per_page
+    return objects.offset(
+      offset_item.to_i
+    ).limit(
+      per_page.to_i
+    )
+  end
   def generate_aid(model, column)
     loop do
       aid = ('a'..'z').to_a.concat(('0'..'9').to_a).shuffle[1..17].join

@@ -2,47 +2,64 @@
 <% provide(:title, 'Dashboard') %>
 <% provide(:header_text, 'Dashboard') %>
 <% provide(:selected_nav, 'dashboard') %>
-<div>
-  <div>
-    <%= @current_account.name %>
-    /
-    <span>
-      @<%= @current_account.name_id %>
-    </span>
+
+<div class="dashboard">
+  <div class="dashboard-profile">
+    <div>
+      <%= @current_account.name %>
+      /
+      <span>
+        @<%= @current_account.name_id %>
+      </span>
+    </div>
+    <p><%= link_to 'プロフ設定', settings_profile_path %></p>
   </div>
-  <p><%= link_to 'プロフ設定', settings_profile_path %></p>
-</div>
-<div>
-  <h2>お財布</h2>
-  <p>残高 000,000 AMV</p>
-</div>
-<div>
-  <h2>現在地</h2>
-  <p>0000.000000</p>
-  <p>0000.000000</p>
-</div>
-<div>
-  <h2>とおりすがり交信</h2>
-  <p>交信1人</p>
-</div>
-<div>
-  <h2>ワールド</h2>
-  <p>参加0人/最大1人</p>
-</div>
-<div>
-  <h2>aShop</h2>
-  <p>商品</p>
-  <p>購入</p>
-</div>
-<div>
-  <h2>なめらか紙芝居</h2>
-  <p>参加0人/最大1人</p>
-</div>
-<div>
-  <h2>アプリ</h2>
-  <p>参加0人/最大1人</p>
-</div>
-<div>
-  <h2>グループ</h2>
-  <p>参加0人/最大1人</p>
+  <div class="dashboard-features">
+    <div class="dashboard-features-canvases">
+      <h2>🎨キャンバス🖌️</h2>
+      <%= link_to '新しいのを描く', new_canvas_path, data: {turbo: false} %>
+      <br />
+      <%= link_to 'みんなのを見る', canvases_path %>
+    </div>
+    <div class="dashboard-features-canvases">
+      <h2>🫧絵文字🍭</h2>
+      <%= link_to '新しいのを作る', new_emoji_path, data: {turbo: false} %>
+      <br />
+      <%= link_to 'みんなのを見る', emojis_path %>
+    </div>
+    <div>
+      <h2>🪙お財布💴</h2>
+      <p>残高 000,000 AMV</p>
+    </div>
+    <div>
+      <h2>現在地</h2>
+      <p>0000.000000</p>
+      <p>0000.000000</p>
+    </div>
+    <div>
+      <h2>とおりすがり交信</h2>
+      <p>交信1人</p>
+    </div>
+    <div>
+      <h2>ワールド</h2>
+      <p>参加0人/最大1人</p>
+    </div>
+    <div>
+      <h2>aShop</h2>
+      <p>商品</p>
+      <p>購入</p>
+    </div>
+    <div>
+      <h2>なめらか紙芝居</h2>
+      <p>参加0人/最大1人</p>
+    </div>
+    <div>
+      <h2>アプリ</h2>
+      <p>参加0人/最大1人</p>
+    </div>
+    <div>
+      <h2>グループ</h2>
+      <p>参加0人/最大1人</p>
+    </div>
+  </div>
 </div>

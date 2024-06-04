@@ -29,6 +29,7 @@ gem 'mime-types'
 gem "meilisearch-rails"
 gem 'mecab'
 gem 'natto'
+gem 'chunky_png'
 gem 'rubyzip', '2.3.0'
 gem 'rails-i18n'
 group :development, :test do

@@ -1,6 +1,6 @@
 <% if @current_account.present? %>
   <% item = Item.new %>
-  <%= form_with model: item, url: create_item_path do |f| %>
+  <%= form_with model: item, url: items_path do |f| %>
     <%= render "shared/error_messages", instead: item %>
     <% if (defined? initial_replied) %>
       <%= f.hidden_field :replied, value: initial_replied %>
