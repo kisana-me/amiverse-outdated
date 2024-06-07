@@ -6,7 +6,7 @@
           <div class="nav-list-logo">
               <%= render 'svgs/amiverse' %>
           </div>
-          <div class="nav-list-info"><%= Rails.application.config.x.custom_config.server_name %></div>
+          <div class="nav-list-info"><%= Rails.application.config.x.server_property.server_name %></div>
         </div>
       <% end %>
     </div>
@@ -64,6 +64,14 @@
         <div class="nav-list-container">
           <div class="nav-list-icon"><%= render 'svgs/message', width: icons_width, height: icons_height %></div>
           <div class="nav-list-info">Messages</div>
+        </div>
+      <% end %>
+    </div>
+    <div class="nav-li item-new-button-2">
+      <%= link_to new_item_path do %>
+        <div class="nav-list-container inb2-container">
+          <div class="nav-list-icon">投稿</div>
+          <div class="nav-list-info">Post</div>
         </div>
       <% end %>
     </div>

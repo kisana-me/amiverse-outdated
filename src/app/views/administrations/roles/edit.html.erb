@@ -1,0 +1,5 @@
+<% provide(:layout_type, 'header_text') %>
+<% provide(:header_text, '招待 - 編集') %>
+<% provide(:title, '招待 - 編集') %>
+
+<%= render 'administrations/shared/all_form', instead: @role, url: "/administrations/roles/#{@role.aid}/update" %>

@@ -2,9 +2,13 @@
 <% provide(:title, '通知') %>
 <% provide(:header_text, '通知') %>
 
-<ul>
-<% @notifications.each do |notification| %>
-  <li><%= notification.message %></li>
-<% end %>
-</ul>
-<%= link_to('new', new_notification_path) %>
+<div>
+  <ul>
+  <% @notifications.each do |notification| %>
+    <li><%= notification.message %></li>
+  <% end %>
+  </ul>
+  <% if @notifications.blank? %>
+    <p>通知はありません</p>
+  <% end %>
+</div>

@@ -1,11 +1,10 @@
 module ApplicationHelper
   include AccountsHelper
-  include ItemsHelper
   include ImagesHelper
-  include VideosHelper
+  include TrendManagement
   require 'aws-sdk-s3'
   def full_title(page_title = '')
-    base_title = Rails.application.config.x.custom_config.server_name
+    base_title = Rails.application.config.x.server_property.server_name
     if page_title.empty?
       base_title
     else
@@ -19,6 +18,9 @@ module ApplicationHelper
     current_page = current_page.to_i
     page = where_to_go == 'next' ? [current_page + 1, 2].max : where_to_go == 'prev' ? [current_page - 1, 1].max : 2
     return page
+  end
+  def tab_trend
+    current_trend(limit: 5)
   end
   private
   def object_url(path_key)

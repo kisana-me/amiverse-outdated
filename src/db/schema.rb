@@ -420,38 +420,6 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["uuid"], name: "index_clients_on_uuid", unique: true
   end
 
-  create_table "custom_configs", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "aid", null: false
-    t.string "server_name", default: "", null: false
-    t.string "server_version", default: "", null: false
-    t.text "server_description", default: "", null: false
-    t.boolean "open_registrations", default: false, null: false
-    t.text "languages", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.string "theme_color", default: "", null: false
-    t.text "urls", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "others", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.string "maintainer_name", default: "", null: false
-    t.string "maintainer_email", default: "", null: false
-    t.bigint "accounts", default: 0, null: false
-    t.bigint "items", default: 0, null: false
-    t.bigint "images", default: 0, null: false
-    t.bigint "audios", default: 0, null: false
-    t.bigint "videos", default: 0, null: false
-    t.bigint "emojis", default: 0, null: false
-    t.bigint "reactions", default: 0, null: false
-    t.text "meta", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
-    t.datetime "published_at"
-    t.boolean "activitypub", default: false, null: false
-    t.text "ap_meta", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.check_constraint "json_valid(`ap_meta`)", name: "ap_meta"
-    t.check_constraint "json_valid(`languages`)", name: "languages"
-    t.check_constraint "json_valid(`meta`)", name: "meta"
-    t.check_constraint "json_valid(`others`)", name: "others"
-    t.check_constraint "json_valid(`urls`)", name: "urls"
-  end
-
   create_table "diffusions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "diffused", null: false
     t.bigint "diffuser", null: false
@@ -954,6 +922,38 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["aid", "name_id"], name: "index_roles_on_aid_and_name_id", unique: true
     t.check_constraint "json_valid(`cache`)", name: "cache"
     t.check_constraint "json_valid(`meta`)", name: "meta"
+  end
+
+  create_table "server_properties", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "aid", null: false
+    t.string "server_name", default: "", null: false
+    t.string "server_version", default: "", null: false
+    t.text "server_description", default: "", null: false
+    t.boolean "open_registrations", default: false, null: false
+    t.text "languages", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.string "theme_color", default: "", null: false
+    t.text "urls", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "others", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.string "maintainer_name", default: "", null: false
+    t.string "maintainer_email", default: "", null: false
+    t.bigint "accounts", default: 0, null: false
+    t.bigint "items", default: 0, null: false
+    t.bigint "images", default: 0, null: false
+    t.bigint "audios", default: 0, null: false
+    t.bigint "videos", default: 0, null: false
+    t.bigint "emojis", default: 0, null: false
+    t.bigint "reactions", default: 0, null: false
+    t.text "meta", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
+    t.datetime "published_at"
+    t.boolean "activitypub", default: false, null: false
+    t.text "ap_meta", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.check_constraint "json_valid(`ap_meta`)", name: "ap_meta"
+    t.check_constraint "json_valid(`languages`)", name: "languages"
+    t.check_constraint "json_valid(`meta`)", name: "meta"
+    t.check_constraint "json_valid(`others`)", name: "others"
+    t.check_constraint "json_valid(`urls`)", name: "urls"
   end
 
   create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|

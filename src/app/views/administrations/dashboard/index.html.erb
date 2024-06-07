@@ -1,0 +1,40 @@
+<% provide(:layout_type, 'header_text') %>
+<% provide(:header_text, '管理者制御盤') %>
+<% provide(:title, '管理者制御盤') %>
+
+<ul>
+  <li><%= link_to '⭕アカウント', administrations_accounts_path %></li>
+  <li><%= link_to '⭕セッション', administrations_sessions_path %></li>
+  <li><%= link_to '⭕招待', administrations_invitations_path %></li>
+  <li><%= link_to '❌アイテム', administrations_root_path %></li>
+  <li><%= link_to '❌画像', administrations_root_path %></li>
+  <li><%= link_to '❌動画', administrations_root_path %></li>
+  <li><%= link_to '❌絵文字', administrations_root_path %></li>
+  <li><%= link_to '通知', administrations_root_path %></li>
+  <li><%= link_to 'メッセージ', administrations_root_path %></li>
+  <li><%= link_to 'グループ', administrations_root_path %></li>
+  <li><%= link_to 'タグ', administrations_root_path %></li>
+  <li><%= link_to 'トピック', administrations_root_path %></li>
+  <li><%= link_to 'リスト', administrations_root_path %></li>
+  
+  <li><%= link_to 'ロール', administrations_root_path %></li>
+  <li><%= link_to 'バッジ', administrations_root_path %></li>
+
+  <li><%= link_to '財布', administrations_root_path %></li>
+  <li><%= link_to 'aShop', administrations_root_path %></li>
+  <li><%= link_to '商品', administrations_root_path %></li>
+  <li><%= link_to 'マップ', administrations_root_path %></li>
+  <li><%= link_to 'ワールド', administrations_root_path %></li>
+  <li><%= link_to 'アプリケーション', administrations_root_path %></li>
+  <li><%= link_to 'サブスクリプション', administrations_root_path %></li>
+  <br />
+  <li><%= link_to '❌ActivityPub', administrations_root_path %></li>
+  <li><%= link_to '❌AT Protocol', administrations_root_path %></li>
+  <br />
+  <li><%= link_to '❌Announcements', administrations_root_path %></li>
+  <li><%= link_to '❌Advertisement', administrations_root_path %></li>
+  <li><%= link_to '❌Report', administrations_root_path %></li>
+  <br />
+  <li><%= link_to '⭕test', administrations_test_path %></li>
+  <li><%= link_to '⭕server_properties', administrations_server_properties_path %></li>
+</ul>

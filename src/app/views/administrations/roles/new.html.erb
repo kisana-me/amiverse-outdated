@@ -1,0 +1,12 @@
+<%= form_with model: @role, url: administrations_roles_path do |f| %>
+
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <br />
+
+  <%= f.label :name_id, 'name_id' %>
+  <%= f.text_field :name_id %>
+  <br />
+
+  <%= f.submit 'Create' %>
+<% end %>

@@ -27,8 +27,13 @@ class ApplicationController < ActionController::Base
   def set_current_account
     @current_account = current_account
   end
-  def admin_account
+  def administrator_account
     unless @current_account && @current_account.administrator?
+      render_404
+    end
+  end
+  def moderator_account
+    unless @current_account && @current_account.moderator?
       render_404
     end
   end

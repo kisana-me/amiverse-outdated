@@ -1,4 +1,6 @@
 class SignupController < ApplicationController
+  include InvitationManagement
+
   def index
   end
   def check # 招待コードの入力
@@ -8,50 +10,54 @@ class SignupController < ApplicationController
     end
   end
   def entry # アカウント情報の入力
-    if Rails.application.config.x.initial
+    if Rails.application.config.x.initial # 初回
       @account = Account.new
-    else
-      invitation = check_invitation_code(params[:code])
-      if invitation
+    elsif Rails.application.config.x.server_property.open_registrations # 登録可
+    else # その他
+      if check_code(code: params[:code])
         session[:code] = params[:code]
         @account = Account.new
       else
+        flash.now[:danger] = '招待コードが正しくありません'
         render 'check'
       end
     end
   end
   def create
     @account = Account.new(account_params)
-    if Rails.application.config.x.open_registrations || Rails.application.config.x.initial
-      #@account.activated = true
-    else
-      invitation = check_invitation_code(session[:code])
-      unless invitation
+    if Rails.application.config.x.initial # 初回
+      create_initial
+      return
+    elsif Rails.application.config.x.server_property.open_registrations # 登録可
+    else # その他
+      invitation = check_code(code: session[:code])
+      if invitation
+      else
         render 'entry'
         return
       end
     end
     @account.aid = generate_aid(Account, 'aid')
-    #@account.activitypub_id = URI.join(ENV['APP_URL'], '@' + params[:account][:name_id])
-    #key_pair = generate_rsa_key_pair
-    #@account.private_key = key_pair[:private_key]
-    #@account.public_key = key_pair[:public_key]
     if @account.save
-      if invitation
-        invitation.update(uses: invitation.uses + 1)
-        session[:code].clear
-      end
-      if Rails.application.config.x.initial
-        Rails.application.config.x.initial = false
+      if Rails.application.config.x.initial # 初回
+      elsif Rails.application.config.x.server_property.open_registrations # 登録可
+      else # その他
+        if invitation
+          invitation.accounts << @account
+          invitation.update(uses: invitation.uses + 1)
+          session[:code].clear
+        end
       end
       flash[:success] = "アカウントが作成されました"
       redirect_to login_path
     else
-      flash.now[:danger] = "間違っています。"
+      flash.now[:danger] = "間違っています"
       render 'entry'
     end
   end
+
   private
+
   def account_params
     params.require(:account).permit(
       :name,
@@ -63,20 +69,16 @@ class SignupController < ApplicationController
       :password_confirmation
     )
   end
-  def check_invitation_code(code)
-    invitation = Invitation.find_by(code: code)
-    if !invitation
-      flash.now[:danger] = "招待コードが無効です"
-      return false
-    elsif invitation.uses >= invitation.max_uses
-      flash.now[:danger] = "招待コードの使用回数が上限に達しています"
-      return false
-    elsif invitation.deleted
-      flash.now[:danger] = "削除された招待コードです"
-      return false
+  def create_initial
+    @account.aid = generate_aid(Account, 'aid')
+    @account.roles << Role.create(name: '管理者', name_id: 'administrator', aid: generate_aid(Role, 'aid'))
+    if @account.save
+      flash[:success] = "管理者アカウントが作成されました"
+      redirect_to login_path
     else
-      flash[:success] = "有効な招待コードです"
-      return invitation
+      flash.now[:danger] = "管理者アカウントを作成できませんでした"
+      render 'entry'
     end
+    Rails.application.config.x.initial = false
   end
 end

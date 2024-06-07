@@ -5,6 +5,23 @@ class AccountsController < ApplicationController
 
   def show
     @account = find_account_by_nid(params[:name_id])
+    items = @account.items.order(id: :desc).where(
+      visibility: :public_share,
+      status: :shared,
+      deleted: false
+    ).includes(
+      :images,
+      :videos,
+      :reactions,
+      :emojis,
+      :replying,
+      :repliers,
+      :quoting,
+      :quoters
+    )
+    @page = current_page(page_param: params[:page])
+    @pages = total_page(objects: items)
+    @items = paged_objects(page: @page, objects: items)
   end
   def reject_follow
     account = find_account_by_nid(params[:name_id])

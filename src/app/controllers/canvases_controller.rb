@@ -2,7 +2,7 @@ class CanvasesController < ApplicationController
   before_action :logged_in_account
 
   def index
-    @canvases = Canvas.all
+    @canvases = Canvas.all.order(id: :desc)
   end
   def show
     @canvas = Canvas.find_by(aid: params[:aid], deleted: false)

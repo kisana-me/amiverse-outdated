@@ -1,0 +1,3 @@
+class ServerProperty < ApplicationRecord
+  
+end

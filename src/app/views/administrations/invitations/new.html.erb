@@ -1,0 +1,24 @@
+<% provide(:layout_type, 'header_text') %>
+<% provide(:header_text, '招待 - 作成') %>
+<% provide(:title, '招待 - 作成') %>
+
+<%= form_with model: @invitation, url: administrations_invitations_path do |f| %>
+
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <br />
+
+  <%= f.label :code %>
+  <%= f.text_field :code %>
+  <br />
+
+  <%= f.label :max_uses %>
+  <%= f.number_field :max_uses %>
+  <br />
+
+  <%= f.label :expires_at %>
+  <%= f.datetime_field :expires_at %>
+  <br />
+
+  <%= f.submit '作成' %>
+<% end %>

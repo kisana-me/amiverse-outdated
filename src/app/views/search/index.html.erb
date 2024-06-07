@@ -12,9 +12,9 @@
 <div id="items">
   <%= render partial: 'items/item',
     collection: @items,
-    as: :item,
-    locals: {reactions: Reaction.all}
+    as: :item
   %>
+  <%= render 'shared/paging', page: @page, pages: @pages, page_to: "search", more_params: "query=#{params[:query]}" %>
   <% if @items.blank? %>
     <p>検索結果がありません。</p>
   <% end %>

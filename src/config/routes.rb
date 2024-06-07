@@ -1,7 +1,7 @@
 require 'sidekiq/web'
 Rails.application.routes.draw do
 
-  #sidekiq
+  # sidekiq
   mount Sidekiq::Web => '/sidekiq'
   Sidekiq::Web.use(Rack::Auth::Basic) do |user, password|
     [user, password] == [ENV['SIDEKIQ_USERNAME'], ENV['SIDEKIQ_PASSWORD']]
@@ -10,39 +10,25 @@ Rails.application.routes.draw do
   # action cable
   mount ActionCable.server => '/cable'
 
-  root 'timelines#index'
-  
-  # discovery
+  # === base === #
+  root 'feed#index'
+  get 'following' => 'feed#following'
   get 'discovery' => 'discovery#index'
-
-  # search
   get 'search' => 'search#index'
-
-  # dashboard
   get 'dashboard' => 'dashboard#index'
 
-  # timeline
-  get 'tl' => 'timelines#tl'
-  get 'tl/follow' => 'timelines#follow'
-  get 'tl/current' => 'timelines#current'
-  get 'tl/group/:group_aid' => 'timelines#group'
-
-  # account
+  # === account === #
+  # resources :accounts, param: :aid, constraints: { name_id: /.*/ } do
+  #   #post '@:name_id/follow' => 'accounts#follow', as: 'follow'
+  # end
   get '@:name_id' => 'accounts#show', as: 'account', constraints: { name_id: /[A-Za-z0-9\-_\.@]*/ }
   get '@:name_id/icon' => 'accounts#show_icon', as: 'show_icon', constraints: { name_id: /.*/ }
   get '@:name_id/banner' => 'accounts#show_banner', as: 'show_banner', constraints: { name_id: /.*/ }
-  post '@:name_id/follow' => 'accounts#follow', as: 'follow', constraints: { name_id: /.*/ }
+  post '@:name_id/follow' => 'accounts#follow', as: 'follow', constraints: { name_id: /.*/ }      # 以下resourcesに移行
   post '@:name_id/reject_follow' => 'accounts#reject_follow', as: 'reject_follow', constraints: { name_id: /.*/ }
   patch '@:name_id/upate' => 'accounts#update', as: 'update_account'
 
-  # item
-  # get 'items' => 'items#index'
-  # get 'items/new' => 'items#new', as: 'new_item'
-  # post 'items/create' => 'items#create', as: 'create_item'
-  # get 'items/:aid' => 'items#show', as: 'item'
-  # get 'items/:aid/edit' => 'items#edit', as: 'edit_item'
-  # patch 'items/:aid/update' => 'items#update', as: 'update_item'
-  # delete 'items/:aid/destroy' => 'items#destroy', as: 'destroy_item'
+  # === item === #
   resources :items, param: :aid do
     get 'reply' => 'items#new_reply', as: 'reply'
     get 'quote' => 'items#new_quote', as: 'quote'
@@ -54,81 +40,46 @@ Rails.application.routes.draw do
   # reaction
   post 'react/:item_aid/:emoji_aid' => 'reactions#react', as: 'react'
 
-  # storage
+  # === storage === #
   get 'storage' => 'storage#index'
+  resources :icons, param: :aid
+  resources :banners, param: :aid
+  resources :images, param: :aid
+  resources :audios, param: :aid
+  resources :videos, param: :aid
 
-  # image
-  resources :images, param: :aid, only: %i[ show create update destroy ]
-  get 'images/:aid/icon' => 'images#show_icon'
-  get 'images/:aid/banner' => 'images#show_banner'
+  # === notifications === #
+  resources :notifications, param: :aid, only: %i[ index show destroy ]
 
-  # video
-  resources :videos, param: :aid, only: %i[ create update destroy ]
-
-  # notifications
-  #resources :videos, param: :aid, only: %i[ create update destroy ]
-  get 'notifications' => 'notifications#index'
-  get 'notifications/new' => 'notifications#new', as: 'new_notification'
-  post 'notifications/create' => 'notifications#create', as: 'create_notification'
-
-  # message
-  get 'messages' => 'messages#index'
-  get 'messages/:group_aid' => 'messages#show', as: 'message'
-  post 'message/:group_aid/create' => 'messages#create', as: 'create_message'
-
-  # group
-  get 'groups' => 'groups#index'
-  get 'groups/new' => 'groups#new', as: 'new_group'
-  post 'groups/create' => 'groups#create', as: 'create_group'
-  get 'groups/:aid' => 'groups#show', as: 'group'
-  post 'groups/:group_aid/add/:account_aid' => 'groups#group_add', as: 'group_add'
-  post 'groups/:group_aid/remove/:account_aid' => 'groups#group_remove', as: 'group_remove'
-
-  # emoji
+  # === emojis === #
   resources :emojis, param: :aid
 
-  # tag
-  get 'tags' => 'tags#index'
-  get 'tags/new' => 'tags#new', as: 'new_tag'
-  post 'tags/create' => 'tags#create', as: 'create_tag'
-  get 'tags/:aid' => 'tags#show', as: 'tag'
-  get 'tags/:aid/edit' => 'tags#edit', as: 'edit_tag'
-  patch 'tags/:aid/update' => 'tags#update', as: 'update_tag'
-  delete 'tags/:aid/destroy' => 'tags#destroy', as: 'destroy_tag'
+  # === tags === #
+  resources :tags, param: :aid
 
-  # canvas
+  # === canvases === #
   resources :canvases, param: :aid
 
-  # list
+  # pre
+  get 'messages' => 'resources#index'
 
-  # wallet
-
-  # a_shop
-
-  # product
-
-  # map
-
-  # world
-
-  # application
-
-  # subscription
-
+  # === entries === #
   # signup
   get 'signup' => 'signup#index'
   get 'signup/check' => 'signup#check'
   post 'signup/entry' => 'signup#entry'
   post 'signup/create' => 'signup#create'
-
-  # session
+  # log-in-out
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create', as: 'create_session'
+  delete 'logout' => 'sessions#logout'
+  # clients
+    # get 'clients/:aid'
+  # sessions
   post 'sessions/change' => 'sessions#change'
   post 'sessions/destroy' => 'sessions#destroy'
-  delete 'logout' => 'sessions#logout'
 
-  # setting
+  # === settings === #
   get 'settings' => 'settings#index'
   get 'settings/profile' => 'settings#profile'
   get 'settings/account' => 'settings#account'
@@ -142,40 +93,39 @@ Rails.application.routes.draw do
   get 'settings/bills_and_payments' => 'settings#bills_and_payments'
   get 'settings/others' => 'settings#others'
 
-  # resource
+  # === resources === #
   get 'resources' => 'resources#index'
   get 'about' => 'resources#about'
   get 'info' => 'resources#info'
   get 'help' => 'resources#help'
-  get 'privacy_policy' => 'resources#privacy_policy'
-  get 'disclaimer' => 'resources#disclaimer'
-  get 'page1' => 'resources#page1'
   get 'sitemap' => 'resources#sitemap'
-  get 'tos' => 'resources#tos'
-  get 'feedback' => 'resources#feedback'
-  get 'help' => 'resources#help'
-  get 'release_notes' => 'resources#release_notes'
+  get 'contact' => 'resources#feedback'
+  # お知らせ
   get 'blog' => 'resources#blog'
+  get 'release_notes' => 'resources#release_notes'
+  # 法的表示
+  get 'tos' => 'resources#tos'
+  get 'privacy_policy' => 'resources#privacy_policy'
 
-  # administrator
-  namespace :administrator do
-
-    # dashboard
+  namespace :administrations do
     root 'dashboard#index'
 
-    # account
-    resources :accounts, param: :aid, constraints: { name_id: /.*/ }, except: %i[ show ]
-
-    # session
+    resources :accounts, param: :aid, constraints: { name_id: /.*/ }, except: %i[ show ] do
+      get 'extra_edit'  => 'accounts#extra_edit'
+      patch 'extra_update'  => 'accounts#extra_update'
+    end
+    resources :clients, param: :uuid, except: %i[ show ]
     resources :sessions, param: :uuid, except: %i[ show ]
+    resources :items, param: :aid, except: %i[ show ]
+    resources :invitations, param: :aid, except: %i[ show ]
 
-    # invitation
-    resources :invitations, param: :uuid, except: %i[ show ]
-
-    # item
-    get 'items' => 'items#index', as: 'items'
-
-    # test
+    # only admins #
+    resources :roles, param: :aid do
+      get 'add_account' => 'items#new_quote'
+      post 'add_account' => 'items#create_reply'
+    end
+    resources :server_properties, param: :aid
+    #=== test ===#
     get 'test' => 'test#index'
     get 'test/explore' => 'test#explore'
     get 'test/explore/:id' => 'test#show', constraints: { id: /.*/ }
@@ -185,17 +135,10 @@ Rails.application.routes.draw do
     post 'test/digest'
     get 'new_accounts' => 'test#new_accounts'
     post 'create_accounts' => 'test#create_accounts'
-
-    # custom config
-    resources :custom_configs, param: :aid, except: %i[ destroy ]
-    #get 'custom-config' => 'custom_config#index', as: 'custom_config'
-    #post 'custom-config' => 'custom_config#update', as: 'update_custom_config'
+    #===      ===#
   end
 
-  # api v1
   namespace :v1 do
-
-    # app_status
     root 'resources#index'
 
     # session
@@ -228,21 +171,6 @@ Rails.application.routes.draw do
     post 'activitypub/inbox' => 'activity_pub#inbox'
   end
 
-  # # activity pub
-  # namespace :ap do
-  #   # account
-  #   get '@:name_id' => 'accounts#show', as: 'account'
-  #   post '@:name_id/inbox' => 'accounts#inbox', as: 'account_inbox'
-  #   get '@:name_id/outbox' => 'accounts#outbox', as: 'account_outbox'
-  #   get '@:name_id/followers' => 'accounts#followers', as: 'account_followers'
-  #   get '@:name_id/following' => 'accounts#following', as: 'account_following'
-  # end
-
-  # # .well-known
-  # get '/.well-known/host-meta' => 'well_known#host_meta'
-  # get '/.well-known/webfinger' => 'well_known#webfinger'
-
-  # Error
   get '*not_found', to: 'application#routing_error'
   post '*not_found', to: 'application#routing_error'
 end

@@ -9,16 +9,17 @@
   <br />
   <%= f.label :name_id, '表示ID', class: '' %>
   <%= f.text_field :name_id, class: '' %>
-  <br />
-  <%= f.label :description, 'アカウント紹介文', class: '' %>
-  <%= f.text_area :description, class: '' %>
-  <br />
-  <%= f.label :location, '場所', class: '' %>
-  <%= f.text_field :location, class: '' %>
-  <br />
-  <%= f.label :birthday, '誕生日' %>
-  <%= f.datetime_field :birthday %>
-  <br />
+  <details>
+    <summary>追加プロフィール</summary>
+    <%= f.label :description, 'アカウント紹介文', class: '' %>
+    <%= f.text_area :description, class: '' %>
+    <br />
+    <%= f.label :location, '場所', class: '' %>
+    <%= f.text_field :location, class: '' %>
+    <br />
+    <%= f.label :birth, '誕生日' %>
+    <%= f.datetime_field :birth %>
+  </details>
   <%= f.label :password, 'パスワード', class: '' %>
   <%= f.password_field :password, class: '' %>
   <br />

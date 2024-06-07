@@ -8,7 +8,7 @@
     <% if index + 1 == page %>
       <%= index + 1 %>
     <% else %>
-      <%= link_to index + 1, "#{page_to}?page=#{index + 1}" %>
+      <%= link_to index + 1, "#{page_to}?page=#{index + 1}#{"&" + more_params if defined? more_params}" %>
     <% end %>
     |
   <% end %>

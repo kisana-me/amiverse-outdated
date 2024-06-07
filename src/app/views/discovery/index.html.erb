@@ -9,10 +9,14 @@
   <%= f.button "検索", name: nil, type: :submit %>
 <% end %>
 <h2>トレンド</h2>
-  <h3>頻出単語</h3>
   <ul>
-    <% @frequent_words.first(30).each do |word, count| %>
-      <li><%= link_to word, search_path(query: word) %> - <%= count %>回</li>
+    <% @trend.each do |w, c| %>
+      <li>
+        <%= link_to w, search_path(query: w) %>
+        <br />
+        <%= c[0] %>投稿↑
+        <%= c[1] %>回↑
+      </li>
     <% end %>
   </ul>
 <h2>おすすめ</h2>

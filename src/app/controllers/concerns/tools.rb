@@ -6,11 +6,14 @@ module Tools
     total = objects.count
     return total.to_i > 0 ? (total.to_f / per_page.to_f).ceil : 0
   end
-  def paged_objects(page:, objects:, per_page: 30)
+  def paged_offset(page:, per_page: 30)
     page = page.to_i < 1 ? 1 : page.to_i
-    offset_item = (page - 1) * per_page
+    return (page - 1) * per_page
+  end
+  def paged_objects(page:, objects:, per_page: 30)
+    offset = paged_offset(page: page, per_page: per_page)
     return objects.offset(
-      offset_item.to_i
+      offset.to_i
     ).limit(
       per_page.to_i
     )

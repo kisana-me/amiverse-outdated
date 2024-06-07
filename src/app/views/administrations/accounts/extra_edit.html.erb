@@ -1,0 +1,19 @@
+<% provide(:layout_type, 'header_text') %>
+<% provide(:header_text, 'アカウント - 編集') %>
+<% provide(:title, 'アカウント - 編集') %>
+
+<%= form_with model: @account, url: administrations_account_extra_update_path(@account.aid) do |f| %>
+  <h3>Permissions</h3>
+  <%# Role.all.each do |role| %>
+    <%# f.label "role_aids_#{role.aid}", role.name_id %>
+    <%# f.check_box :role_aids, { multiple: true, checked: @account.roles.include?(role) }, role.aid, nil %>
+  <%# end %>
+  <h3>Roles</h3>
+  <% Role.all.each do |role| %>
+    <%= f.label "role_aids_#{role.aid}", role.name_id %>
+    <%= f.check_box :role_aids, { multiple: true, checked: @account.roles.include?(role) }, role.aid, nil %>
+  <% end %>
+
+  <br />
+  <%= f.submit '更新' %>
+<% end %>

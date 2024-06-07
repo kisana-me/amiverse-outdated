@@ -1,0 +1,7 @@
+<% provide(:layout_type, 'header_text') %>
+<% provide(:header_text, '招待') %>
+<% provide(:title, '招待') %>
+
+<div style="overflow-y:scroll;">
+  <%= render 'administrations/shared/all_table', instead: @invitations %>
+</div>

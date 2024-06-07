@@ -4,6 +4,28 @@
 <% provide(:selected_settings_menu, 'activity') %>
 
 <% content_for :settings_content do %>
+  <div style="border: 2px solid #777; margin-bottom: 7px;">
+    使用した招待
+    <% @current_account.invitations.each do |i| %>
+      <div style="border: 2px solid #2F2; margin-bottom: 7px;">
+        名前:<%= i.name %>
+        <br />
+        コード:<%= i.code %>
+      </div>
+    <% end %>
+    <%= 'ありません' if @current_account.invitations.blank? %>
+  </div>
+  <div style="border: 2px solid #777; margin-bottom: 7px;">
+    作成した招待
+    <% @current_account.created_invitations.each do |i| %>
+      <div style="border: 2px solid #2F2; margin-bottom: 7px;">
+        名前:<%= i.name %>
+        <br />
+        コード:<%= i.code %>
+      </div>
+    <% end %>
+    <%= 'ありません' if @current_account.created_invitations.blank? %>
+  </div>
   <div>フォロー</div>
   <div>フォロワー</div>
   <div>フォロー申請</div>

@@ -1,0 +1,7 @@
+<% provide(:layout_type, 'header_text') %>
+<% provide(:header_text, 'アカウント') %>
+<% provide(:title, 'アカウント') %>
+
+<div style="overflow-y:scroll;">
+  <%= render 'administrations/shared/all_table', instead: @accounts %>
+</div>

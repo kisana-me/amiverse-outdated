@@ -60,11 +60,11 @@
     </div>
     <div class="content-container">
       <div id="items">
-        <% @account.items.each do |item| %>
-          <% if item.replying.empty? %>
-            <%= render 'items/item', item: item, show_reply_from: true %>
-          <% end %>
-        <% end %>
+        <%= render partial: 'items/item',
+          collection: @items,
+          as: :item, show_reply_from: true
+        %>
+        <%= render 'shared/paging', page: @page, pages: @pages, page_to: "@#{@account.name_id}" %>
       </div>
     </div>
   </div>

@@ -2,8 +2,9 @@ class InvitationsController < ApplicationController
   before_action :logged_in_account
   before_action :set_invitation, only: %i[ show ]
   def index
-    @invitations = Invitation.all
-      .where(deleted: false)
+    #@invitations = Invitation.all
+    #  .where(deleted: false)
+    @invitations = @current_account.invitations
   end
 
   def show

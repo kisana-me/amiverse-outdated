@@ -1,19 +1,26 @@
 class ResourcesController < ApplicationController
-  before_action :logged_in_account, only: [:page1]
+  before_action :logged_in_account, only: []
+
+  def index
+  end
   def about
   end
   def info
   end
   def help
   end
-  def policy
-  end
-  def disclaimer
-  end
-  def page1
-  end
   def sitemap
   end
-  def resources
+  def contact
+  end
+
+  def blog
+  end
+  def release_notes
+  end
+
+  def tos
+  end
+  def privacy_policy
   end
 end
