@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= content_for?(:lang) ? yield(:lang) : 'ja' %>">
   <head>
+    <meta charset="utf-8">
     <title><%= full_title(yield(:title)) %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="robots" content="noindex nofollow">
-    <meta http-equiv="content-language" content="ja">
+    <meta http-equiv="content-language" content="<%= content_for?(:lang) ? yield(:lang) : 'ja' %>">
     <link rel="icon" href="/favicon.ico">
+    <%= render 'layouts/head' %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", media: 'all', "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    <%= yield(:head) %>
     <% if Rails.application.config.x.server_property.ga4 %>
       <!-- Google tag (gtag.js) -->
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-<%= Rails.application.config.x.server_property.ga4_id %>"></script>
