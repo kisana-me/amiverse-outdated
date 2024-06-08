@@ -78,6 +78,9 @@
     <% item.images.each do |image| %>
       <%= image_tag image.image_url, class: 'item-image' %>
     <% end %>
+    <% item.canvases.each do |canvas| %>
+      <%= image_tag canvas.image_url, class: 'item-image', style: 'image-rendering: pixelated;' %>
+    <% end %>
     <% if false %>
       <video controls class='video-view' id='video-<%= video.video_id %>'></video>
       <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>

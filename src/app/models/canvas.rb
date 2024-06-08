@@ -1,5 +1,7 @@
 class Canvas < ApplicationRecord
   belongs_to :account
+  has_many :item_canvases
+  has_many :canvases, through: :item_canvases
   before_create :canvas_upload
   before_update :canvas_upload
   attr_accessor :image_path

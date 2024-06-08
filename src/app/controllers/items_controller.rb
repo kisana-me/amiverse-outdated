@@ -136,7 +136,8 @@ class ItemsController < ApplicationController
       :activitypub,
       selected_images: [],
       selected_audios: [],
-      selected_videos: []
+      selected_videos: [],
+      selected_canvases: []
     )
   end
 end

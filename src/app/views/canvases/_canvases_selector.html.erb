@@ -1,0 +1,7 @@
+<% canvases.each do |canvas| %>
+  <%= f.label canvas.aid %>
+  <%= f.check_box :selected_canvases, { multiple: true }, canvas.aid, nil %>
+  <br />
+  <%= image_tag canvas.image_url, style: 'image-rendering: pixelated;' %>
+  <br />
+<% end %>

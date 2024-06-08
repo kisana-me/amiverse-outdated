@@ -27,6 +27,7 @@ class Account < ApplicationRecord
   has_many :roles, through: :account_roles
   has_one_attached :icon
   has_one_attached :banner
+  has_many :canvases
   # follow
   has_many :followed, class_name: 'Follow', foreign_key: 'followed_id'
   has_many :follower, class_name: 'Follow', foreign_key: 'follower_id'

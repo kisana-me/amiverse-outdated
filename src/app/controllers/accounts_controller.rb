@@ -4,7 +4,7 @@ class AccountsController < ApplicationController
   before_action :logged_in_account, except: %i[ show ]
 
   def show
-    @account = find_account_by_nid(params[:name_id])
+    return unless @account = find_account_by_nid(params[:name_id])
     items = @account.items.order(id: :desc).where(
       visibility: :public_share,
       status: :shared,
@@ -120,6 +120,9 @@ class AccountsController < ApplicationController
   private
   def set_account
     @account = Account.find_by(name_id: params[:name_id])
+    unless @account
+      render_404
+    end
   end
   def account_params
     params.require(:account).permit(

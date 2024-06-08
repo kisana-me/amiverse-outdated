@@ -18,6 +18,8 @@ class Item < ApplicationRecord
   has_many :audios, through: :item_audios
   has_many :item_videos
   has_many :videos, through: :item_videos
+  has_many :item_canvases
+  has_many :canvases, through: :item_canvases
   # reply
   has_many :replied, class_name: 'Reply', foreign_key: 'replied_id'
   has_many :replier, class_name: 'Reply', foreign_key: 'replier_id'
@@ -46,6 +48,7 @@ class Item < ApplicationRecord
   attr_accessor :selected_images
   attr_accessor :selected_audios
   attr_accessor :selected_videos
+  attr_accessor :selected_canvases
   # --- #
 
   private
@@ -66,6 +69,11 @@ class Item < ApplicationRecord
     #     @item.videos << Video.find_by(aid: aid)
     #   end
     # end
+    if selected_canvases.present? # キャンバス
+      selected_canvases.each do |aid|
+        self.canvases << Canvas.find_by(aid: aid)
+      end
+    end
   end
 
   def check_allowed_content

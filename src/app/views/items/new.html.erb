@@ -48,6 +48,10 @@
         </details>
       </details>
       <details>
+        <summary>キャンバスを添付</summary>
+        <%= render 'canvases/canvases_selector', f: f, canvases: @current_account.canvases.where(deleted: false) %>
+      </details>
+      <details>
         <summary>センシティブ</summary>
         <%= f.label :sensitive %>
         <%= f.check_box :sensitive %>
