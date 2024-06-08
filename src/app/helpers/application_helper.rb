@@ -11,7 +11,7 @@ module ApplicationHelper
       page_title + " | " + base_title
     end
   end
-  def full_api_url(path)
+  def full_url(path)
     return File.join(ENV["API_URL"], path)
   end
   def to_page(current_page, where_to_go)

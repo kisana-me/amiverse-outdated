@@ -31,7 +31,7 @@ class InitialServerProperty
   def initialize
     @server_name = 'Amiverse'
     @server_version = 'v.0.0.5'
-    @server_description = ''
+    @server_description = 'Amiverseは次世代のソーシャルメディアです'
     @open_registrations = false
     @languages = ['ja']
     @theme_color = '#22ff22'

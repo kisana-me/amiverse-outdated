@@ -7,5 +7,5 @@
 <meta property="og:description" content="<%= content_for?(:description) ? yield(:description) : Rails.application.config.x.server_property.server_description %>">
 <meta property="og:type" content="website">
 <meta property="og:url" content="<%= request.url %>">
-<meta property="og:image" content="<%= content_for?(:image) ? yield(:image) : '/images/logodark169.png' %>">
+<meta property="og:image" content="<%= full_url(content_for?(:image) ? yield(:image) : '/images/logodark169.png') %>">
 <meta name="twitter:card" content="<%= content_for?(:card) ? yield(:card) : 'summary_large_image' %>">

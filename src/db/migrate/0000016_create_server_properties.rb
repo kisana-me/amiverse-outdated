@@ -5,7 +5,7 @@ class CreateServerProperties < ActiveRecord::Migration[7.0]
       # server info
       t.string :server_name, null: false, default: 'Amiverse'
       t.string :server_version, null: false, default: 'v.0.0.5'
-      t.text :server_description, null: false, default: ''
+      t.text :server_description, null: false, default: 'Amiverseは次世代のソーシャルメディアです'
       # features
       t.boolean :open_registrations, null: false, default: false
       t.json :languages, null: false, default: ['ja']
