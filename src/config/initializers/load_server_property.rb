@@ -6,7 +6,11 @@ Rails.application.config.to_prepare do
         Rails.application.config.x.initial = false
       else
         Rails.application.config.x.server_property = initial_server_property
-        Rails.application.config.x.initial = true
+        if Account.last
+          Rails.application.config.x.initial = false
+        else
+          Rails.application.config.x.initial = true
+        end
       end
     end
   rescue ActiveRecord::NoDatabaseError, ActiveRecord::StatementInvalid => e
@@ -20,19 +24,21 @@ class InitialServerProperty
   attr_accessor :server_name, :server_version, :server_description, :open_registrations,
                 :languages, :theme_color, :urls, :others, :maintainer_name,
                 :maintainer_email, :accounts, :items, :images, :audios, :videos,
-                :emojis, :reactions, :meta, :published_at, :activitypub, :ap_meta
+                :emojis, :reactions, :meta, :published_at, :activitypub, :ap_meta,
+                :trend_interval, :trend_samplings, :trend_search_words,
+                :ga4, :ga4_id
 
   def initialize
     @server_name = 'Amiverse'
     @server_version = 'v.0.0.5'
     @server_description = ''
     @open_registrations = false
-    @languages = []
-    @theme_color = ''
-    @urls = []
+    @languages = ['ja']
+    @theme_color = '#22ff22'
+    @urls = ['https://amiverse.net/']
     @others = []
-    @maintainer_name = ''
-    @maintainer_email = ''
+    @maintainer_name = 'Amiverse Net'
+    @maintainer_email = 'amiverse@amiverse.net'
     @accounts = 0
     @items = 0
     @images = 0
@@ -44,6 +50,11 @@ class InitialServerProperty
     @published_at = nil
     @activitypub = false
     @ap_meta = {}
+    @trend_interval = 30
+    @trend_samplings = 200
+    @trend_search_words = 100
+    @ga4 = true
+    @ga4_id = 'VP5CN519Q8'
   end
 end
 

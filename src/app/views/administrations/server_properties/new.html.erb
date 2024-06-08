@@ -88,5 +88,25 @@
   <%= form.text_area :ap_meta %>
   <br />
 
+  <%= form.label :trend_interval %>
+  <%= form.number_field :trend_interval %>
+  <br />
+
+  <%= form.label :trend_samplings %>
+  <%= form.number_field :trend_samplings %>
+  <br />
+
+  <%= form.label :trend_search_words %>
+  <%= form.number_field :trend_search_words %>
+  <br />
+
+  <%= form.label :ga4 %>
+  <%= form.check_box :ga4 %>
+  <br />
+
+  <%= form.label :ga4_id %>
+  <%= form.text_field :ga4_id %>
+  <br />
+
   <%= form.submit 'Create' %>
 <% end %>

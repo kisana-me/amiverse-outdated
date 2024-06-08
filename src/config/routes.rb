@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   # === base === #
   root 'feed#index'
   get 'following' => 'feed#following'
+  get 'current' => 'feed#current'
   get 'discovery' => 'discovery#index'
   get 'search' => 'search#index'
   get 'dashboard' => 'dashboard#index'

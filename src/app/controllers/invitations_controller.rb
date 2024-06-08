@@ -17,8 +17,8 @@ class InvitationsController < ApplicationController
 
   def create
     @invitation = Invitation.new(invitation_params)
-    @invitation.account_id = @current_account.id
-    @invitation.uuid = SecureRandom.uuid
+    @invitation.creator = @current_account
+    @invitation.aid = generate_aid(Invitation, 'aid')
     if @invitation.save
       flash[:success] = "招待を作成しました。"
       redirect_to root_path

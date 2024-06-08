@@ -1,6 +1,6 @@
-class TrendsController < ApplicationController
-  before_action :logged_in_account, except: %i[ show ]
+class Administrations::TrendsController < Administrations::ApplicationController
   #before_action :set_item, only: %i[ show edit update destroy ]
+
   def index
     @emojis = Emoji.where(
       deleted: false
@@ -41,7 +41,9 @@ class TrendsController < ApplicationController
   end
   def destroy
   end
+
   private
+
   def emoji_params
     params.require(:emoji).permit(
       :name,

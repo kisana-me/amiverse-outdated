@@ -8,7 +8,7 @@
     引用する
   <% end %>
 
-  <%= form_with model: @item, url: items_path, data: {turbo: false} do |f| %>
+  <%= form_with model: @item, url: items_path, data: {turbo: false}, multipart: true do |f| %>
     <%= render "shared/error_messages", instead: @item %>
     <% if (defined? initial_replied) %>
     <%= f.hidden_field :replied, value: initial_replied %>
@@ -33,8 +33,8 @@
     <div>
       <details>
         <summary>メディア</summary>
-        <%= f.label :media %>
-        <%= f.file_field :media, multiple: true, accept: 'image/*,audio/*,video/*' %>
+        <%= label_tag 'media[]' %>
+        <%= file_field_tag 'media[]', multiple: true, accept: 'image/*,audio/*,video/*' %>
         <details>
           <summary>画像を添付</summary>
           <%= render 'images/images_selector', f: f, images: @current_account.images.where(deleted: false) %>
@@ -56,18 +56,12 @@
       </details>
       <details>
         <summary>投票</summary>
-        <%= f.label :poll %>
-        <%= f.check_box :poll %>
       </details>
       <details>
         <summary>予約</summary>
-        <%= f.label :yoyaku %>
-        <%= f.check_box :yoyaku %>
       </details>
       <details>
         <summary>場所</summary>
-        <%= f.label :location %>
-        <%= f.check_box :location %>
       </details>
     </div>
 

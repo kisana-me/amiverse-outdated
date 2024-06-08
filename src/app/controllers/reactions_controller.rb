@@ -2,6 +2,7 @@ class ReactionsController < ApplicationController
   before_action :logged_in_account
   #before_action :set_item, only: %i[ show edit update destroy ]
   def react
+    #Item.first.reactions.create(account: account, emoji: Emoji.first)
     emoji = Emoji.find_by(
       aid: params[:emoji_aid],
       deleted: false

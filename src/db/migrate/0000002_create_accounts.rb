@@ -37,7 +37,7 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       t.boolean :use_login_id, null: false, default: false
       t.integer :usage_type, limit: 1, null: false, default: 0
       t.json :defaults, null: false, default: [] #itemなど投稿時のデフォ
-      t.json :settings, null: false, default: [] #frontのレイアウトなどの設定群
+      t.json :settings, null: false, default: {} #frontのレイアウトなどの設定群
       # cache
       t.string :icon_key, null: false, default: ''
       t.string :banner_key, null: false, default: ''

@@ -73,12 +73,12 @@ class SignupController < ApplicationController
     @account.aid = generate_aid(Account, 'aid')
     @account.roles << Role.create(name: '管理者', name_id: 'administrator', aid: generate_aid(Role, 'aid'))
     if @account.save
+      Rails.application.config.x.initial = false
       flash[:success] = "管理者アカウントが作成されました"
       redirect_to login_path
     else
       flash.now[:danger] = "管理者アカウントを作成できませんでした"
       render 'entry'
     end
-    Rails.application.config.x.initial = false
   end
 end

@@ -11,7 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 902) do
-  create_table "account_achievements", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "account_achievements", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "achievement_id", null: false
     t.datetime "created_at", null: false
@@ -20,7 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["achievement_id"], name: "index_account_achievements_on_achievement_id"
   end
 
-  create_table "account_badges", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "account_badges", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "badge_id", null: false
     t.datetime "created_at", null: false
@@ -29,7 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["badge_id"], name: "index_account_badges_on_badge_id"
   end
 
-  create_table "account_banners", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "account_banners", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "banner_id", null: false
     t.datetime "created_at", null: false
@@ -38,7 +38,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["banner_id"], name: "index_account_banners_on_banner_id"
   end
 
-  create_table "account_curious", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "account_curious", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "topic_id", null: false
     t.integer "score", default: 0, null: false
@@ -48,7 +48,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["topic_id"], name: "index_account_curious_on_topic_id"
   end
 
-  create_table "account_features", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "account_features", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "topic_id", null: false
     t.integer "score", default: 0, null: false
@@ -58,7 +58,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["topic_id"], name: "index_account_features_on_topic_id"
   end
 
-  create_table "account_feeds", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "account_feeds", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "feed_id", null: false
     t.datetime "created_at", null: false
@@ -67,7 +67,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["feed_id"], name: "index_account_feeds_on_feed_id"
   end
 
-  create_table "account_icons", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "account_icons", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "icon_id", null: false
     t.datetime "created_at", null: false
@@ -76,7 +76,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["icon_id"], name: "index_account_icons_on_icon_id"
   end
 
-  create_table "account_invitations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "account_invitations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "invitation_id", null: false
     t.datetime "created_at", null: false
@@ -85,7 +85,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["invitation_id"], name: "index_account_invitations_on_invitation_id"
   end
 
-  create_table "account_item_impressions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "account_item_impressions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "item_id", null: false
     t.integer "status", limit: 1, default: 0, null: false
@@ -95,7 +95,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["item_id"], name: "index_account_item_impressions_on_item_id"
   end
 
-  create_table "account_list_relations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "account_list_relations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "account_list_id", null: false
     t.datetime "created_at", null: false
@@ -104,7 +104,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["account_list_id"], name: "index_account_list_relations_on_account_list_id"
   end
 
-  create_table "account_lists", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "account_lists", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
     t.string "name", default: "", null: false
@@ -119,7 +119,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["aid"], name: "index_account_lists_on_aid", unique: true
   end
 
-  create_table "account_permissions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "account_permissions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "permission_id", null: false
     t.datetime "created_at", null: false
@@ -128,7 +128,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["permission_id"], name: "index_account_permissions_on_permission_id"
   end
 
-  create_table "account_roles", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "account_roles", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "role_id", null: false
     t.datetime "created_at", null: false
@@ -137,7 +137,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["role_id"], name: "index_account_roles_on_role_id"
   end
 
-  create_table "account_tags", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "account_tags", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "tag_id", null: false
     t.datetime "created_at", null: false
@@ -146,7 +146,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["tag_id"], name: "index_account_tags_on_tag_id"
   end
 
-  create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.string "name_id", null: false
@@ -228,7 +228,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`word_mutes`)", name: "word_mutes"
   end
 
-  create_table "achievements", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "achievements", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
@@ -248,7 +248,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
-  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -258,7 +258,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -270,13 +270,13 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "audios", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "audios", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
     t.string "name", default: "", null: false
@@ -303,7 +303,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
-  create_table "badges", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "badges", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
@@ -323,7 +323,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
-  create_table "banners", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "banners", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
     t.string "name", default: "", null: false
@@ -350,7 +350,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
-  create_table "blocks", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "blocks", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "blocked", null: false
     t.bigint "blocker", null: false
     t.datetime "created_at", null: false
@@ -359,7 +359,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["blocker"], name: "fk_rails_0d53fdd4e5"
   end
 
-  create_table "canvases", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "canvases", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
     t.string "name", default: "", null: false
@@ -389,7 +389,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
-  create_table "categories", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "categories", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
@@ -406,7 +406,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`meta`)", name: "meta"
   end
 
-  create_table "clients", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "clients", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "uuid", null: false
     t.string "client_digest", null: false
     t.bigint "primary_session", default: 0, null: false
@@ -420,7 +420,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["uuid"], name: "index_clients_on_uuid", unique: true
   end
 
-  create_table "diffusions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "diffusions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "diffused", null: false
     t.bigint "diffuser", null: false
     t.datetime "created_at", null: false
@@ -429,7 +429,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["diffuser"], name: "fk_rails_5248f1462e"
   end
 
-  create_table "emoji_categories", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "emoji_categories", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "emoji_type", null: false
     t.bigint "emoji_id", null: false
     t.bigint "category_id", null: false
@@ -439,7 +439,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["emoji_type", "emoji_id"], name: "index_emoji_categories_on_emoji"
   end
 
-  create_table "emojis", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "emojis", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
     t.string "name", default: "", null: false
@@ -464,7 +464,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
-  create_table "feeds", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "feeds", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.integer "feed_type", limit: 1, default: 0, null: false
     t.integer "usage_type", limit: 1, default: 0, null: false
@@ -475,9 +475,9 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`data`)", name: "data"
   end
 
-  create_table "follows", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "followed", null: false
-    t.bigint "follower", null: false
+  create_table "follows", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "followed_id", null: false
+    t.bigint "follower_id", null: false
     t.string "uid", default: "", null: false
     t.boolean "accepted", default: false, null: false
     t.datetime "accepted_at"
@@ -485,11 +485,11 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["followed"], name: "fk_rails_7b60022071"
-    t.index ["follower"], name: "fk_rails_2712f8dae3"
+    t.index ["followed_id"], name: "fk_rails_5ef72a3867"
+    t.index ["follower_id"], name: "fk_rails_622d34a301"
   end
 
-  create_table "icons", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "icons", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
     t.string "name", default: "", null: false
@@ -516,7 +516,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
-  create_table "images", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "images", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
     t.string "name", default: "", null: false
@@ -543,7 +543,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
-  create_table "invitations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "invitations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
     t.string "name", default: "", null: false
@@ -559,7 +559,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["aid", "code"], name: "index_invitations_on_aid_and_code", unique: true
   end
 
-  create_table "item_audios", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "item_audios", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "audio_id", null: false
     t.datetime "created_at", null: false
@@ -568,7 +568,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["item_id"], name: "index_item_audios_on_item_id"
   end
 
-  create_table "item_canvases", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "item_canvases", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "canvas_id", null: false
     t.datetime "created_at", null: false
@@ -577,7 +577,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["item_id"], name: "index_item_canvases_on_item_id"
   end
 
-  create_table "item_images", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "item_images", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "image_id", null: false
     t.datetime "created_at", null: false
@@ -586,7 +586,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["item_id"], name: "index_item_images_on_item_id"
   end
 
-  create_table "item_list_relations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "item_list_relations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "item_list_id", null: false
     t.datetime "created_at", null: false
@@ -595,7 +595,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["item_list_id"], name: "index_item_list_relations_on_item_list_id"
   end
 
-  create_table "item_lists", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "item_lists", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
     t.string "name", default: "", null: false
@@ -610,7 +610,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["aid"], name: "index_item_lists_on_aid", unique: true
   end
 
-  create_table "item_tags", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "item_tags", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "tag_id", null: false
     t.datetime "created_at", null: false
@@ -619,7 +619,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["tag_id"], name: "index_item_tags_on_tag_id"
   end
 
-  create_table "item_topics", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "item_topics", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "topic_id", null: false
     t.integer "score", default: 0, null: false
@@ -629,7 +629,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["topic_id"], name: "index_item_topics_on_topic_id"
   end
 
-  create_table "item_videos", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "item_videos", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "video_id", null: false
     t.datetime "created_at", null: false
@@ -638,7 +638,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["video_id"], name: "index_item_videos_on_video_id"
   end
 
-  create_table "items", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "items", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
     t.text "content", default: "", null: false
@@ -679,7 +679,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`meta`)", name: "meta"
   end
 
-  create_table "mentions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "mentions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "item_id", null: false
     t.datetime "created_at", null: false
@@ -688,7 +688,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["item_id"], name: "index_mentions_on_item_id"
   end
 
-  create_table "message_groups", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "message_groups", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
     t.string "name", default: "", null: false
@@ -705,7 +705,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["aid"], name: "index_message_groups_on_aid", unique: true
   end
 
-  create_table "messages", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "messages", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "message_group_id", null: false
     t.string "uuid", null: false
@@ -720,7 +720,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["message_group_id"], name: "index_messages_on_message_group_id"
   end
 
-  create_table "mutes", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "mutes", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "muted", null: false
     t.bigint "muter", null: false
     t.datetime "created_at", null: false
@@ -729,7 +729,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["muter"], name: "fk_rails_9f098a6341"
   end
 
-  create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "uuid", null: false
     t.string "message", default: "", null: false
@@ -741,7 +741,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["account_id"], name: "index_notifications_on_account_id"
   end
 
-  create_table "permissions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "permissions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
@@ -760,7 +760,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`properties`)", name: "properties"
   end
 
-  create_table "polymorphic_audios", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "polymorphic_audios", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "target_type", null: false
     t.bigint "target_id", null: false
     t.bigint "audio_id", null: false
@@ -770,7 +770,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["target_type", "target_id"], name: "index_polymorphic_audios_on_target"
   end
 
-  create_table "polymorphic_banners", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "polymorphic_banners", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "target_type", null: false
     t.bigint "target_id", null: false
     t.bigint "banner_id", null: false
@@ -780,7 +780,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["target_type", "target_id"], name: "index_polymorphic_banners_on_target"
   end
 
-  create_table "polymorphic_feeds", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "polymorphic_feeds", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "target_type", null: false
     t.bigint "target_id", null: false
     t.bigint "feed_id", null: false
@@ -790,7 +790,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["target_type", "target_id"], name: "index_polymorphic_feeds_on_target"
   end
 
-  create_table "polymorphic_icons", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "polymorphic_icons", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "target_type", null: false
     t.bigint "target_id", null: false
     t.bigint "icon_id", null: false
@@ -800,7 +800,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["target_type", "target_id"], name: "index_polymorphic_icons_on_target"
   end
 
-  create_table "polymorphic_images", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "polymorphic_images", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "target_type", null: false
     t.bigint "target_id", null: false
     t.bigint "image_id", null: false
@@ -810,7 +810,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["target_type", "target_id"], name: "index_polymorphic_images_on_target"
   end
 
-  create_table "polymorphic_reactions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "polymorphic_reactions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "emoji_id", null: false
     t.string "target_type", null: false
@@ -825,7 +825,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["target_type", "target_id"], name: "index_polymorphic_reactions_on_target"
   end
 
-  create_table "polymorphic_tags", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "polymorphic_tags", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "target_type", null: false
     t.bigint "target_id", null: false
     t.bigint "tag_id", null: false
@@ -835,7 +835,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["target_type", "target_id"], name: "index_polymorphic_tags_on_target"
   end
 
-  create_table "polymorphic_topics", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "polymorphic_topics", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "target_type", null: false
     t.bigint "target_id", null: false
     t.bigint "topic_id", null: false
@@ -845,7 +845,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["topic_id"], name: "index_polymorphic_topics_on_topic_id"
   end
 
-  create_table "polymorphic_videos", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "polymorphic_videos", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "target_type", null: false
     t.bigint "target_id", null: false
     t.bigint "video_id", null: false
@@ -855,16 +855,16 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["video_id"], name: "index_polymorphic_videos_on_video_id"
   end
 
-  create_table "quotes", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "quoted", null: false
-    t.bigint "quoter", null: false
+  create_table "quotes", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "quoted_id", null: false
+    t.bigint "quoter_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["quoted"], name: "fk_rails_87ced17c39"
-    t.index ["quoter"], name: "fk_rails_616dc58d04"
+    t.index ["quoted_id"], name: "fk_rails_a493216fab"
+    t.index ["quoter_id"], name: "fk_rails_83c38854a4"
   end
 
-  create_table "reactions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "reactions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "emoji_id", null: false
     t.bigint "item_id", null: false
@@ -878,7 +878,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["item_id"], name: "index_reactions_on_item_id"
   end
 
-  create_table "read_items", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "read_items", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "item_id", null: false
     t.integer "counter", default: 0, null: false
@@ -888,7 +888,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["item_id"], name: "index_read_items_on_item_id"
   end
 
-  create_table "read_messages", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "read_messages", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "message_id", null: false
     t.datetime "created_at", null: false
@@ -897,16 +897,16 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["message_id"], name: "index_read_messages_on_message_id"
   end
 
-  create_table "replies", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "replied", null: false
-    t.bigint "replier", null: false
+  create_table "replies", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "replied_id", null: false
+    t.bigint "replier_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["replied"], name: "fk_rails_7f82de0917"
-    t.index ["replier"], name: "fk_rails_2001645403"
+    t.index ["replied_id"], name: "fk_rails_ed89900097"
+    t.index ["replier_id"], name: "fk_rails_20e81e0ffe"
   end
 
-  create_table "roles", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "roles", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.string "name_id", default: "", null: false
@@ -924,18 +924,18 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`meta`)", name: "meta"
   end
 
-  create_table "server_properties", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "server_properties", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "aid", null: false
-    t.string "server_name", default: "", null: false
-    t.string "server_version", default: "", null: false
+    t.string "server_name", default: "Amiverse", null: false
+    t.string "server_version", default: "v.0.0.5", null: false
     t.text "server_description", default: "", null: false
     t.boolean "open_registrations", default: false, null: false
-    t.text "languages", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.string "theme_color", default: "", null: false
-    t.text "urls", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
+    t.text "languages", size: :long, default: "[\"ja\"]", null: false, collation: "utf8mb4_bin"
+    t.string "theme_color", default: "#22ff22", null: false
+    t.text "urls", size: :long, default: "[\"https://amiverse.net/\"]", null: false, collation: "utf8mb4_bin"
     t.text "others", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.string "maintainer_name", default: "", null: false
-    t.string "maintainer_email", default: "", null: false
+    t.string "maintainer_name", default: "Amiverse Net", null: false
+    t.string "maintainer_email", default: "amiverse@amiverse.net", null: false
     t.bigint "accounts", default: 0, null: false
     t.bigint "items", default: 0, null: false
     t.bigint "images", default: 0, null: false
@@ -947,6 +947,11 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.datetime "published_at"
     t.boolean "activitypub", default: false, null: false
     t.text "ap_meta", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
+    t.integer "trend_interval", default: 30, null: false
+    t.integer "trend_samplings", default: 200, null: false
+    t.integer "trend_search_words", default: 100, null: false
+    t.boolean "ga4", default: true, null: false
+    t.string "ga4_id", default: "VP5CN519Q8", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.check_constraint "json_valid(`ap_meta`)", name: "ap_meta"
@@ -956,7 +961,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`urls`)", name: "urls"
   end
 
-  create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "client_id", null: false
     t.string "uuid", null: false
@@ -968,7 +973,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["client_id"], name: "index_sessions_on_client_id"
   end
 
-  create_table "tags", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "tags", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
@@ -985,7 +990,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`meta`)", name: "meta"
   end
 
-  create_table "topics", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "topics", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
@@ -1002,7 +1007,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`meta`)", name: "meta"
   end
 
-  create_table "trend_words", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "trend_words", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "trend_id", null: false
     t.bigint "word_id", null: false
     t.datetime "created_at", null: false
@@ -1011,7 +1016,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["word_id"], name: "index_trend_words_on_word_id"
   end
 
-  create_table "trends", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "trends", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
@@ -1031,7 +1036,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`words`)", name: "words"
   end
 
-  create_table "videos", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "videos", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
     t.string "name", default: "", null: false
@@ -1058,7 +1063,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
-  create_table "words", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "words", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "aid", null: false
     t.string "name", default: "", null: false
     t.text "description", default: "", null: false
@@ -1106,8 +1111,8 @@ ActiveRecord::Schema[7.0].define(version: 902) do
   add_foreign_key "diffusions", "items", column: "diffuser"
   add_foreign_key "emoji_categories", "categories"
   add_foreign_key "emojis", "accounts"
-  add_foreign_key "follows", "accounts", column: "followed"
-  add_foreign_key "follows", "accounts", column: "follower"
+  add_foreign_key "follows", "accounts", column: "followed_id"
+  add_foreign_key "follows", "accounts", column: "follower_id"
   add_foreign_key "icons", "accounts"
   add_foreign_key "images", "accounts"
   add_foreign_key "invitations", "accounts"
@@ -1145,8 +1150,8 @@ ActiveRecord::Schema[7.0].define(version: 902) do
   add_foreign_key "polymorphic_tags", "tags"
   add_foreign_key "polymorphic_topics", "topics"
   add_foreign_key "polymorphic_videos", "videos"
-  add_foreign_key "quotes", "items", column: "quoted"
-  add_foreign_key "quotes", "items", column: "quoter"
+  add_foreign_key "quotes", "items", column: "quoted_id"
+  add_foreign_key "quotes", "items", column: "quoter_id"
   add_foreign_key "reactions", "accounts"
   add_foreign_key "reactions", "emojis"
   add_foreign_key "reactions", "items"
@@ -1154,8 +1159,8 @@ ActiveRecord::Schema[7.0].define(version: 902) do
   add_foreign_key "read_items", "items"
   add_foreign_key "read_messages", "accounts"
   add_foreign_key "read_messages", "messages"
-  add_foreign_key "replies", "items", column: "replied"
-  add_foreign_key "replies", "items", column: "replier"
+  add_foreign_key "replies", "items", column: "replied_id"
+  add_foreign_key "replies", "items", column: "replier_id"
   add_foreign_key "sessions", "accounts"
   add_foreign_key "sessions", "clients"
   add_foreign_key "trend_words", "trends"

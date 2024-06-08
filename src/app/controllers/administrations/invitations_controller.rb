@@ -11,7 +11,7 @@ class Administrations::InvitationsController < Administrations::ApplicationContr
   end
   def create
     @invitation = Invitation.new(invitation_params)
-    @invitation.account = @current_account
+    @invitation.creator = @current_account
     @invitation.aid = generate_aid(Invitation, 'aid')
     if @invitation.save
       flash[:success] = "招待を作成しました"

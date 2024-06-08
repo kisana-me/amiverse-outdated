@@ -6,10 +6,7 @@ class ItemsController < ApplicationController
   include Format
 
   def index
-    items = Item.where(
-      silent: false,
-      visibility: :public_share,
-      status: :shared,
+    items = @current_account.items.where(
       deleted: false
     ).order(id: :desc).includes(
       :account,
@@ -35,25 +32,46 @@ class ItemsController < ApplicationController
   end
   def create
     @item = Item.new(item_params)
+    # 事前にアップロード #
+    if params[:media]
+      params[:media].each do |m|
+        case m.content_type
+        when /\Aimage/
+          image = Image.new(image: m)
+          image.account = @current_account
+          image.aid = generate_aid(Image, 'aid')
+          image.name = m.original_filename if image.name.blank?
+          if image.save
+            @item.selected_images = @item.selected_images.nil? ? [] : @item.selected_images
+            @item.selected_images << image.aid
+          else
+          end
+          @item.errors.add(:base, "画像エラーメッセージ")
+        when /\Aaudio/
+          Rails.logger.info("音声ファイルです")
+          # 音声ファイルの場合の処理
+        when /\Avideo/
+          Rails.logger.info("動画ファイルです")
+          # 動画ファイルの場合の処理
+        else
+          Rails.logger.info("その他のファイルです")
+          # その他のファイルの場合の処理
+        end
+      end
+    end
+    # 関連付け前処理 #
+    if params[:item][:replied].present? # 返信
+      replied = Item.find_by(aid: params[:item][:replied])
+      @item.replier.new(replier: @item, replied: replied)
+    end
+    if params[:item][:quoted].present? # 引用
+      quoted = Item.find_by(aid: params[:item][:quoted])
+      @item.quoter.new(quoter: @item, quoted: quoted)
+    end
+    #########
     @item.account = @current_account
     @item.aid = generate_aid(Item, 'aid')
-    if params[:item][:selected_images].present?
-      params[:item][:selected_images].each do |aid|
-        image = Image.find_by(aid: aid)
-        @item.images << image
-      end
-    end
-    if params[:item][:replied].present?
-      replied = Item.find_by(aid: params[:item][:replied])
-      #@item.replying = replied
-    end
-    if @item.save
-      # if replied = Item.find_by(aid: params[:item][:replied])
-      #   Reply.create(replier: @item, replied: replied)
-      # end
-      if quoted = Item.find_by(aid: params[:item][:quoted])
-        Quote.create(quoter: @item, quoted: quoted)
-      end
+    if @item.save!
       flash[:success] = '投稿しました'
       redirect_to item_url(@item.aid)
     else
@@ -110,16 +128,15 @@ class ItemsController < ApplicationController
       :language,
       # main #
       :content,
-      :media,
-      :selected_images,
-      :selected_audios,
-      :selected_videos,
       :sensitive,
       :caution_message,
       # sub #
       :silent,
       :draft,
-      :activitypub
+      :activitypub,
+      selected_images: [],
+      selected_audios: [],
+      selected_videos: []
     )
   end
 end

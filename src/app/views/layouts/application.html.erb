@@ -3,8 +3,7 @@
   <head>
     <title><%= full_title(yield(:title)) %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="robots" content="noindex">
-    <meta name="robots" content="nofollow">
+    <meta name="robots" content="noindex nofollow">
     <meta http-equiv="content-language" content="ja">
     <link rel="icon" href="/favicon.ico">
     <%= csrf_meta_tags %>
@@ -12,9 +11,22 @@
     <%= stylesheet_link_tag "application", media: 'all', "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <%= yield(:head) %>
+    <% if Rails.application.config.x.server_property.ga4 %>
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-<%= Rails.application.config.x.server_property.ga4_id %>"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-<%= Rails.application.config.x.server_property.ga4_id %>');
+      </script>
+    <% end %>
   </head>
   <body>
-    <div class="main-container dark-mode" id="main-container">
+    <% dark_mode = false %>
+    <% dark_mode ||= session[:dark_mode] %>
+    <% dark_mode ||= @current_account.settings['default']['dark_mode'] if @current_account && @current_account.settings['default'] %>
+    <div class="main-container <%= dark_mode ? 'dark-mode' : 'light-mode' %>" id="main-container">
       <%= render 'layouts/nav' %>
       <main>
         <% layout_type = yield(:layout_type) %>
@@ -35,11 +47,43 @@
               <%= yield %>
             </div>
           </div>
+        <% elsif layout_type == 'feed' %>
+        <% selected_tab = yield(:selected_tab) %>
+          <div class='main-header'>
+            <div class='main-header-logo'>
+            </div>
+            <div class='main-header-home'>
+              <% if selected_tab == 'home' %>
+                home
+              <% else %>
+                <%= link_to 'home', root_path %>
+              <% end %>
+            </div>
+            <div class='main-header-following'>
+              <% if selected_tab == 'following' %>
+                following
+              <% else %>
+                <%= link_to 'following', following_path %>
+              <% end %>
+            </div>
+            <div class='main-header-current'>
+              <% if selected_tab == 'current' %>
+                current
+              <% else %>
+                <%= link_to 'current', current_path %>
+              <% end %>
+            </div>
+          </div>
+          <div class='shared-default-layout-out-container'>
+            <div class='shared-default-layout-in-container'>
+              <%= yield %>
+            </div>
+          </div>
         <% else %>
           <%= yield %>
         <% end %>
         <% flash.each do |message_type, message| %>
-          <div class="<%= message_type %>"><%= message %></div>
+          <div class="flash <%= message_type %>"><%= message %></div>
         <% end %>
       </main>
       <%= render 'layouts/tab' %>

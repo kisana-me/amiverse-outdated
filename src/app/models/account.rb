@@ -28,8 +28,8 @@ class Account < ApplicationRecord
   has_one_attached :icon
   has_one_attached :banner
   # follow
-  has_many :followed, class_name: 'Follow', foreign_key: 'followed'
-  has_many :follower, class_name: 'Follow', foreign_key: 'follower'
+  has_many :followed, class_name: 'Follow', foreign_key: 'followed_id'
+  has_many :follower, class_name: 'Follow', foreign_key: 'follower_id'
   has_many :followers, through: :followed, source: :follower
   has_many :following, through: :follower, source: :followed
   # varidate
@@ -66,6 +66,18 @@ class Account < ApplicationRecord
     validates_confirmation_of :password, allow_blank: true
   end
   has_secure_password validations: false
+  serialize :additional_informations, JSON
+  serialize :pinned_items, JSON
+  serialize :defaults, JSON
+  serialize :settings, JSON
+  serialize :word_mutes, JSON
+  serialize :mutes, JSON
+  serialize :blocks, JSON
+  serialize :permissions, JSON
+  serialize :checker, JSON
+  serialize :cache, JSON
+  serialize :meta, JSON
+  serialize :ap_meta, JSON
 
   def add_roles(add_roles_array)
     add_array(object: self, column: 'roles', add_array: add_roles_array)

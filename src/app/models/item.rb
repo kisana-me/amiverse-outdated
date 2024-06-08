@@ -1,7 +1,8 @@
 class Item < ApplicationRecord
   include MeiliSearch::Rails
   meilisearch do
-    attribute :content
+    attribute :content, :deleted, :created_at
+    sortable_attributes [:deleted, :created_at]
     # displayed_attributes [:user_id, :created_at]
   end
   enum render_type: { plane: 0, markdown: 1, html: 2, mfm: 3}
@@ -18,13 +19,13 @@ class Item < ApplicationRecord
   has_many :item_videos
   has_many :videos, through: :item_videos
   # reply
-  has_many :replied, class_name: 'Reply', foreign_key: 'replied'
-  has_many :replier, class_name: 'Reply', foreign_key: 'replier'
+  has_many :replied, class_name: 'Reply', foreign_key: 'replied_id'
+  has_many :replier, class_name: 'Reply', foreign_key: 'replier_id'
   has_many :repliers, through: :replied, source: :replier
   has_many :replying, through: :replier, source: :replied
   # quote
-  has_many :quoted, class_name: 'Quote', foreign_key: 'quoted'
-  has_many :quoter, class_name: 'Quote', foreign_key: 'quoter'
+  has_many :quoted, class_name: 'Quote', foreign_key: 'quoted_id'
+  has_many :quoter, class_name: 'Quote', foreign_key: 'quoter_id'
   has_many :quoters, through: :quoted, source: :quoter
   has_many :quoting, through: :quoter, source: :quoted
   # reaction
@@ -37,6 +38,7 @@ class Item < ApplicationRecord
     uniqueness: { case_sensitive: true } # 大文字小文字の違いを確認する
   # custom validate #
   validate :check_allowed_content
+  before_create :associate_media
   # attr #
   attr_accessor :draft
   attr_accessor :selected_replied
@@ -44,20 +46,34 @@ class Item < ApplicationRecord
   attr_accessor :selected_images
   attr_accessor :selected_audios
   attr_accessor :selected_videos
-  attr_accessor :media
   # --- #
 
   private
 
-  def check_allowed_content
-    if activitypub
-      errors.add(:activitypub, 'に対応していません')
+  def associate_media
+    if selected_images.present? # 画像
+      selected_images.each do |aid|
+        self.images << Image.find_by(aid: aid)
+      end
     end
-    if draft == 1
+    # if params[:item][:selected_audios].present? # 音源
+    #   params[:item][:selected_audios].each do |aid|
+    #     @item.audios << Audio.find_by(aid: aid)
+    #   end
+    # end
+    # if params[:item][:selected_videos].present? # 動画
+    #   params[:item][:selected_videos].each do |aid|
+    #     @item.videos << Video.find_by(aid: aid)
+    #   end
+    # end
+  end
+
+  def check_allowed_content
+    if !(draft.to_i == 0) # modelで型定義ないからstrで来る
       errors.add(:draft, 'に対応していません')
     end
-    if silent
-      errors.add(:silent, 'に対応していません')
+    if activitypub
+      errors.add(:activitypub, 'に対応していません')
     end
     if !text?
       errors.add(:layout_type, ':text以外に対応していません')
@@ -70,12 +86,6 @@ class Item < ApplicationRecord
     end
     if !personal?
       errors.add(:usage_type, ':personal以外に対応していません')
-    end
-    if media.present?
-      errors.add(:media, ':に対応していません')
-    end
-    if selected_images.present?
-      errors.add(:selected_images, ':iの設定に対応していません')
     end
     if selected_audios.present?
       errors.add(:selected_audios, ':音源の設定に対応していません')

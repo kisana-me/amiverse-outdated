@@ -6,15 +6,15 @@ class Administrations::TestController < Administrations::ApplicationController
   def index
   end
   def new_accounts
-    contents = hashtag
-    100.times do |i|
-      item = Item.new(
-        account: @current_account,
-        content: contents[i],
-        aid: generate_aid(Item, 'aid')
-      )
-      item.save
-    end
+    # contents = hashtag
+    # 100.times do |i|
+    #   item = Item.new(
+    #     account: @current_account,
+    #     content: contents[i],
+    #     aid: generate_aid(Item, 'aid')
+    #   )
+    #   item.save
+    # end
   end
   def create_accounts
     account_times = params[:account_times].to_i || 0
@@ -51,7 +51,7 @@ class Administrations::TestController < Administrations::ApplicationController
       end
     end
     flash[:success] = 'end'
-    redirect_to administrator_new_accounts_path
+    redirect_to administrations_new_accounts_path
   end
   def explore
   end

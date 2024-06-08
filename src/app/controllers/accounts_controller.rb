@@ -46,6 +46,11 @@ class AccountsController < ApplicationController
     redirect_to root_path
   end
   def follow
+    if @current_account.name_id == params[:name_id]
+      redirect_to root_path
+      flash[:danger] = 'フォローできません'
+      return
+    end
     account = find_account_by_nid(params[:name_id])
     this_follow_params = {
       followed: account,
@@ -86,6 +91,12 @@ class AccountsController < ApplicationController
   end
   def update
     @account = @current_account
+
+    if params[:account][:settings_dark_mode]
+      @account.settings ||= {}
+      @account.settings['default'] ||= {}
+      @account.settings['default']['dark_mode'] = params[:account][:settings_dark_mode] == '1'
+    end
     if @account.update(account_update_params)
       flash[:success] = "更新しました"
       redirect_to account_path(@account.name_id)

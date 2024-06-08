@@ -1,4 +1,4 @@
-module AccountsHelper
+module AccountsManagement
   def name_id_host_separater(str)
     name_id = ''
     host = ''

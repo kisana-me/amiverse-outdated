@@ -9,6 +9,8 @@
   <%= f.button "検索", name: nil, type: :submit %>
 <% end %>
 <h2>トレンド</h2>
+  <div><%= Rails.application.config.x.last_trend_at.strftime("%k時 %M分") %> 時点</div>
+  <%# (Rails.application.config.x.last_trend_at - Rails.application.config.x.server_property.trend_interval * 60).strftime("%Y年 %m月 %d日 %k時 %M分 %S秒") %>
   <ul>
     <% @trend.each do |w, c| %>
       <li>

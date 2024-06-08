@@ -9,11 +9,10 @@ class Administrations::ServerPropertiesController < Administrations::Application
     @server_property = ServerProperty.new(server_property_params)
     @server_property.aid = generate_aid(ServerProperty, 'aid')
     if @server_property.save
-      flash[:success] = "作成しました"
-      redirect_to administrator_root_path
-      server_property = ServerProperty.last
-      Rails.application.config.x.server_property = server_property
+      Rails.application.config.x.server_property = @server_property
       Rails.application.config.x.initial = false
+      flash[:success] = "作成しました"
+      redirect_to administrations_root_path
     else
       flash.now[:danger] = "失敗しました"
       render 'new'
@@ -42,6 +41,11 @@ class Administrations::ServerPropertiesController < Administrations::Application
       :emojis,
       :reactions,
       :activitypub,
+      :trend_interval,
+      :trend_samplings,
+      :trend_search_words,
+      :ga4,
+      :ga4_id,
       languages: [],
       urls: [],
       others: [],

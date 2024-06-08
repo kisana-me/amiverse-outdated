@@ -42,10 +42,14 @@
       <div class="ioa-others">
         <div class="ioa-button-wrap">
           <div class="ioa-button">
-            <% if @current_account && @current_account.following.exists?(item.account.id) %>
+            <% if @current_account && @current_account.following.map(&:id).include?(item.account.id) %>
               <%= button_to("フォロー解除", follow_path(item.account.name_id), method: :post) %>
             <% elsif @current_account %>
-              <%= button_to("フォローする", follow_path(item.account.name_id), method: :post) %>
+              <% if @current_account == item.account %>
+                <%= button_to("プロフィール", account_path(@current_account.name_id), method: :get) %>
+              <% else %>
+                <%= button_to("フォローする", follow_path(item.account.name_id), method: :post) %>
+              <% end %>
             <% else %>
               <%= button_to('ログインしてフォロー', login_path, method: :get) %>
             <% end %>
