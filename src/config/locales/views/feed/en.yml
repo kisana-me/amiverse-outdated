@@ -1,0 +1,8 @@
+en:
+  feed:
+    index:
+      title: 'Home'
+    following:
+      title: 'Following'
+    current:
+      title: 'Current'

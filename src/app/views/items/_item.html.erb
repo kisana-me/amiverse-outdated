@@ -16,10 +16,10 @@
     <div class="item-owners-account">
       <%= link_to account_path(item.account.name_id) do %>
         <div class="ioa-link">
-          <% if false %>
-            <%= image_tag image_url(aid: item.account.icon_key, type: 'icons'), class: 'ioa-icon' %>
+          <% if item.account.icon %>
+            <%= image_tag item.account.icon.image_url(variant_type: 'icons'), class: 'ioa-icon' %>
           <% else %>
-            <%= image_tag 'icon.webp', class: 'ioa-icon' %>
+            <img src="/images/icon.webp" class="ioa-icon" />
           <% end %>
           <div class="ioa-profile">
             <div class="ioa-name">

@@ -123,17 +123,20 @@ module SessionManagement
       uuid: cookies.signed[:a_uid],
       deleted: false
     ) if cookies.signed[:a_uid].present? && !client
-    if BCrypt::Password.new(client.client_digest).is_password?(cookies.signed[:a_rtk]) || path_client_check
+    if cookies.signed[:a_rtk].present? && BCrypt::Password.new(client.client_digest).is_password?(cookies.signed[:a_rtk]) || path_client_check
       Session.where(client: client, account: account, deleted: false).update_all(deleted: true)
       if db_session = Session.find_by(client: client, deleted: false)
         client.update(primary_session: db_session.id)
         account = db_session.account # 健全なアカウントを
-        return nil if account.deleted # 生きたアカウントを
-        session[:logged_in] = true
+        return false if account.deleted # 生きたアカウントを
+        return true
       else
         client.update(deleted: true)
         cookies_logout
+        return true
       end
+    else
+      return false
     end
   end
 

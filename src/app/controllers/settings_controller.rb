@@ -1,5 +1,5 @@
 class SettingsController < ApplicationController
-  before_action :logged_in_account
+  before_action :logged_in_account, except: %i[ index display ]
   def index
     
   end

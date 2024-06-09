@@ -17,7 +17,8 @@ class ItemsController < ApplicationController
       :replying,
       :repliers,
       :quoting,
-      :quoters
+      :quoters,
+      :canvases
     )
 
     @page = current_page(page_param: params[:page])
@@ -71,11 +72,10 @@ class ItemsController < ApplicationController
     #########
     @item.account = @current_account
     @item.aid = generate_aid(Item, 'aid')
-    if @item.save!
-      flash[:success] = '投稿しました'
-      redirect_to item_url(@item.aid)
+    if @item.save
+      redirect_to item_url(@item.aid), success: t('.success')
     else
-      flash.now[:danger] = '失敗しました'
+      flash.now[:danger] = t('.danger')
       render 'new'
     end
   end
@@ -113,7 +113,7 @@ class ItemsController < ApplicationController
     )
   end
   def set_item()
-    @item = get_item
+    return unless @item = get_item
   end
   def set_new_item
     @item = Item.new

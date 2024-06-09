@@ -1,0 +1,8 @@
+<%= f.radio_button selected, '', checked: default.blank? %>
+<%= f.label "#{selected}_#{}", '選択しない' %>
+<br />
+<% images.each do |image| %>
+  <%= f.radio_button selected, image.aid, checked: default == image.aid %>
+  <%= f.label "#{selected}_#{image.aid}", image.name %>
+  <%= image_tag image.image_url, class: 'storage-images-image' %>
+<% end %>

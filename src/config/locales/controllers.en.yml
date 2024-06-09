@@ -1,0 +1,15 @@
+en:
+  sessions:
+    create:
+      success: 'Logged in'
+      danger: 'Can not log in'
+    logout:
+      success: 'Logged out'
+      danger: 'Can not log out'
+    all_logout:
+      success: 'All logged out'
+      danger: 'Can not all log out'
+  items:
+    create:
+      success: 'Posted'
+      danger: 'Can not post'

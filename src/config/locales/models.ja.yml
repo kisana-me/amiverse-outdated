@@ -1,0 +1,23 @@
+ja:
+  activerecord:
+    models:
+      account: アカウント 
+      item: アイテム
+    attributes:
+        account:
+          id: ID
+          aid: 固有ID
+          name: 名前
+          name_id: 表示ID
+          email: Eメール
+          password: パスワード
+        item:
+          id: ID
+          aid: 固有ID
+          content: 内容
+          sensitive: センシティブ
+          caution_message: 警告文
+          visibility: 公開範囲
+  attributes:
+    created_at: 作成日
+    updated_at: 更新日

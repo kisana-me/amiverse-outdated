@@ -1,0 +1,8 @@
+ja:
+  accounts:
+    index:
+      title: '%{name}さん'
+    show:
+      title: '%{name}さんの情報'
+    edit:
+      title: '%{name}さんの情報を編集'

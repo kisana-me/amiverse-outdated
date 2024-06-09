@@ -1,3 +1,7 @@
+<% provide(:title, '投稿する') %>
+<% provide(:layout_type, 'header_text') %>
+<% provide(:header_text, '投稿する') %>
+
 <% if @current_account.present? %>
   <% if (defined? initial_replied) %>
     <%= render 'items/item', item: @replied %>
@@ -37,7 +41,7 @@
         <%= file_field_tag 'media[]', multiple: true, accept: 'image/*,audio/*,video/*' %>
         <details>
           <summary>画像を添付</summary>
-          <%= render 'images/images_selector', f: f, images: @current_account.images.where(deleted: false) %>
+          <%= render 'images/images_multi_selector', f: f, selecteds: 'selected_images', images: @current_account.images.where(deleted: false) %>
         </details>
         <details>
           <summary>動画を添付</summary>

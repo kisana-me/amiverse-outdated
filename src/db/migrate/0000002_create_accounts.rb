@@ -39,8 +39,8 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
       t.json :defaults, null: false, default: [] #itemなど投稿時のデフォ
       t.json :settings, null: false, default: {} #frontのレイアウトなどの設定群
       # cache
-      t.string :icon_key, null: false, default: ''
-      t.string :banner_key, null: false, default: ''
+      t.bigint :icon_id, null: true
+      t.bigint :banner_id, null: true
       t.bigint :followers_counter, null: false, default: 0
       t.bigint :following_counter, null: false, default: 0
       t.bigint :items_counter, null: false, default: 0

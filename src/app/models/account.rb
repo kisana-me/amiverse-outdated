@@ -10,7 +10,7 @@ class Account < ApplicationRecord
   enum usage_type: { personal: 0, bot: 1, commercial: 2 }
   enum status: { activated: 0, waiting: 1, doubt: 2, silenced: 3, locked: 4, hibernated: 5, suspended: 6, frozen: 7 }
   # 1:承認待ち 2:報告あがってるので確認まで一時停止 3:他人から極力見えないように 4:不審な行動を検出したので一時停止 5:自らアカウントを停止 6:当分利用停止 7:永久利用停止
-  enum language: { japanese: 0, english: 1, korean: 2 }
+  enum language: { ja: 0, en: 1, kr: 2 }
   has_many :sessions
   has_many :clients, through: :sessions
   has_many :items
@@ -25,21 +25,15 @@ class Account < ApplicationRecord
   has_many :invitations, through: :account_invitations
   has_many :account_roles
   has_many :roles, through: :account_roles
-  has_one_attached :icon
-  has_one_attached :banner
   has_many :canvases
+  belongs_to :icon, class_name: 'Image', foreign_key: 'icon_id', optional: true
+  belongs_to :banner, class_name: 'Image', foreign_key: 'banner_id', optional: true
   # follow
   has_many :followed, class_name: 'Follow', foreign_key: 'followed_id'
   has_many :follower, class_name: 'Follow', foreign_key: 'follower_id'
   has_many :followers, through: :followed, source: :follower
   has_many :following, through: :follower, source: :followed
   # varidate
-  validates :icon,
-    size: { less_than: 100.megabytes },
-    content_type: %w[ image/jpeg image/png image/gif image/webp ]
-  validates :banner,
-    size: { less_than: 100.megabytes },
-    content_type: %w[ image/jpeg image/png image/gif image/webp ]
   BASE_64_URL_REGEX  = /\A[a-zA-Z0-9_-]*\z/
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   validates :aid,
@@ -79,6 +73,23 @@ class Account < ApplicationRecord
   serialize :cache, JSON
   serialize :meta, JSON
   serialize :ap_meta, JSON
+  before_create :associate_icon_banner
+  before_update :associate_icon_banner
+  attr_accessor :selected_icon
+  attr_accessor :selected_banner
+
+  def associate_icon_banner
+    if selected_icon.present? # アイコン
+      self.icon = Image.find_by(aid: selected_icon)
+    elsif !selected_icon.nil? # nilでなく空
+      self.icon = nil
+    end
+    if selected_banner.present? # バナー
+      self.banner = Image.find_by(aid: selected_banner)
+    elsif !selected_banner.nil? # nilでなく空
+      self.banner = nil
+    end
+  end
 
   def add_roles(add_roles_array)
     add_array(object: self, column: 'roles', add_array: add_roles_array)

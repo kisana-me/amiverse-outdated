@@ -1,0 +1,15 @@
+ja:
+  sessions:
+    create:
+      success: 'ログインしました'
+      danger: 'ログインできません'
+    logout:
+      success: 'ログアウトしました'
+      danger: 'ログアウトできません'
+    all_logout:
+      success: 'すべてログアウトしました'
+      danger: 'すべてログアウトできません'
+  items:
+    create:
+      success: '投稿しました'
+      danger: '投稿できません'

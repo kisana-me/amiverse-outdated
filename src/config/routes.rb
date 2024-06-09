@@ -77,6 +77,7 @@ Rails.application.routes.draw do
   # clients
     # get 'clients/:aid'
   # sessions
+  patch 'sessions/current' => 'sessions#update_current'
   post 'sessions/change' => 'sessions#change'
   post 'sessions/destroy' => 'sessions#destroy'
 

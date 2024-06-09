@@ -3,23 +3,30 @@
 <% if @account.present? %>
   <% provide(:title, @account.name) %>
 
+  <% provide(:card, 'summary') %>
+  <% if @account.icon %>
+    <% provide(:image, @account.icon.image_url(variant_type: 'icons')) %>
+  <% else %>
+    <% provide(:image, full_url('/images/icon.webp')) %>
+  <% end %>
+
   <div class="account-container" id="account-container">
     <div class="top-container">
       <div class="banner-container" id="banner-container" >
-        <% if @account.banner_key.present? %>
-          <%= image_tag image_url(aid: @account.banner_key, type: 'banners'), class: 'account-banner' %>
+        <% if @account.banner %>
+          <%= image_tag @account.banner.image_url(variant_type: 'banners'), class: 'account-banner' %>
         <% else %>
-          <%= image_tag 'banner.webp', class: 'account-banner' %>
+          <img src="/images/banner.webp" class="account-banner" />
         <% end %>
       </div>
     </div>
     <div class="name-container fixed" id="name-container">
       <div id="name-before"></div>
       <div class="icon-container">
-        <% if @account.icon_key.present? %>
-          <%= image_tag image_url(key: @account.icon_key), class: 'account-icon' %>
+        <% if @account.icon %>
+          <%= image_tag @account.icon.image_url(variant_type: 'icons'), class: 'account-icon' %>
         <% else %>
-          <%= image_tag 'icon.webp', class: 'account-icon' %>
+          <img src="/images/icon.webp" class="account-icon" />
         <% end %>
       </div>
       <div class="meta-container">

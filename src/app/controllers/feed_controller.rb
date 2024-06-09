@@ -7,7 +7,6 @@ class FeedController < ApplicationController
       status: :shared,
       deleted: false
     ).order(id: :desc).includes(
-      :account,
       :images,
       :videos,
       :reactions,
@@ -15,7 +14,9 @@ class FeedController < ApplicationController
       :replying,
       :repliers,
       :quoting,
-      :quoters
+      :quoters,
+      :canvases,
+      account: [:icon]
     )
     @page = current_page(page_param: params[:page])
     @pages = total_page(objects: items)
@@ -51,7 +52,6 @@ class FeedController < ApplicationController
       status: :shared,
       deleted: false
     ).order(id: :desc).includes(
-      :account,
       :images,
       :videos,
       :reactions,
@@ -59,7 +59,9 @@ class FeedController < ApplicationController
       :replying,
       :repliers,
       :quoting,
-      :quoters
+      :quoters,
+      :canvases,
+      account: [:icon]
     )
     @page = current_page(page_param: params[:page])
     @pages = total_page(objects: items)

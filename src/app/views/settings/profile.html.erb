@@ -5,37 +5,25 @@
 
 <% content_for :settings_content do %>
   <details>
-    <summary>アイコンを追加</summary>
+    <summary>アイコンとして追加</summary>
     <%# render 'icons/form' %>
+    未実装なのでストレージに追加してから選んで
   </details>
   <details>
-    <summary>バナーを追加</summary>
+    <summary>バナーとして追加</summary>
     <%# render 'icons/form' %>
+    未実装なのでストレージに追加してから選んで
   </details>
   <%= form_with model: @current_account, url: update_account_path(@current_account.name_id), data: { turbo: false } do |f| %>
     <details>
-      <summary>アイコン一覧</summary>
-      <% @images.each do |image| %>
-        <div>
-          <%= f.radio_button :icon_key, image.aid %>
-          名前:<%= image.name %>
-          ID:<%= image.aid %>
-          説明:<%= image.description %>
-          <%= image_tag image_url(id: image.aid), class: 'storage-images-image' %>
-        </div>
-      <% end %>
+      <summary>アイコン</summary>
+      <%= render 'images/images_single_selector', f: f, selected: 'selected_icon',
+        default: @current_account.icon.aid, images: @current_account.images.where(deleted: false) %>
     </details>
     <details>
       <summary>バナー</summary>
-      <% @images.each do |image| %>
-        <div>
-          <%= f.radio_button :banner_key, image.aid %>
-          名前:<%= image.name %>
-          ID:<%= image.aid %>
-          説明:<%= image.description %>
-          <%= image_tag image_url(id: image.aid), class: 'storage-images-image' %>
-        </div>
-      <% end %>
+      <%= render 'images/images_single_selector', f: f, selected: 'selected_banner',
+        default: @current_account.banner.aid, images: @current_account.images.where(deleted: false) %>
     </details>
     <%= f.label :name, '名前', class: '' %>
     <%= f.text_field :name, class: '' %>

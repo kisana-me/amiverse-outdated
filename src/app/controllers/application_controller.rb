@@ -5,6 +5,9 @@ class ApplicationController < ActionController::Base
   # helpers
   include ApplicationHelper
   before_action :set_current_account
+  before_action :set_current_locale
+  # flash success:緑 notice:青 alert:黄 danger:赤
+  add_flash_types :success, :danger
 
   unless Rails.env.development?
     rescue_from Exception,                      with: :render_500
@@ -26,6 +29,13 @@ class ApplicationController < ActionController::Base
   end
   def set_current_account
     @current_account = current_account
+  end
+  def set_current_locale
+    locale = 'ja'
+    session[:locale] = params[:locale] if params[:locale] && supported_locale?(params[:locale])
+    locale = session[:locale] if session[:locale]
+    locale = @current_account&.language if @current_account&.language
+    I18n.locale = locale
   end
   def administrator_account
     unless @current_account && @current_account.administrator?
@@ -52,8 +62,11 @@ class ApplicationController < ActionController::Base
   def store_location
     session[:forwarding_url] = request.original_url if request.get?
   end
-  def redirect_back_or(default: '/')
+  def redirect_back_or(default: root_path)
     redirect_to(session[:forwarding_url] || default)
     session.delete(:forwarding_url)
+  end
+  def supported_locale?(locale)
+    I18n.available_locales.map(&:to_s).include?(locale.to_s)
   end
 end

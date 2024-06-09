@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 902) do
+ActiveRecord::Schema[7.0].define(version: 905) do
   create_table "account_achievements", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "achievement_id", null: false
@@ -31,11 +31,11 @@ ActiveRecord::Schema[7.0].define(version: 902) do
 
   create_table "account_banners", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
-    t.bigint "banner_id", null: false
+    t.bigint "image_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_account_banners_on_account_id"
-    t.index ["banner_id"], name: "index_account_banners_on_banner_id"
+    t.index ["image_id"], name: "index_account_banners_on_image_id"
   end
 
   create_table "account_curious", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
@@ -69,11 +69,11 @@ ActiveRecord::Schema[7.0].define(version: 902) do
 
   create_table "account_icons", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
-    t.bigint "icon_id", null: false
+    t.bigint "image_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_account_icons_on_account_id"
-    t.index ["icon_id"], name: "index_account_icons_on_icon_id"
+    t.index ["image_id"], name: "index_account_icons_on_image_id"
   end
 
   create_table "account_invitations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
@@ -88,7 +88,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
   create_table "account_item_impressions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "item_id", null: false
-    t.integer "status", limit: 1, default: 0, null: false
+    t.integer "activity_type", limit: 1, default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_account_item_impressions_on_account_id"
@@ -177,9 +177,9 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.boolean "use_login_id", default: false, null: false
     t.integer "usage_type", limit: 1, default: 0, null: false
     t.text "defaults", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "settings", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.string "icon_key", default: "", null: false
-    t.string "banner_key", default: "", null: false
+    t.text "settings", size: :long, default: "{}", null: false, collation: "utf8mb4_bin"
+    t.bigint "icon_id"
+    t.bigint "banner_id"
     t.bigint "followers_counter", default: 0, null: false
     t.bigint "following_counter", default: 0, null: false
     t.bigint "items_counter", default: 0, null: false
@@ -323,33 +323,6 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
-  create_table "banners", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
-    t.bigint "account_id", null: false
-    t.string "aid", null: false
-    t.string "name", default: "", null: false
-    t.text "description", default: "", null: false
-    t.integer "render_type", limit: 1, default: 0, null: false
-    t.boolean "sensitive", default: false, null: false
-    t.string "caution_message", default: "", null: false
-    t.string "original_key", default: "", null: false
-    t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.integer "visibility", limit: 1, default: 0, null: false
-    t.integer "limitation", limit: 1, default: 0, null: false
-    t.integer "status", limit: 1, default: 0, null: false
-    t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.bigint "data_size", default: 0, null: false
-    t.boolean "deleted", default: false, null: false
-    t.datetime "deleted_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_banners_on_account_id"
-    t.index ["aid"], name: "index_banners_on_aid", unique: true
-    t.check_constraint "json_valid(`cache`)", name: "cache"
-    t.check_constraint "json_valid(`meta`)", name: "meta"
-    t.check_constraint "json_valid(`variants`)", name: "variants"
-  end
-
   create_table "blocks", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "blocked", null: false
     t.bigint "blocker", null: false
@@ -487,33 +460,6 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.datetime "updated_at", null: false
     t.index ["followed_id"], name: "fk_rails_5ef72a3867"
     t.index ["follower_id"], name: "fk_rails_622d34a301"
-  end
-
-  create_table "icons", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
-    t.bigint "account_id", null: false
-    t.string "aid", null: false
-    t.string "name", default: "", null: false
-    t.text "description", default: "", null: false
-    t.integer "render_type", limit: 1, default: 0, null: false
-    t.boolean "sensitive", default: false, null: false
-    t.string "caution_message", default: "", null: false
-    t.string "original_key", default: "", null: false
-    t.text "variants", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.integer "visibility", limit: 1, default: 0, null: false
-    t.integer "limitation", limit: 1, default: 0, null: false
-    t.integer "status", limit: 1, default: 0, null: false
-    t.text "meta", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.text "cache", size: :long, default: "[]", null: false, collation: "utf8mb4_bin"
-    t.bigint "data_size", default: 0, null: false
-    t.boolean "deleted", default: false, null: false
-    t.datetime "deleted_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_icons_on_account_id"
-    t.index ["aid"], name: "index_icons_on_aid", unique: true
-    t.check_constraint "json_valid(`cache`)", name: "cache"
-    t.check_constraint "json_valid(`meta`)", name: "meta"
-    t.check_constraint "json_valid(`variants`)", name: "variants"
   end
 
   create_table "images", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
@@ -770,16 +716,6 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["target_type", "target_id"], name: "index_polymorphic_audios_on_target"
   end
 
-  create_table "polymorphic_banners", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
-    t.string "target_type", null: false
-    t.bigint "target_id", null: false
-    t.bigint "banner_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["banner_id"], name: "index_polymorphic_banners_on_banner_id"
-    t.index ["target_type", "target_id"], name: "index_polymorphic_banners_on_target"
-  end
-
   create_table "polymorphic_feeds", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "target_type", null: false
     t.bigint "target_id", null: false
@@ -788,16 +724,6 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.datetime "updated_at", null: false
     t.index ["feed_id"], name: "index_polymorphic_feeds_on_feed_id"
     t.index ["target_type", "target_id"], name: "index_polymorphic_feeds_on_target"
-  end
-
-  create_table "polymorphic_icons", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
-    t.string "target_type", null: false
-    t.bigint "target_id", null: false
-    t.bigint "icon_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["icon_id"], name: "index_polymorphic_icons_on_icon_id"
-    t.index ["target_type", "target_id"], name: "index_polymorphic_icons_on_target"
   end
 
   create_table "polymorphic_images", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
@@ -878,16 +804,6 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.index ["item_id"], name: "index_reactions_on_item_id"
   end
 
-  create_table "read_items", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
-    t.bigint "account_id", null: false
-    t.bigint "item_id", null: false
-    t.integer "counter", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_read_items_on_account_id"
-    t.index ["item_id"], name: "index_read_items_on_item_id"
-  end
-
   create_table "read_messages", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "message_id", null: false
@@ -928,7 +844,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
     t.string "aid", null: false
     t.string "server_name", default: "Amiverse", null: false
     t.string "server_version", default: "v.0.0.5", null: false
-    t.text "server_description", default: "", null: false
+    t.text "server_description", default: "Amiverseは次世代のソーシャルメディアです", null: false
     t.boolean "open_registrations", default: false, null: false
     t.text "languages", size: :long, default: "[\"ja\"]", null: false, collation: "utf8mb4_bin"
     t.string "theme_color", default: "#22ff22", null: false
@@ -1078,7 +994,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
   add_foreign_key "account_badges", "accounts"
   add_foreign_key "account_badges", "badges"
   add_foreign_key "account_banners", "accounts"
-  add_foreign_key "account_banners", "banners"
+  add_foreign_key "account_banners", "images"
   add_foreign_key "account_curious", "accounts"
   add_foreign_key "account_curious", "topics"
   add_foreign_key "account_features", "accounts"
@@ -1086,7 +1002,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
   add_foreign_key "account_feeds", "accounts"
   add_foreign_key "account_feeds", "feeds"
   add_foreign_key "account_icons", "accounts"
-  add_foreign_key "account_icons", "icons"
+  add_foreign_key "account_icons", "images"
   add_foreign_key "account_invitations", "accounts"
   add_foreign_key "account_invitations", "invitations"
   add_foreign_key "account_item_impressions", "accounts"
@@ -1103,7 +1019,6 @@ ActiveRecord::Schema[7.0].define(version: 902) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "audios", "accounts"
-  add_foreign_key "banners", "accounts"
   add_foreign_key "blocks", "accounts", column: "blocked"
   add_foreign_key "blocks", "accounts", column: "blocker"
   add_foreign_key "canvases", "accounts"
@@ -1113,7 +1028,6 @@ ActiveRecord::Schema[7.0].define(version: 902) do
   add_foreign_key "emojis", "accounts"
   add_foreign_key "follows", "accounts", column: "followed_id"
   add_foreign_key "follows", "accounts", column: "follower_id"
-  add_foreign_key "icons", "accounts"
   add_foreign_key "images", "accounts"
   add_foreign_key "invitations", "accounts"
   add_foreign_key "item_audios", "audios"
@@ -1141,9 +1055,7 @@ ActiveRecord::Schema[7.0].define(version: 902) do
   add_foreign_key "mutes", "accounts", column: "muter"
   add_foreign_key "notifications", "accounts"
   add_foreign_key "polymorphic_audios", "audios"
-  add_foreign_key "polymorphic_banners", "banners"
   add_foreign_key "polymorphic_feeds", "feeds"
-  add_foreign_key "polymorphic_icons", "icons"
   add_foreign_key "polymorphic_images", "images"
   add_foreign_key "polymorphic_reactions", "accounts"
   add_foreign_key "polymorphic_reactions", "emojis"
@@ -1155,8 +1067,6 @@ ActiveRecord::Schema[7.0].define(version: 902) do
   add_foreign_key "reactions", "accounts"
   add_foreign_key "reactions", "emojis"
   add_foreign_key "reactions", "items"
-  add_foreign_key "read_items", "accounts"
-  add_foreign_key "read_items", "items"
   add_foreign_key "read_messages", "accounts"
   add_foreign_key "read_messages", "messages"
   add_foreign_key "replies", "items", column: "replied_id"

@@ -7,6 +7,6 @@
   <div>お問い合わせ</div>
   <div>バグの報告</div>
   <div>機能のリクエスト</div>
-  <%= button_to("ログアウト", logout_path, method: :delete) %>
+  <%= button_to("ログアウト", logout_path, method: :delete, data: {turbo: false}) %>
 <% end %>
 <%= render 'settings/listed' %>

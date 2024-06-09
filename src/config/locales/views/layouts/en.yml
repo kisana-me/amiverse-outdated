@@ -1,0 +1,8 @@
+en:
+  layouts:
+    application:
+      home: 'Home'
+      following: 'Following'
+      current: 'Current'
+    tab:
+      trend: 'Trend'

@@ -1,0 +1,8 @@
+ja:
+  layouts:
+    application:
+      home: 'ホーム'
+      following: 'フォロー中'
+      current: '現在'
+    tab:
+      trend: 'トレンド'

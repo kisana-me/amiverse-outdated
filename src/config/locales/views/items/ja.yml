@@ -1,0 +1,8 @@
+ja:
+  items:
+    index:
+      title: '%{name}さんのアイテム一覧'
+    show:
+      title: '投稿:%{aid}の情報'
+    edit:
+      title: '投稿:%{aid}の情報を編集'

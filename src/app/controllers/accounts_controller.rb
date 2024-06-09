@@ -141,11 +141,11 @@ class AccountsController < ApplicationController
     params.require(:account).permit(
       :name,
       :name_id,
-      :icon_data,
-      :banner_data,
       :description,
       :location,
-      :birthday
+      :birthday,
+      :selected_icon,
+      :selected_banner
     )
   end
   def account_password_update_params

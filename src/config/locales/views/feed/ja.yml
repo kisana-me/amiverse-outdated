@@ -1,0 +1,8 @@
+ja:
+  feed:
+    index:
+      title: 'ホーム'
+    following:
+      title: 'フォロー中'
+    current:
+      title: '現在'

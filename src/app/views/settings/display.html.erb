@@ -10,11 +10,21 @@
   <div>ブロック</div>
   <div>テーマ</div>
   <div>ダークモード</div>
-  <%= form_with model: @current_account, url: update_account_path(@current_account.name_id), data: { turbo: false } do |f| %>
-    <%= f.label :settings_dark_mode %>
-    <%= f.check_box :settings_dark_mode, { checked: @current_account.settings&.dig('default', 'dark_mode') } %>
-    <br />
-    <%= f.submit '保存' %>
+  <% if @current_account %>
+    <%= form_with model: @current_account, url: update_account_path(@current_account.name_id), data: { turbo: false } do |f| %>
+      <%= f.label :settings_dark_mode %>
+      <%= f.check_box :settings_dark_mode, { checked: @current_account.settings&.dig('default', 'dark_mode') } %>
+      <br />
+      <%= f.submit '保存' %>
+    <% end %>
+  <% else %>
+    <%= form_with url: sessions_current_path, data: { turbo: false }, method: :patch do |f| %>
+      <%= hidden_field_tag 'setting[dark_mode]', 0, id: 'hidden_setting_dark_mode' %>
+      <%= label_tag 'setting[dark_mode]' %>
+      <%= check_box_tag 'setting[dark_mode]', 1, session[:setting]&.dig('dark_mode') %>
+      <br />
+      <%= f.submit '保存' %>
+    <% end %>
   <% end %>
   <div>テーマ色</div>
   <div>テーマ背景色</div>

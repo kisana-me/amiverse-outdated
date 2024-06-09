@@ -1,4 +1,15 @@
+<% provide(:title, '投稿') %>
+<% provide(:layout_type, 'header_text') %>
+<% provide(:header_text, '投稿') %>
+
 <% if @item.present? %>
+  <% provide(:card, 'summary') %>
+  <% if @item.account.icon %>
+    <% provide(:image, @item.account.icon.image_url(variant_type: 'icons')) %>
+  <% else %>
+    <% provide(:image, full_url('/images/icon.webp')) %>
+  <% end %>
+
   <%= render 'items/item', item: @item, show_repliers: true, show_replying: true %>
 <% else %>
   <p>指定されたアイテムは存在しません</p>
