@@ -18,12 +18,12 @@
     <details>
       <summary>アイコン</summary>
       <%= render 'images/images_single_selector', f: f, selected: 'selected_icon',
-        default: @current_account.icon.aid, images: @current_account.images.where(deleted: false) %>
+        default: @current_account.icon ? @current_account.icon.aid : '', images: @current_account.images.where(deleted: false) %>
     </details>
     <details>
       <summary>バナー</summary>
       <%= render 'images/images_single_selector', f: f, selected: 'selected_banner',
-        default: @current_account.banner.aid, images: @current_account.images.where(deleted: false) %>
+        default: @current_account.banner ? @current_account.banner.aid : '', images: @current_account.images.where(deleted: false) %>
     </details>
     <%= f.label :name, '名前', class: '' %>
     <%= f.text_field :name, class: '' %>
