@@ -1,6 +1,6 @@
-class CreateActivityPubServers < ActiveRecord::Migration[7.0]
+class CreateActivityPubInstances < ActiveRecord::Migration[7.0]
   def change
-    create_table :activity_pub_servers do |t|
+    create_table :activity_pub_instances do |t|
       t.string :aid, null: false, default: ''
       t.string :name, null: false, default: ''
       t.string :host, null: false, default: ''
@@ -28,6 +28,6 @@ class CreateActivityPubServers < ActiveRecord::Migration[7.0]
       t.datetime :deleted_at
       t.timestamps
     end
-    add_index :activity_pub_servers, [:aid, :host], unique: true
+    add_index :activity_pub_instances, [:aid, :host], unique: true
   end
 end

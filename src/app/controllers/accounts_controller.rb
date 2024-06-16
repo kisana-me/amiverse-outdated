@@ -1,10 +1,11 @@
 class AccountsController < ApplicationController
   include ActivityPub
+  include AccountManagement
   before_action :set_account, except: %i[ show ]
   before_action :logged_in_account, except: %i[ show ]
 
   def show
-    return unless @account = find_account_by_nid(params[:name_id])
+    return unless @account = find_account(params[:name_id])
     items = @account.items.order(id: :desc).where(
       visibility: :public_share,
       status: :shared,
@@ -24,7 +25,7 @@ class AccountsController < ApplicationController
     @items = paged_objects(page: @page, objects: items)
   end
   def reject_follow
-    account = find_account_by_nid(params[:name_id])
+    account = find_account(params[:name_id])
     this_follow_params = {
       followed: @current_account,
       follower: account
@@ -51,7 +52,7 @@ class AccountsController < ApplicationController
       flash[:danger] = 'フォローできません'
       return
     end
-    account = find_account_by_nid(params[:name_id])
+    account = find_account(params[:name_id])
     this_follow_params = {
       followed: account,
       follower: @current_account
@@ -59,7 +60,7 @@ class AccountsController < ApplicationController
     if account.foreigner
       if Follow.exists?(this_follow_params)
         follow = Follow.find_by(this_follow_params)
-        ap_undo_follow(followed: account, follower: @current_account, id: follow.uid)
+        ap_undo_follow(followed: account, follower: @current_account, uid: follow.uid)
         follow.delete
         flash[:success] = 'フォロー取り消し依頼しました'
       else
@@ -67,7 +68,7 @@ class AccountsController < ApplicationController
         Rails.logger.info(this_follow_params[:uid])
         follow = Follow.new(this_follow_params)
         if follow.save!
-          ap_follow(followed: account, follower: @current_account, id: this_follow_params[:uid])
+          ap_follow(followed: account, follower: @current_account, uid: this_follow_params[:uid])
           flash[:success] = 'フォロー依頼しました'
         else
           flash[:danger] = 'フォロー依頼できません'
@@ -145,7 +146,8 @@ class AccountsController < ApplicationController
       :location,
       :birthday,
       :selected_icon,
-      :selected_banner
+      :selected_banner,
+      :activitypub
     )
   end
   def account_password_update_params

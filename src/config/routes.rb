@@ -135,6 +135,7 @@ Rails.application.routes.draw do
     post 'test/generate'
     post 'test/verify'
     post 'test/digest'
+    post 'test/generate_ap_key_pair'
     get 'new_accounts' => 'test#new_accounts'
     post 'create_accounts' => 'test#create_accounts'
     #===      ===#

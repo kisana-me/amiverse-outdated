@@ -59,6 +59,7 @@ class Account < ApplicationRecord
     end
     validates_length_of :password, maximum: ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED
     validates_confirmation_of :password, allow_blank: true
+    validate :check_allowed_content
   end
   has_secure_password validations: false
   serialize :additional_informations, JSON
@@ -91,6 +92,13 @@ class Account < ApplicationRecord
     end
   end
 
+  def check_allowed_content
+    if activitypub # ap keysがあるか
+      if ap_private_key.blank? || ap_public_key.blank?
+        errors.add(:activitypub, 'activitypubに対応していません')
+      end
+    end
+  end
   def add_roles(add_roles_array)
     add_array(object: self, column: 'roles', add_array: add_roles_array)
   end

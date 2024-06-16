@@ -1,5 +1,38 @@
 module ActivityStreams
-  # 作成
+
+  ### General ###
+
+  def as_wrap(id:, type:, actor:, object:)
+    return {
+      "@context": "https://www.w3.org/ns/activitystreams",
+      "id": File.join(actor.ap_uri, id),
+      "type": type,
+      "actor": actor.ap_uri,
+      "object": object
+    }
+  end
+
+  ### Create ###
+
+  def as_create(
+    id:,
+    to: ["https://www.w3.org/ns/activitystreams#Public"],
+    cc: [], actor:, object:, published:
+    )
+      {
+        "@context": ["https://www.w3.org/ns/activitystreams", {}],
+        "type": "Create",
+        "id": File.join(ENV['APP_URL'], id),
+        "published": published.utc.iso8601,
+        "to": to,
+        "cc": cc,
+        "actor": File.join(ENV['APP_URL'], '@'+ actor.name_id),
+        "object": object
+      }
+    end
+
+  ### Note ###
+
   def as_note(item:, to: [], cc: [])
     {
       "@context": "https://www.w3.org/ns/activitystreams",

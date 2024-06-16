@@ -1,41 +1,54 @@
 module AccountManagement
-  def name_id_host_separater(str)
-    name_id = ''
+  include ActivityPub
+
+  def find_account(str)
+    nid, host, local = nid_host_separater(str)
+    if local
+      query = nid
+    else
+      query = nid + '@' + host
+    end
+
+    account = Account.find_by(
+      name_id: query,
+      deleted: false
+    )
+    if !account && !local
+      account = ap_account(nid: nid, host: host)
+    end
+    return account
+  end
+  def find_local_account(nid)
+    return Account.find_by(
+      name_id: nid,
+      deleted: false
+    )
+  end
+
+  def account_checker() # 使用量監視
+    # @current_account.checker = 
+  end
+
+  def nid_host_separater(str)
+    nid = ''
     host = ''
     if str.include?('@')
       parts = str.split('@')
       case parts.length
       when 3
-        name_id, host = parts.pop(2)
+        nid, host = parts.pop(2)
       when 2
         if str.start_with?('@')
-          name_id = parts.last
+          nid = parts.last
         else
-          name_id, host = parts
+          nid, host = parts
         end
       when 1
-        name_id = parts.first
+        nid = parts.first
       end
     else
-      name_id = str
+      nid = str
     end
-    return name_id, host, (host.blank? || host == URI.parse(ENV['APP_URL']).host)
-  end
-  def find_account_by_nid(nid)
-    name_id, host, own_server = name_id_host_separater(nid)
-    if own_server
-      search_id = name_id
-    else
-      search_id = name_id + '@' + host
-    end
-    Account.find_by(
-      name_id: search_id,
-      status: :activated,
-      deleted: false
-    )
-  end
-
-  def account_checker()
-    #@current_account.checker = 
+    return nid, host, (host.blank? || host == URI.parse(ENV['APP_URL']).host)
   end
 end

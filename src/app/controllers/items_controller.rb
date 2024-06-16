@@ -3,7 +3,6 @@ class ItemsController < ApplicationController
   before_action :set_item, only: %i[ show edit update destroy ]
   before_action :set_new_item, only: %i[ new new_reply new_quote ]
   include ActivityPub
-  include Format
 
   def index
     items = @current_account.items.where(
@@ -74,6 +73,9 @@ class ItemsController < ApplicationController
     @item.aid = generate_aid(Item, 'aid')
     if @item.save
       redirect_to item_url(@item.aid), success: t('.success')
+      # action cable
+      # activity pub
+      # ap_create_note
     else
       flash.now[:danger] = t('.danger')
       render 'new'

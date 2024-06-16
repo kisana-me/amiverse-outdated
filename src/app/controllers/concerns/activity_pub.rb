@@ -2,51 +2,53 @@ module ActivityPub
   include HttpCommunication
   include HttpSignature
   include ActivityStreams
+  include ApDeliver
 
-  ### AS GENERAL ###
+  ### Item -> Note ###
 
-  def ap_create(
-  id:,
-  to: ["https://www.w3.org/ns/activitystreams#Public"],
-  cc: [], actor:, object:, published:
-  )
-    {
-      "@context": ["https://www.w3.org/ns/activitystreams", {}],
-      "type": "Create",
-      "id": File.join(ENV['APP_URL'], id),
-      "published": published.utc.iso8601,
-      "to": to,
-      "cc": cc,
-      "actor": File.join(ENV['APP_URL'], '@'+ actor.name_id),
-      "object": object
-    }
-  end
-
-  ### FOLLOW ###
-
-  def ap_follow(followed:, follower:, id:)
-    ap_send(
-      id: "follow/#{id}",
+  def ap_create_note(item:)
+    # to = メンションなどあれば
+    # cc = 連携中のサーバーなど
+    note = as_note(item:, to: [], cc: [])
+    body = as_create(
+      id:,
+      to: ["https://www.w3.org/ns/activitystreams#Public"],
+      cc: [], actor: item.account, object: note, published: item.created_at.utc.iso8601
+    )
+    aps_send(
+      id: "create_item/#{item.aid}",
       type: 'Follow',
       actor: follower,
       object: followed.activitypub_id,
       destination: followed
     )
   end
-  def ap_undo_follow(followed:, follower:, id:)
+
+  ### Follow ###
+
+  def ap_follow(followed:, follower:, uid:)
+    body = as_wrap(
+      id: "follow/#{uid}",
+      type: 'Follow',
+      actor: follower,
+      object: followed.ap_uri
+    )
+    apd_deliver(body: body, account: follower, destination: followed)
+  end
+  def ap_undo_follow(followed:, follower:, uid:)
     undo_object = {
-      "id": File.join(follower.activitypub_id, "follow/#{id}"),
+      "id": File.join(follower.ap_uri, "follow/#{uid}"),
       "type": 'Follow',
-      "actor": follower.activitypub_id,
-      "object": followed.activitypub_id
+      "actor": follower.ap_uri,
+      "object": followed.ap_uri
     }
-    ap_send(
-      id: 'undo_follow',
+    body = as_wrap(
+      id: "undo_follow/#{uid}",
       type: 'Undo',
       actor: follower,
-      object: undo_object,
-      destination: followed
+      object: undo_object
     )
+    apd_deliver(body: body, account: follower, destination: followed)
   end
   def ap_accept_follow(followed:, follower:, id:)
     accept_object = {
@@ -55,7 +57,7 @@ module ActivityPub
       "actor": follower.activitypub_id,
       "object": followed.activitypub_id
     }
-    ap_send(
+    aps_send(
       id: 'accept_follow',
       type: 'Accept',
       actor: followed,
@@ -64,7 +66,7 @@ module ActivityPub
     )
   end
   def ap_accept_undo_follow(received_body:, followed:, follower:)#???
-    ap_send(
+    aps_send(
       id: 'undo_follow',
       type: 'Accept',
       actor: followed,
@@ -76,14 +78,14 @@ module ActivityPub
     reject_object = {
       id: follow_id,
       type: 'Follow',
-      actor: follower.activitypub_id,
-      object: followed.activitypub_id
+      actor: follower,
+      object: followed
     }
-    ap_send(
+    aps_send(
       id: 'undo_follow',
       type: 'Reject',
       actor: followed,
-      object: reject_object,
+      object: received_body,
       destination: follower
     )
   end
@@ -95,7 +97,39 @@ module ActivityPub
   def ap_undo_like()
   end
 
-  ### NOTE ###
+  # Account
+
+  def ap_account(nid:, host:)
+    # host(instance)の確認
+    uri = apd_get_uri(nid: nid, host: host) # webfingerしてアカウントを認識
+    # uriを改めてローカルで確認後、なければ(旧)explore_account(uri)する
+    data = apd_get_data(url: uri)
+    return nil unless data['id'] == uri
+    #アカウントがあって正しくデータが返ってきたか確認(ないuriにgetしたら何が送られてくるのか調査しないと書けない)
+    account = Account.new(
+      name: data['name'].present? ? data['name'] : '',
+      name_id: ap_name_id(pu_name: data['preferredUsername'], uri: uri),
+      aid: generate_aid(Account, 'aid'),
+      ap_uri: data['id'],
+      #serverと紐づけ
+      foreigner: true,
+      activitypub: true,
+      description: data['summary'].present? ? data['summary'] : '',
+      discoverable: data['discoverable'].present? ? data['discoverable'] : true,
+      auto_accept_follow: data['manuallyApprovesFollowers'].present? ? data['manuallyApprovesFollowers'] : false,
+      ap_public_key: data['publicKey']['publicKeyPem']
+    )
+    account.save(context: :skip)
+    return account
+  end
+
+
+
+
+
+
+
+  # ~~~~~~~~~~~
 
   def ap_pre_create_note(item:)
     body = {
@@ -125,8 +159,6 @@ module ActivityPub
         "content": item.content
       }
     }
-  end
-  def delete_note()
   end
   def ap_send(id:, type:, actor:, object:, destination:)
     body = {
@@ -185,26 +217,6 @@ module ActivityPub
     server_params[:theme_color] = data['metadata']['themeColor'] if data['metadata']['themeColor'].present?
     ActivityPubServer.create(server_params)
   end
-  def id_to_uri(id)
-    name_id, host, own_server = name_id_host_separater(id)
-    uri = ''
-    if own_server
-    else
-      uri = URI::HTTPS.build(
-        host: host,
-        path: '/.well-known/webfinger',
-        query: 'resource=acct:' + name_id + '@' + host
-      )
-      req,res = https_get(
-        uri.to_s,
-        {}
-      )
-      data = JSON.parse(res.body)
-      self_links = data['links'].select { |link| link['rel'] == "self" }
-      uri = self_links.first['href']
-    end
-    return uri
-  end
   def account(uri)
     #サーバー判定
     #if URI.parse(uri).host == URI.parse(ENV['APP_URL']).host
@@ -256,12 +268,13 @@ module ActivityPub
       content: body.to_json,
       response: res.body)
   end
-  def get_name_id(uri, preferredUsername)
-    host = URI.parse(uri).host
-    preferredUsername + '@' + host
+  def ap_name_id(pu_name:, uri:)
+    return pu_name + '@' + URI.parse(uri).host
   end
+
   private
-  def explore_account(uri)
+
+  def explore_account(uri) ### 解体中
     host = URI.parse(uri).host
     path = URI.parse(uri).path
     current_time = Time.now.utc.httpdate
@@ -287,34 +300,5 @@ module ActivityPub
       'User-Agent': "Amiverse v.0.0.5 (+https://#{URI.parse(ENV['APP_URL']).host}/)",
       'Accept' => 'application/activity+json'
     })
-    req,res = https_get(
-      uri,
-      headers
-    )
-    ActivityPubDelivered.create(
-      to_url: uri,
-      digest: '',
-      to_be_signed: statement_headers,
-      signature: headers.to_json,
-      statement: statement,
-      response: res.body
-    )
-    data = JSON.parse(res.body)
-    account = Account.new(
-      name: data['name'].present? ? data['name'] : '',
-      name_id: get_name_id(data['id'], data['preferredUsername']),
-      aid: generate_aid(Account, 'aid'),
-      activitypub_id: uri,
-      #serverと紐づけ
-      foreigner: true,
-      activitypub: true,
-      activated: true,
-      description: data['summary'].present? ? data['summary'] : '',
-      discoverable: data['discoverable'].nil? ? true : data['discoverable'].present?,
-      locked: data['manuallyApprovesFollowers'].nil? ? true : data['manuallyApprovesFollowers'].present?,
-      public_key: data['publicKey']['publicKeyPem']
-    )
-    account.save!(context: :skip)
-    return account
   end
 end

@@ -1,5 +1,5 @@
 class Administrations::TestController < Administrations::ApplicationController
-  include ActivityPub
+  include AccountManagement
   include Tools
   include Dummy
 
@@ -56,7 +56,7 @@ class Administrations::TestController < Administrations::ApplicationController
   def explore
   end
   def show
-    @account = account(id_to_uri(params[:id]))
+    @account = find_account(params[:id])
   end
   def new
   end
@@ -93,5 +93,19 @@ class Administrations::TestController < Administrations::ApplicationController
     flash.now[:success] = "hexdigest: #{hexdigest},\nbase64digest: #{base64digest}"
     render 'new'
   end
-  private
+  def generate_ap_key_pair
+    account = @current_account
+    key_pair = generate_rsa_key_pair()
+    if account.ap_private_key.blank? && account.ap_public_key.blank?
+      account.ap_private_key = key_pair[:private_key]
+      account.ap_public_key = key_pair[:public_key]
+      account.activitypub = true
+      account.ap_uri = File.join(ENV['APP_URL'], "accounts/#{account.aid}")
+      account.save!
+      flash[:success] = '作成しました'
+    else
+      flash[:danger] = 'すでに存在'
+    end
+    redirect_to administrations_test_path
+  end
 end

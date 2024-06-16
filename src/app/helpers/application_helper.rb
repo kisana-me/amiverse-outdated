@@ -1,6 +1,4 @@
 module ApplicationHelper
-  include AccountsHelper
-  include ImagesHelper
   include TrendManagement
   require 'aws-sdk-s3'
   def full_title(page_title = '')

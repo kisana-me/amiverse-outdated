@@ -276,6 +276,69 @@ ActiveRecord::Schema[7.0].define(version: 905) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "activity_pub_delivereds", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "activity_pub_instance_id"
+    t.string "to_url"
+    t.string "digest"
+    t.text "to_be_signed"
+    t.text "signature"
+    t.text "statement"
+    t.text "content", size: :long, collation: "utf8mb4_bin"
+    t.text "response"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_pub_instance_id"], name: "index_activity_pub_delivereds_on_activity_pub_instance_id"
+    t.check_constraint "json_valid(`content`)", name: "content"
+  end
+
+  create_table "activity_pub_instances", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.string "aid", default: "", null: false
+    t.string "name", default: "", null: false
+    t.string "host", default: "", null: false
+    t.text "description", default: "", null: false
+    t.string "icon_id", default: "", null: false
+    t.string "banner_id", default: "", null: false
+    t.string "favicon_id", default: "", null: false
+    t.integer "accounts", default: 0, null: false
+    t.integer "items", default: 0, null: false
+    t.integer "followers", default: 0, null: false
+    t.integer "following", default: 0, null: false
+    t.string "memo", default: "", null: false
+    t.string "software_name", default: "", null: false
+    t.string "software_version", default: "", null: false
+    t.boolean "open_registrations", default: false, null: false
+    t.boolean "not_responding", default: false, null: false
+    t.boolean "blocked", default: false, null: false
+    t.string "theme_color", default: "", null: false
+    t.string "maintainer_name", default: "", null: false
+    t.string "maintainer_email", default: "", null: false
+    t.datetime "first_retrieved_at"
+    t.datetime "last_received_at"
+    t.datetime "last_fetched_at"
+    t.boolean "deleted", default: false, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["aid", "host"], name: "index_activity_pub_instances_on_aid_and_host", unique: true
+  end
+
+  create_table "activity_pub_receiveds", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "activity_pub_instance_id"
+    t.string "received_at"
+    t.text "headers", size: :long, collation: "utf8mb4_bin"
+    t.text "body", size: :long, collation: "utf8mb4_bin"
+    t.string "activitypub_id"
+    t.string "activity_type"
+    t.text "object", size: :long, collation: "utf8mb4_bin"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_pub_instance_id"], name: "index_activity_pub_receiveds_on_activity_pub_instance_id"
+    t.check_constraint "json_valid(`body`)", name: "body"
+    t.check_constraint "json_valid(`headers`)", name: "headers"
+    t.check_constraint "json_valid(`object`)", name: "object"
+  end
+
   create_table "audios", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "aid", null: false
@@ -1018,6 +1081,8 @@ ActiveRecord::Schema[7.0].define(version: 905) do
   add_foreign_key "account_tags", "tags"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "activity_pub_delivereds", "activity_pub_instances"
+  add_foreign_key "activity_pub_receiveds", "activity_pub_instances"
   add_foreign_key "audios", "accounts"
   add_foreign_key "blocks", "accounts", column: "blocked"
   add_foreign_key "blocks", "accounts", column: "blocker"
