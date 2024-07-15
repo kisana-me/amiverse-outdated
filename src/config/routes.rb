@@ -33,13 +33,12 @@ Rails.application.routes.draw do
   resources :items, param: :aid do
     get 'reply' => 'items#new_reply', as: 'reply'
     get 'quote' => 'items#new_quote', as: 'quote'
+    get 'react' => 'items#new_react', as: 'react'
     post 'reply' => 'items#create_reply', as: 'create_reply'
     post 'quote' => 'items#create_quote', as: 'create_quote'
-    post 'diffuse' => 'items#create_diffuse', as: 'create_diffuse'
+    post 'react' => 'reactions#react', as: 'create_react'
+    # post 'diffuse' => 'items#create_diffuse', as: 'create_diffuse'
   end
-
-  # reaction
-  post 'react/:item_aid/:emoji_aid' => 'reactions#react', as: 'react'
 
   # === storage === #
   get 'storage' => 'storage#index'

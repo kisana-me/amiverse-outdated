@@ -10,7 +10,12 @@
     <% provide(:image, full_url('/images/icon.webp')) %>
   <% end %>
 
-  <%= render 'items/item', item: @item, show_repliers: true, show_replying: true %>
+
+  <% if defined? emojis %>
+    <%= render 'items/item', item: @item, show_repliers: true, show_replying: true, emojis: emojis %>
+  <% else %>
+    <%= render 'items/item', item: @item, show_repliers: true, show_replying: true %>
+  <% end %>
 <% else %>
   <p>指定されたアイテムは存在しません</p>
 <% end %>

@@ -98,6 +98,11 @@ class ItemsController < ApplicationController
     @quoted = get_item(aid: params[:item_aid])
     render 'items/new', locals: { initial_quoted: params[:item_aid] }
   end
+  def new_react
+    @item = get_item(aid: params[:item_aid])
+    emojis = Emoji.all
+    render 'items/show', locals: { emojis: emojis }
+  end
   def diffuse
     @item = get_item(aid: params[:item_aid])
     # 拡散する

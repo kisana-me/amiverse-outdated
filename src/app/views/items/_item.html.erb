@@ -101,7 +101,7 @@
   <div class="item-reactions">
     <% item.emojis.each do |emoji| %>
       <div class="item-reaction">
-        <%= button_to react_path(item.aid, emoji.aid), method: :post do %>
+        <%= button_to item_react_path(item.aid), params: {emoji_aid: emoji.aid}, method: :post do %>
           <% if false %>
             <%= image_tag image_url(model: 'emojis', type: 'tb-emojis', aid: emoji.aid), class: '' %>
           <% else %>
@@ -173,16 +173,19 @@
           <%# render 'items/form', initial_quoted: item.aid %>
         </div>
         <div id="aid_<%= item.aid %>_tab_reactions_content" class="tab_content">
-          <%= link_to 'リアクションする', item_quote_path(item.aid) %>
-          <%# Emoji.all.each do |emoji| %>
-            <%# button_to react_path(item.aid, emoji.aid), method: :post do %>
-              <%# if false %>
-                <%# image_tag image_url(model: 'emojis', type: 'tb-emojis', aid: emoji.aid), class: '' %>
-              <%# else %>
-                <%# emoji.name %>
-              <%# end %>
-            <%# end%>
-          <%# end %>
+          <% if defined? emojis %>
+          <% emojis.each do |emoji| %>
+            <%= button_to item_create_react_path(item.aid), params: {emoji_aid: emoji.aid}, method: :post do %>
+              <% if false %>
+                <%= image_tag image_url(model: 'emojis', type: 'tb-emojis', aid: emoji.aid), class: '' %>
+              <% else %>
+                <%= emoji.name %>
+              <% end %>
+            <% end%>
+          <% end %>
+          <% else %>
+            <%= link_to 'リアクションする', item_react_path(item.aid) %>
+          <% end %>
         </div>
         <div id="aid_<%= item.aid %>_tab_share_content" class="tab_content">
           共有する
