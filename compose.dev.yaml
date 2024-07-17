@@ -104,7 +104,7 @@ services:
     env_file:
       - environment.dev.env
     volumes:
-      - meili-vol:/data.ms
+      - meili-vol:/meili_data
     ports:
       - "7700:7700"
 

@@ -171,7 +171,7 @@ input[name="tab_menu"] {
 .item-new-button-2{
 }
 .inb2-container {
-  background: #461919;
+  background: var(--button-color);
 }
 
 @media (max-width: 699px) {

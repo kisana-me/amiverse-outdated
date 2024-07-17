@@ -31,20 +31,20 @@
   --dark-9: #e7e7e7;
 }
 :root .light-mode {
-  --background-color: #cecece;
-  --main-background-color: #ffffff;
+  --background-color: #fff;
   --font-color: black;
   --link-color: var(--light-0);
   --border-color: #000000;
   --transparent-background-color: #0000003f;
   --content-color: #fff;
   --shadow-color: #808080;
-  --blur-color: #0008;
+  --blur-color: #fff8;
   --primary-color: blue;
+  --button-color: #bfbfff;
+  --hover-color: #0008;
 }
 :root .dark-mode {
-  --background-color: #1d1d1d;
-  --main-background-color: #141414;
+  --background-color: #000;
   --font-color: white;
   --link-color: var(--dark-0);
   --border-color: #fff;
@@ -53,6 +53,8 @@
   --shadow-color: #808080;
   --blur-color: #0008;
   --primary-color: darkblue;
+  --button-color: #bfbfff;
+  --hover-color: #fff8;
 }
 body {
   margin: 0;

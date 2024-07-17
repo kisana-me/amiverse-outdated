@@ -114,7 +114,7 @@ services:
     env_file:
       - environment.exa.env
     volumes:
-      - meili-vol:/data.ms
+      - meili-vol:/meili_data
     restart: always
     ports:
       - "7700:7700"

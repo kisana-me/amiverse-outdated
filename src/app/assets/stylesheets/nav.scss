@@ -43,10 +43,10 @@ nav {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--font-color);
 }
 .nav-list-container:hover {
-  background: #fff4;
+  background: var(--hover-color);
 }
 .nav-list-icon {
   display: flex;
