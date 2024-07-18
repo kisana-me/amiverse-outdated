@@ -12,64 +12,70 @@
 <% end %>
 
 <div class="item">
-  <div class="item-owners">
-    <div class="item-owners-account">
-      <%= link_to account_path(item.account.name_id) do %>
-        <div class="ioa-link">
-          <% if item.account.icon %>
-            <%= image_tag item.account.icon.image_url(variant_type: 'icons'), class: 'ioa-icon' %>
-          <% else %>
-            <img src="/images/icon.webp" class="ioa-icon" />
-          <% end %>
-          <div class="ioa-profile">
-            <div class="ioa-name">
-              <%= item.account.name %>
-            </div>
-            <div class="ioa-nameid">
-              @<%= item.account.name_id %>
-            </div>
+  <div class="item-account">
+    <div class="item-account-badges">
+      <%= link_to emojis_path, class: 'iab-badge',
+      style: 'border-color: #5CFF23; background: #5CFF2355;' do %>
+        <div class="iab-icon">🍭</div>
+        <div class="iab-name">
+          開発者
+        </div>
+      <% end %>
+      <%= link_to emojis_path, class: 'iab-badge',
+      style: 'border-color: #48E9FF; background: #48E9FF55;' do %>
+        <div class="iab-icon">✨</div>
+        <div class="iab-name">
+          TESTER
+        </div>
+      <% end %>
+    </div>
+    <div class="item-account-info">
+      <%= link_to account_path(item.account.name_id), class: 'iai-plate' do %>
+        <% if item.account.icon %>
+          <%= image_tag item.account.icon.image_url(variant_type: 'icons'), class: 'iai-icon' %>
+        <% else %>
+          <img src="/images/icon.webp" class="iai-icon" />
+        <% end %>
+        <div class="iai-nameplate">
+          <div class="iai-name">
+            <%= item.account.name %>
+          </div>
+          <div class="iai-name_id">
+            @<%= item.account.name_id %>
           </div>
         </div>
       <% end %>
-      <div class="ioa-badges">
-        <div>🍭</div>
-        <div>💕</div>
-        <div>🫧</div>
-        <div>🌈</div>
-        <div>💮</div>
-        <div>🔰</div>
-      </div>
-      <div class="ioa-others">
-        <div class="ioa-button-wrap">
-          <div class="ioa-button">
-            <% if @current_account && @current_account.following.map(&:id).include?(item.account.id) %>
-              <%= button_to("フォロー解除", follow_path(item.account.name_id), method: :post) %>
-            <% elsif @current_account %>
-              <% if @current_account == item.account %>
-                <%= button_to("プロフィール", account_path(@current_account.name_id), method: :get) %>
-              <% else %>
-                <%= button_to("フォローする", follow_path(item.account.name_id), method: :post) %>
-              <% end %>
-            <% else %>
-              <%= button_to('ログインしてフォロー', login_path, method: :get) %>
-            <% end %>
-          </div>
-        </div>
+      <div class="iai-others">
+        <% if @current_account && @current_account.following.map(&:id).include?(item.account.id) %>
+          <%= button_to("フォロー中", follow_path(item.account.name_id), class: 'iai-button', method: :post) %>
+        <% elsif @current_account %>
+          <% if @current_account == item.account %>
+            <%= button_to("プロフィール", account_path(@current_account.name_id), class: 'iai-button', method: :get) %>
+          <% else %>
+            <%= button_to("フォロー", follow_path(item.account.name_id), class: 'iai-button', method: :post) %>
+          <% end %>
+        <% else %>
+          <%= button_to('ログイン', login_path, class: 'iai-button', method: :get) %>
+        <% end %>
       </div>
     </div>
   </div>
   <div class="item-details">
-    <div class="item-details-kind">
-      <%# item.kind %>
+    <div class="id-tags">
+      <% if false %>
+        <%= link_to item_path(item.aid), class: 'id-tag' do %>
+          <div class="id-tag-icon">←</div>
+          <div class="id-tag-name">返信</div>
+        <% end %>
+        <%= link_to item_path(item.aid), class: 'id-tag' do %>
+          <div class="id-tag-icon">→</div>
+          <div class="id-tag-name">引用</div>
+        <% end %>
+      <% end %>
     </div>
-    <div class="item-details-kind">
-      <%# item.kind %>
-    </div>
-    <div class="item-details-id">
-    </div>
-    <div class="item-details-date">
-      <%= link_to item.created_at.strftime("%Y年 %m月 %d日 %k時 %M分 %S秒"), item_path(item.aid) %>
-    </div>
+    <%= link_to item_path(item.aid), class: 'id-text' do %>
+      全体公開・<%= item.created_at.strftime("%Y/%m/%d/ %k:%M:%S") %>
+    <% end %>
   </div>
   <div class="item-content">
     <%= item.content %>
@@ -95,127 +101,62 @@
       </script>
     <% end %>
   </div>
-  <div style="text-align:right; font-size:11px;">
-    <%= link_to item.aid, item_path(item.aid) %>
+  <div class="item-details">
+    <div class="id-tags">
+      <% if false %>
+        <%= link_to item_path(item.aid), class: 'id-tag' do %>
+          <div class="id-tag-icon">💴</div>
+          <div class="id-tag-name">広告</div>
+        <% end %>
+      <% end %>
+    </div>
+    <%= link_to item_path(item.aid), class: 'id-text' do %>
+      1回・<%= item.aid %>
+    <% end %>
   </div>
   <div class="item-reactions">
-    <% item.emojis.each do |emoji| %>
-      <div class="item-reaction">
-        <%= button_to item_react_path(item.aid), params: {emoji_aid: emoji.aid}, method: :post do %>
-          <% if false %>
-            <%= image_tag image_url(model: 'emojis', type: 'tb-emojis', aid: emoji.aid), class: '' %>
-          <% else %>
+    <% if item.emojis.blank? %>
+    <% else %>
+      <% item.emojis.each do |emoji| %>
+        <%= button_to item_react_path(item.aid), params: {emoji_aid: emoji.aid}, method: :post, class: 'ir-reaction',
+        style: 'border-color: #DA48FF; background: #DA48FF55;' do %>
+          <div class="ir-emoji">
             <%= emoji.name %>
-          <% end %>
-          <span><%= item.reactions.where(emoji_id: emoji.id).size %></span>
-        <% end%>
-      </div>
+          </div>
+          <div class="ir-count">
+            <%= item.reactions.where(emoji_id: emoji.id).size %>
+          </div>
+        <% end %>
+      <% end %>
     <% end %>
   </div>
   <div class="item-panel">
-    <div class="item-tab">
-      <input id="aid_<%= item.aid %>_tab_replying" type="radio" name="tab_menu">
-      <label class="tab_menu" for="aid_<%= item.aid %>_tab_replying">返信先<%= item.replying.size %></label>
-      <input id="aid_<%= item.aid %>_tab_replies" type="radio" name="tab_menu">
-      <label class="tab_menu" for="aid_<%= item.aid %>_tab_replies">返信<%= item.repliers.size %></label>
-      <input id="aid_<%= item.aid %>_tab_diffusions" type="radio" name="tab_menu">
-      <label class="tab_menu" for="aid_<%= item.aid %>_tab_diffusions">拡散<%= 0 %></label>
-      <input id="aid_<%= item.aid %>_tab_quoting" type="radio" name="tab_menu">
-      <label class="tab_menu" for="aid_<%= item.aid %>_tab_quoting">引用元<%= item.quoting.size %></label>
-      <input id="aid_<%= item.aid %>_tab_quoters" type="radio" name="tab_menu">
-      <label class="tab_menu" for="aid_<%= item.aid %>_tab_quoters">引用<%= item.quoters.size %></label>
-      <input id="aid_<%= item.aid %>_tab_reactions" type="radio" name="tab_menu">
-      <label class="tab_menu" for="aid_<%= item.aid %>_tab_reactions">リアクション<%= item.reactions.size %></label>
-      <input id="aid_<%= item.aid %>_tab_share" type="radio" name="tab_menu">
-      <label class="tab_menu" for="aid_<%= item.aid %>_tab_share">共有</label>
-      <input id="aid_<%= item.aid %>_tab_save" type="radio" name="tab_menu">
-      <label class="tab_menu" for="aid_<%= item.aid %>_tab_save">保存</label>
-      <input id="aid_<%= item.aid %>_tab_others" type="radio" name="tab_menu">
-      <label class="tab_menu" for="aid_<%= item.aid %>_tab_others">その他</label>
-      <details>
-        <summary>詳しく</summary>
-        <div id="aid_<%= item.aid %>_tab_replying_content" class="tab_content">
-          返信先の表示
-          <% if !item.replying.empty? %>
-            <div class="item-reply-from">
-              📩返信先
-            </div>
-            <% item.replying.each do |reply| %>
-              <%= link_to reply.aid, item_path(reply.aid) %>
-            <% end %>
-          <% else %>
-            返信先はありません
-          <% end %>
+      <div class="ip-button ip-menu popup-menu" data-controller="popup-menu" data-popup-menu-target="popupMenu">
+        <div data-popup-menu-target="menuButton" data-action="click->popup-menu#toggleMenu" class="menu-button">
+          📋0
         </div>
-        <div id="aid_<%= item.aid %>_tab_replies_content" class="tab_content">
-          <%= link_to '返信する', item_reply_path(item.aid) %>
-          <%# render 'items/form', initial_replied: item.aid %>
+        <div data-popup-menu-target="menu" class="menu" style="display: none;">
+          <button class="menu-item">リストに追加</button>
+          <button class="menu-item">シェアする</button>
+          <button class="menu-item">興味がない</button>
+          <button class="menu-item">フォロー/解除</button>
+          <button class="menu-item">ミュートする</button>
+          <button class="menu-item">ブロックする</button>
+          <button class="menu-item">アナリティクス</button>
+          <button class="menu-item">埋め込む</button>
+          <button class="menu-item">報告する</button>
         </div>
-        <div id="aid_<%= item.aid %>_tab_diffusions_content" class="tab_content">
-          拡散する
-          <%= button_to '拡散する' %>
-        </div>
-        <div id="aid_<%= item.aid %>_tab_quoting_content" class="tab_content">
-          引用元の表示
-          <% if !item.quoting.empty? %>
-            <div class="item-quote-from">
-              📩引用元
-            </div>
-            <% item.quoting.each do |quote| %>
-              <%= link_to quote.aid, item_path(quote.aid) %>
-            <% end %>
-          <% else %>
-            引用元はありません
-          <% end %>
-        </div>
-        <div id="aid_<%= item.aid %>_tab_quoters_content" class="tab_content">
-          <%= link_to '引用する', item_quote_path(item.aid) %>
-          <%# render 'items/form', initial_quoted: item.aid %>
-        </div>
-        <div id="aid_<%= item.aid %>_tab_reactions_content" class="tab_content">
-          <% if defined? emojis %>
-          <% emojis.each do |emoji| %>
-            <%= button_to item_create_react_path(item.aid), params: {emoji_aid: emoji.aid}, method: :post do %>
-              <% if false %>
-                <%= image_tag image_url(model: 'emojis', type: 'tb-emojis', aid: emoji.aid), class: '' %>
-              <% else %>
-                <%= emoji.name %>
-              <% end %>
-            <% end%>
-          <% end %>
-          <% else %>
-            <%= link_to 'リアクションする', item_react_path(item.aid) %>
-          <% end %>
-        </div>
-        <div id="aid_<%= item.aid %>_tab_share_content" class="tab_content">
-          共有する
-          https://amiverse.net/items/<%= item.aid %>
-        </div>
-        <div id="aid_<%= item.aid %>_tab_save_content" class="tab_content">
-          保存する
-          ダウンロード・ブックマーク
-        </div>
-        <div id="aid_<%= item.aid %>_tab_others_content" class="tab_content">
-          その他
-          アナリティクス
-          埋め込む
-          報告
-        </div>
-      </details>
-      <style>
-        #aid_<%= item.aid %>_tab_replying:checked ~ details #aid_<%= item.aid %>_tab_replying_content,
-        #aid_<%= item.aid %>_tab_replies:checked ~ details #aid_<%= item.aid %>_tab_replies_content,
-        #aid_<%= item.aid %>_tab_diffusions:checked ~ details #aid_<%= item.aid %>_tab_diffusions_content,
-        #aid_<%= item.aid %>_tab_quoting:checked ~ details #aid_<%= item.aid %>_tab_quoting_content,
-        #aid_<%= item.aid %>_tab_quoters:checked ~ details #aid_<%= item.aid %>_tab_quoters_content,
-        #aid_<%= item.aid %>_tab_reactions:checked ~ details #aid_<%= item.aid %>_tab_reactions_content,
-        #aid_<%= item.aid %>_tab_share:checked ~ details #aid_<%= item.aid %>_tab_share_content,
-        #aid_<%= item.aid %>_tab_save:checked ~ details #aid_<%= item.aid %>_tab_save_content,
-        #aid_<%= item.aid %>_tab_others:checked ~ details #aid_<%= item.aid %>_tab_others_content {
-            display: block;
-        }
-      </style>
-    </div>
+      </div>
+    <%= link_to item_quote_path(item.aid), class: 'ip-button ip-quote' do %>
+      📝<%= item.quoters.size %>
+    <% end %>
+    <div class="ip-button ip-diffuse">🎶<%= 0 %></div>
+    <%= link_to item_reply_path(item.aid), class: 'ip-button ip-reply' do %>
+      💬<%= item.repliers.size %>
+    <% end %>
+    <%= link_to item_react_path(item.aid), class: 'ip-button ip-react' do %>
+      😊<%= item.reactions.size %>
+    <% end %>
   </div>
 </div>
 

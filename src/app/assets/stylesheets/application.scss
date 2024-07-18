@@ -40,8 +40,11 @@
   --shadow-color: #808080;
   --blur-color: #fff8;
   --primary-color: blue;
-  --button-color: #bfbfff;
+  --button-color: #000;
+  --button-font-color: #FFF;
   --hover-color: #0008;
+  --inconspicuous-font-color: #bcbcbc;
+  --inconspicuous-background-color: #444;
 }
 :root .dark-mode {
   --background-color: #000;
@@ -53,8 +56,11 @@
   --shadow-color: #808080;
   --blur-color: #0008;
   --primary-color: darkblue;
-  --button-color: #bfbfff;
+  --button-color: #FFF;
+  --button-font-color: #000;
   --hover-color: #fff8;
+  --inconspicuous-font-color: #bcbcbc;
+  --inconspicuous-background-color: #444;
 }
 body {
   margin: 0;
