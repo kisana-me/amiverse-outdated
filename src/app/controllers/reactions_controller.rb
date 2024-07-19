@@ -7,29 +7,28 @@ class ReactionsController < ApplicationController
       aid: params[:emoji_aid],
       deleted: false
     )
-    item = Item.find_by(
+    @item = Item.find_by(
       aid: params[:item_aid],
       deleted: false
     )
     this_react_params = {
       account_id: @current_account.id,
       emoji_id: emoji.id,
-      item_id: item.id
+      item_id: @item.id
     }
     if Reaction.exists?(this_react_params)
       Reaction.where(this_react_params).delete_all
-      flash[:success] = 'リアクションを取り消しました'
+      #flash[:success] = 'リアクションを取り消しました'
+    elsif Reaction.new(this_react_params).save
+      #flash[:success] = 'リアクションしました'
     else
-      react = Reaction.new(this_react_params)
-      if react.save
-        flash[:success] = 'リアクションしました'
-      else
-        flash[:danger] = '失敗しました'
-      end
+      flash[:danger] = '失敗しました'
+      render 'items/show', status: :unprocessable_entity
     end
-    redirect_to item_path(item.aid)
   end
+
   private
+
   def reaction_params
     params.require(:reaction).permit(
       :reaction_type,

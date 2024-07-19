@@ -32,7 +32,7 @@
         <%= f.file_field :media, multiple: true, accept: 'image/*,audio/*,video/*' %>
         <details>
           <summary>画像を添付</summary>
-          <%= render 'images/images_selector', f: f, images: @current_account.images.where(deleted: false) %>
+          <%= render 'images/images_multi_selector', f: f, selecteds: 'selected_images', images: @current_account.images.where(deleted: false) %>
         </details>
         <details>
           <summary>動画を添付</summary>

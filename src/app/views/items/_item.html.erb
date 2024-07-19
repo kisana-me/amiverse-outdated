@@ -11,7 +11,7 @@
   </div>
 <% end %>
 
-<div class="item">
+<div class="item" id="item_<%= item.aid %>">
   <div class="item-account">
     <div class="item-account-badges">
       <%= link_to emojis_path, class: 'iab-badge',
@@ -154,15 +154,37 @@
           <button class="menu-item">報告する</button>
         </div>
       </div>
-    <%= link_to item_quote_path(item.aid), class: 'ip-button ip-quote' do %>
+    <%= link_to item_quote_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-quote' do %>
       📝<%= item.quoters.size %>
     <% end %>
     <div class="ip-button ip-diffuse">🎶<%= 0 %></div>
-    <%= link_to item_reply_path(item.aid), class: 'ip-button ip-reply' do %>
+    <%= link_to item_reply_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-reply' do %>
       💬<%= item.repliers.size %>
     <% end %>
-    <%= link_to item_react_path(item.aid), class: 'ip-button ip-react' do %>
+    <%= link_to item_react_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-react' do %>
       😊<%= item.reactions.size %>
+    <% end %>
+  </div>
+  <div class="item-console">
+    <% if (defined? initial_replied) %>
+      返信する
+      <%= render 'items/form', item: @replied %>
+    <% end %>
+    <% if (defined? initial_quoted) %>
+      引用する
+      <%= render 'items/form', item: @quoted %>
+    <% end %>
+    <% if defined? emojis %>
+      反応する
+      <% emojis.each do |emoji| %>
+        <%= button_to item_create_react_path(@item.aid), params: {emoji_aid: emoji.aid}, method: :post do %>
+          <% if false %>
+            <%= image_tag image_url(model: 'emojis', type: 'tb-emojis', aid: emoji.aid), class: '' %>
+          <% else %>
+            <%= emoji.name %>
+          <% end %>
+        <% end%>
+      <% end %>
     <% end %>
   </div>
 </div>

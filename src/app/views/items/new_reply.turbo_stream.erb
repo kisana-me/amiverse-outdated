@@ -1,0 +1,1 @@
+<%= turbo_stream.replace 'item_' + @item.aid, partial: "items/item", locals: { item: @item, initial_replied: @item.aid } %>

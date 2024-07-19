@@ -89,19 +89,19 @@ class ItemsController < ApplicationController
   end
 
   def new_reply
-    @item = Item.new
-    @replied = get_item(aid: params[:item_aid])
-    render 'items/new', locals: { initial_replied: params[:item_aid] }
+    #@item = Item.new
+    @item = get_item(aid: params[:item_aid])
+    #render 'items/new', locals: { initial_replied: params[:item_aid] }
   end
   def new_quote
-    @item = Item.new
-    @quoted = get_item(aid: params[:item_aid])
-    render 'items/new', locals: { initial_quoted: params[:item_aid] }
+    #@item = Item.new
+    @item = get_item(aid: params[:item_aid])
+    #render 'items/new', locals: { initial_quoted: params[:item_aid] }
   end
   def new_react
     @item = get_item(aid: params[:item_aid])
-    emojis = Emoji.all
-    render 'items/show', locals: { emojis: emojis }
+    @emojis = Emoji.all
+    #render 'items/show', locals: { emojis: emojis }
   end
   def diffuse
     @item = get_item(aid: params[:item_aid])
