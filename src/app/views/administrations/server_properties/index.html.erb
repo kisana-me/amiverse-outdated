@@ -1,1 +1,8 @@
+<div>
+  <div>現在の設定</div>
+  <div>
+    <%= render 'administrations/server_properties/form', server_property: @server_property, url: administrations_server_properties_path %>
+  </div>
+</div>
+<br />
 <%= link_to 'new', new_administrations_server_property_path %>

@@ -7,10 +7,9 @@
     <ul>
       <% tab_trend.each do |w, c| %>
         <li>
-          <%= link_to w, search_path(query: w) %>
+          <%= link_to w, search_path(query: '"'+w+'"') %>
           <br />
-          <%= c[0] %>投稿↑
-          <%= c[1] %>回↑
+        <%= c.min %>件
         </li>
       <% end %>
     </ul>

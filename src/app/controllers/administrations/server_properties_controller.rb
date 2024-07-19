@@ -1,6 +1,7 @@
 class Administrations::ServerPropertiesController < Administrations::ApplicationController
   def index
-    @server_property = ServerProperty.all
+    @server_properties = ServerProperty.all
+    @server_property = Rails.application.config.x.server_property
   end
   def new
     @server_property = ServerProperty.new

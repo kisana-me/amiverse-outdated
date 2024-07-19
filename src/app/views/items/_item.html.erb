@@ -62,11 +62,13 @@
   </div>
   <div class="item-details">
     <div class="id-tags">
-      <% if false %>
+      <% if item.replying.size > 0 %>
         <%= link_to item_path(item.aid), class: 'id-tag' do %>
           <div class="id-tag-icon">←</div>
           <div class="id-tag-name">返信</div>
         <% end %>
+      <% end %>
+      <% if item.quoting.size > 0 %>
         <%= link_to item_path(item.aid), class: 'id-tag' do %>
           <div class="id-tag-icon">→</div>
           <div class="id-tag-name">引用</div>
@@ -74,11 +76,11 @@
       <% end %>
     </div>
     <%= link_to item_path(item.aid), class: 'id-text' do %>
-      全体公開・<%= item.created_at.strftime("%Y/%m/%d/ %k:%M:%S") %>
+      <%= item.human_attribute_enum(:visibility) %>・<%= item.created_at.strftime("%Y/%m/%d/ %k:%M:%S") %>
     <% end %>
   </div>
   <div class="item-content">
-    <%= item.content %>
+    <%= safe_join(item.content.split("\n"),tag(:br)) %>
   </div>
   <div class="item-media">
     <% item.images.each do |image| %>
@@ -103,30 +105,35 @@
   </div>
   <div class="item-details">
     <div class="id-tags">
-      <% if false %>
+      <% if item.usage_type != 'personal' %>
         <%= link_to item_path(item.aid), class: 'id-tag' do %>
-          <div class="id-tag-icon">💴</div>
-          <div class="id-tag-name">広告</div>
+          <div class="id-tag-icon">❕</div>
+          <div class="id-tag-name"><%= item.human_attribute_enum(:usage_type) %></div>
         <% end %>
       <% end %>
     </div>
     <%= link_to item_path(item.aid), class: 'id-text' do %>
-      1回・<%= item.aid %>
+      <%= item.viewed_counter %>回・<%= item.aid %>
     <% end %>
   </div>
   <div class="item-reactions">
     <% if item.emojis.blank? %>
     <% else %>
       <% item.emojis.each do |emoji| %>
+        <% react_flag = @current_account && Reaction.exists?({
+        account_id: @current_account.id,
+        emoji_id: emoji.id,
+        item_id: item.id
+        }) %>
         <%= button_to item_react_path(item.aid), params: {emoji_aid: emoji.aid}, method: :post, class: 'ir-reaction',
-        style: 'border-color: #DA48FF; background: #DA48FF55;' do %>
+        style: "border-color: ##{react_flag ? 'ff4848' : 'DA48FF'}; background: ##{react_flag ? 'ff484855' : 'DA48FF55'};" do %>
           <div class="ir-emoji">
             <%= emoji.name %>
           </div>
           <div class="ir-count">
             <%= item.reactions.where(emoji_id: emoji.id).size %>
           </div>
-        <% end %>
+          <% end %>
       <% end %>
     <% end %>
   </div>

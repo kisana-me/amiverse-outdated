@@ -5,15 +5,18 @@ module TrendManagement
     word_count = Hash.new(0)
     items.each do |post|
       natto.parse(post.content) do |n|
-        if n.surface.length > 3
-          word_count[n.surface] += 1
+        surface = n.surface
+        feature = n.feature.split(',')
+        if surface.length <= 3 || surface.match?(/[!?\s　]/) || (surface.match?(/\A[a-zA-Z]+\z/) && !(feature[0] == "名詞" && feature[1] == "固有名詞"))
+          next
         end
+        word_count[surface] += 1
       end
     end
     sorted_words = word_count.sort_by { |_, count| -count }.first(Rails.application.config.x.server_property.trend_search_words)#単語の頻出度順、大きくするとmeilisearchの回数が増える
     word_usage_count = {}
     sorted_words.to_a.each do |word, _|
-      word_usage_count[word] = [items.search(word, limit: 500).count, _] # 検索結果数
+      word_usage_count[word] = [items.search('"'+word+'"', limit: 500).count, _] # 検索結果数
     end
     word_usage_count.sort_by { |_, counts| -counts[0] }.first(30).to_h#投稿の数順
   end

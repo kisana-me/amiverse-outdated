@@ -1,0 +1,16 @@
+ja:
+  activerecord:
+    models:
+    attributes:
+        item:
+          id: ID
+        item/visibility:
+          public_share: 全体公開
+          do_not_share: 非公開
+          followers_share: フォロワー公開
+          scopings_share: 限定公開
+          direct_share: 直接公開
+        item/usage_type:
+          personal: 個人
+          bot: ボット
+          commercial: 広告
