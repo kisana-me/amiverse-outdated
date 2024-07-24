@@ -82,10 +82,28 @@
   <div class="item-content">
     <%= safe_join(item.content.split("\n"),tag(:br)) %>
   </div>
-  <div class="item-media">
+  <div class="item-media" data-controller="image-viewer">
+
+
     <% item.images.each do |image| %>
-      <%= image_tag image.image_url, class: 'item-image' %>
+      <%= image_tag image.image_url, class: 'item-image', data: { action: "click->image-viewer#openViewer", image_viewer_target: "previewImage" } %>
     <% end %>
+
+    <div class="fullscreen-image-viewer hidden" data-image-viewer-target="viewer">
+      <div class="fiv-background" data-image-viewer-target="background" data-action="click->image-viewer#closeImage"></div>
+      <div class="fiv-container" data-image-viewer-target="container"></div>
+      <button class="fiv-reset" data-image-viewer-target="reset" data-action="click->image-viewer#resetImage">↺</button>
+      <button class="fiv-close" data-image-viewer-target="close" data-action="click->image-viewer#closeImage">×</button>
+      <button class="fiv-prev" data-image-viewer-target="prev" data-action="click->image-viewer#prevImage">◀</button>
+      <button class="fiv-next" data-image-viewer-target="next" data-action="click->image-viewer#nextImage">▶</button>
+    </div>
+
+
+
+
+
+
+
     <% item.canvases.each do |canvas| %>
       <%= image_tag canvas.image_url, class: 'item-image', style: 'image-rendering: pixelated;' %>
     <% end %>
@@ -138,22 +156,22 @@
     <% end %>
   </div>
   <div class="item-panel">
-      <div class="ip-button ip-menu popup-menu" data-controller="popup-menu" data-popup-menu-target="popupMenu">
-        <div data-popup-menu-target="menuButton" data-action="click->popup-menu#toggleMenu" class="menu-button">
-          📋0
-        </div>
-        <div data-popup-menu-target="menu" class="menu" style="display: none;">
-          <button class="menu-item">リストに追加</button>
-          <button class="menu-item">シェアする</button>
-          <button class="menu-item">興味がない</button>
-          <button class="menu-item">フォロー/解除</button>
-          <button class="menu-item">ミュートする</button>
-          <button class="menu-item">ブロックする</button>
-          <button class="menu-item">アナリティクス</button>
-          <button class="menu-item">埋め込む</button>
-          <button class="menu-item">報告する</button>
-        </div>
+    <div class="ip-button ip-menu popup-menu" data-controller="popup-menu" data-popup-menu-target="popupMenu">
+      <div data-popup-menu-target="menuButton" data-action="click->popup-menu#toggleMenu" class="menu-button">
+        📋0
       </div>
+      <div data-popup-menu-target="menu" class="menu" style="display: none;">
+        <button class="menu-item">リストに追加</button>
+        <button class="menu-item">シェアする</button>
+        <button class="menu-item">興味がない</button>
+        <button class="menu-item">フォロー/解除</button>
+        <button class="menu-item">ミュートする</button>
+        <button class="menu-item">ブロックする</button>
+        <button class="menu-item">アナリティクス</button>
+        <button class="menu-item">埋め込む</button>
+        <button class="menu-item">報告する</button>
+      </div>
+    </div>
     <%= link_to item_quote_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-quote' do %>
       📝<%= item.quoters.size %>
     <% end %>

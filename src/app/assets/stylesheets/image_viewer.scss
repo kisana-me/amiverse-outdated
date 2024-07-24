@@ -1,0 +1,63 @@
+.hidden {
+  display: none;
+}
+
+.fullscreen-image-viewer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+
+.fiv-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.fiv-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+}
+
+.fiv-prev, .fiv-next, .fiv-reset, .fiv-close {
+  position: absolute;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.fiv-prev {
+  top: 50%;
+  left: 20px;
+}
+
+.fiv-next {
+  top: 50%;
+  right: 20px;
+}
+
+
+.fiv-reset {
+  top: 10px;
+  right: 10px;
+}
+.fiv-close {
+  top: 10px;
+  left: 10px;
+}

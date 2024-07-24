@@ -135,6 +135,13 @@
 
 .item-media {
   padding: 5px;
+  display: flex;
+  max-height: 500px;
+  overflow-x: auto;
+  img {
+    
+    object-fit: contain;
+  }
 }
 .item-image {
   width: 100%;
