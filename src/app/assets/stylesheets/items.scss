@@ -2,8 +2,48 @@
 /* item */
 
 .item {
-  padding: 10px 5px;
+  //padding: 10px 5px;
   border-bottom: 1px var(--border-color) solid;
+  display: flex;
+}
+.item-left {
+  padding: 0 2px;
+  width: 8px;
+  display: flex;
+  flex-direction: column;
+}
+.item-left-top {
+  width: 2px;
+  margin: 0 auto;
+}
+.ilt-full {
+  height: 57px;
+}
+.ilt-summary {
+  height: 33px;
+}
+.item-left-middle {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+}
+.item-left-bottom {
+  width: 2px;
+  margin: 0 auto;
+}
+.ilb-full {
+  height: calc(100% - 57px);
+}
+.ilb-summary {
+  height: calc(100% - 33px);
+}
+.il-display {
+  background: rgb(78, 78, 78);
+}
+.item-wrap {
+  padding: 12px 12px 12px 0;
+  flex-grow: 1;
+  min-width: 0; //flex内のflexが親をはみ出ないように
 }
 
 /* item-account-badges / iab */
@@ -120,6 +160,13 @@
   color: var(--inconspicuous-font-color);
   margin: 2px 0 2px auto;
 }
+// summary
+.item-summary-details {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: var(--inconspicuous-font-color);
+}
 
 /* item-content */
 
@@ -139,7 +186,6 @@
   max-height: 500px;
   overflow-x: auto;
   img {
-    
     object-fit: contain;
   }
 }
@@ -150,12 +196,12 @@
 /* item-reactions / ir */
 
 .item-reactions {
-  max-height: 26px;
+  //max-height: 26px;
   display: flex;
   flex-direction: row;
   width: 100%;
-  flex-wrap: nowrap;
-  overflow-x: auto;
+  flex-wrap: wrap;
+  overflow-x: hidden;
   overflow-y: hidden;
 }
 .ir-reaction {
@@ -182,6 +228,7 @@
   justify-content: space-evenly;
 }
 .ip-button {
+  display: flex;
   background: #ffffff3d;
   border-radius: 12px;
   line-height: 21px;
@@ -195,20 +242,15 @@
 .ip-button:hover {
   background: var(--hover-color);
 }
+.ipb-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+}
 .ip-menu {
-  .menu-button {
-      padding: 0;
-      background: none;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-  }
-  .menu-button:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px #fff, 0 0 0 4px #4f46e5;
-  }
+  cursor: pointer;
+
   .menu {
       position: fixed;
       z-index: 200;

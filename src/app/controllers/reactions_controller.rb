@@ -18,11 +18,11 @@ class ReactionsController < ApplicationController
     }
     if Reaction.exists?(this_react_params)
       Reaction.where(this_react_params).delete_all
-      #flash[:success] = 'リアクションを取り消しました'
+      flash.now[:success] = 'リアクションを取り消しました'
     elsif Reaction.new(this_react_params).save
-      #flash[:success] = 'リアクションしました'
+      flash.now[:success] = 'リアクションしました'
     else
-      flash[:danger] = '失敗しました'
+      flash.now[:danger] = '失敗しました'
       render 'items/show', status: :unprocessable_entity
     end
   end

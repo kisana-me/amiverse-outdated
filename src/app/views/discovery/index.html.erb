@@ -1,13 +1,27 @@
-<% provide(:layout_type, 'header_text') %>
+<% provide(:layout_type, 'header') %>
 <% provide(:title, 'みつける') %>
-<% provide(:header_text, 'みつける') %>
+<% provide(:selected_nav, 'discovery') %>
 
-<h2>検索</h2>
-<%= form_with url: search_path, method: :get do |f| %>
-  <%= f.label :query, "検索" %>
-  <%= f.search_field :query, value: params[:query] %>
-  <%= f.button "検索", name: nil, type: :submit %>
+<% content_for :header_content do %>
+  <%= form_with url: search_path, method: :get do |f| %>
+    <%= f.label :query, "検索" %>
+    <%= f.search_field :query, value: params[:query] %>
+    <%= f.button "検索", name: nil, type: :submit %>
+  <% end %>
 <% end %>
+
+<div class="discovery-top">
+  <div class="discovery-top-background"></div>
+  <div class="discovery-top-content">
+    <div class="dtc-title">
+      タイトル。
+    </div>
+    <div class="dtc-summary">
+      ここに要約文がはいります。。。。
+    </div>
+  </div>
+</div>
+
 <h2>トレンド</h2>
   <div><%= Rails.application.config.x.last_trend_at.strftime("%k時 %M分") %> 時点</div>
   <%# (Rails.application.config.x.last_trend_at - Rails.application.config.x.server_property.trend_interval * 60).strftime("%Y年 %m月 %d日 %k時 %M分 %S秒") %>
@@ -20,6 +34,4 @@
       </li>
     <% end %>
   </ul>
-<h2>おすすめ</h2>
-<h2>ワールド</h2>
-<h2>ニュース</h2>
+<h2>アイテム</h2>

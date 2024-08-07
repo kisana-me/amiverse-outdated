@@ -12,7 +12,7 @@
 
 
   <% if defined? emojis %>
-    <%= render 'items/item', item: @item, show_repliers: true, show_replying: true %>
+    <%= render 'items/item', item: @item, show_repliers: true, show_replying: true, full_display: true %>
     <% emojis.each do |emoji| %>
       <%= button_to item_create_react_path(@item.aid), params: {emoji_aid: emoji.aid}, method: :post do %>
         <% if false %>
@@ -23,7 +23,7 @@
       <% end%>
     <% end %>
   <% else %>
-    <%= render 'items/item', item: @item, show_repliers: true, show_replying: true %>
+    <%= render 'items/item', item: @item, show_repliers: true, show_replying: true, full_display: true %>
   <% end %>
 <% else %>
   <p>指定されたアイテムは存在しません</p>

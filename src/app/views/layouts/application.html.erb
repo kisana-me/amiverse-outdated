@@ -36,6 +36,15 @@
               <%= yield %>
             </div>
           </div>
+        <% elsif layout_type == 'header' %>
+          <div class='main-header'>
+            <%= yield(:header_content) %>
+          </div>
+          <div class='shared-default-layout-out-container'>
+            <div class='shared-default-layout-in-container'>
+              <%= yield %>
+            </div>
+          </div>
         <% elsif layout_type == 'header_text' %>
           <div class='main-header'>
             <div class='main-header-text'>
@@ -48,7 +57,7 @@
             </div>
           </div>
         <% elsif layout_type == 'feed' %>
-        <% selected_tab = yield(:selected_tab) %>
+          <% selected_tab = yield(:selected_tab) %>
           <div class='main-header'>
             <div class='main-header-logo'>
             </div>
@@ -82,9 +91,9 @@
         <% else %>
           <%= yield %>
         <% end %>
-        <% flash.each do |message_type, message| %>
-          <div class="flash <%= message_type %>"><%= message %></div>
-        <% end %>
+        <div class="flash" id="flash">
+          <%= render 'shared/flash' %>
+        </div>
       </main>
       <%= render 'layouts/tab' %>
     </div>

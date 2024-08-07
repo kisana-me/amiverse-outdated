@@ -4,7 +4,7 @@
       <%= link_to root_path do %>
         <div class="nav-list-container">
           <div class="nav-list-logo">
-              <%= render 'svgs/amiverse' %>
+              <%= render 'svgs/nav/amiverse' %>
           </div>
           <div class="nav-list-info"><%= Rails.application.config.x.server_property.server_name %></div>
         </div>
@@ -20,9 +20,9 @@
         <div class="nav-list-container">
           <div class="nav-list-icon">
             <% if selected_nav == 'home' %>
-              <%= render 'svgs/home' %>
+              <%= render 'svgs/nav/home' %>
             <% else%>
-              <%= render 'svgs/home_frame' %>
+              <%= render 'svgs/nav/home_frame' %>
             <% end %>
           </div>
           <div class="nav-list-info">Home</div>
@@ -32,7 +32,13 @@
     <div class="nav-li">
       <%= link_to discovery_path do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon"><%= render 'svgs/search', width: icons_width, height: icons_height %></div>
+          <div class="nav-list-icon">
+            <% if selected_nav == 'discovery' %>
+              <%= render 'svgs/nav/discovery' %>
+            <% else%>
+              <%= render 'svgs/nav/discovery_frame' %>
+            <% end %>
+          </div>
           <div class="nav-list-info">Discovery</div>
         </div>
       <% end %>
@@ -42,9 +48,9 @@
         <div class="nav-list-container">
           <div class="nav-list-icon">
             <% if selected_nav == 'dashboard' %>
-              <%= render 'svgs/dashboard' %>
+              <%= render 'svgs/nav/dashboard' %>
             <% else%>
-              <%= render 'svgs/dashboard_frame' %>
+              <%= render 'svgs/nav/dashboard_frame' %>
             <% end %>
           </div>
           <div class="nav-list-info">Dashboard</div>
@@ -54,7 +60,13 @@
     <div class="nav-li">
       <%= link_to notifications_path do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon"><%= render 'svgs/notifications', width: icons_width, height: icons_height %></div>
+          <div class="nav-list-icon">
+            <% if selected_nav == 'notifications' %>
+              <%= render 'svgs/nav/notifications' %>
+            <% else%>
+              <%= render 'svgs/nav/notifications_frame' %>
+            <% end %>
+          </div>
           <div class="nav-list-info">Notification</div>
         </div>
       <% end %>
@@ -62,8 +74,14 @@
     <div class="nav-li">
       <%= link_to messages_path do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon"><%= render 'svgs/message', width: icons_width, height: icons_height %></div>
-          <div class="nav-list-info">Messages</div>
+          <div class="nav-list-icon">
+            <% if selected_nav == 'communities' %>
+              <%= render 'svgs/nav/communities' %>
+            <% else%>
+              <%= render 'svgs/nav/communities_frame' %>
+            <% end %>
+          </div>
+          <div class="nav-list-info">Communities</div>
         </div>
       <% end %>
     </div>
@@ -94,7 +112,7 @@
       <% else %>
         <%= link_to login_path do %>
           <div class="nav-list-container">
-            <div class="nav-list-icon"><%= render 'svgs/login', width: icons_width, height: icons_height %></div>
+            <div class="nav-list-icon"><%= render 'svgs/nav/login', width: icons_width, height: icons_height %></div>
             <div class="nav-list-info">LOGIN</div>
           </div>
         <% end %>
@@ -103,7 +121,13 @@
     <div class="nav-li">
       <%= link_to settings_path do %>
         <div class="nav-list-container">
-          <div class="nav-list-icon"><%= render 'svgs/settings', width: icons_width, height: icons_height %></div>
+          <div class="nav-list-icon">
+            <% if selected_nav == 'settings' %>
+              <%= render 'svgs/nav/settings' %>
+            <% else%>
+              <%= render 'svgs/nav/settings_frame' %>
+            <% end %>
+          </div>
           <div class="nav-list-info">Settings</div>
         </div>
       <% end %>

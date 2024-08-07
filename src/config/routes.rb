@@ -49,7 +49,7 @@ Rails.application.routes.draw do
   resources :videos, param: :aid
 
   # === notifications === #
-  resources :notifications, param: :aid, only: %i[ index show destroy ]
+  resources :notifications, param: :aid, only: %i[ index new create show destroy ]
 
   # === emojis === #
   resources :emojis, param: :aid

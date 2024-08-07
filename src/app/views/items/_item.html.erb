@@ -1,221 +1,251 @@
 <% if defined? show_replying %>
-  <div class="item-reply">
     <% if !item.replying.empty? %>
-      <div class="item-reply-from">
-        📩返信先
-      </div>
       <% item.replying.each do |reply| %>
-        <%= render 'items/item', item: reply %>
+        <%= render 'items/item', item: reply, showing: 'showing' %>
       <% end %>
     <% end %>
-  </div>
 <% end %>
 
 <div class="item" id="item_<%= item.aid %>">
-  <div class="item-account">
-    <div class="item-account-badges">
-      <%= link_to emojis_path, class: 'iab-badge',
-      style: 'border-color: #5CFF23; background: #5CFF2355;' do %>
-        <div class="iab-icon">🍭</div>
-        <div class="iab-name">
-          開発者
-        </div>
-      <% end %>
-      <%= link_to emojis_path, class: 'iab-badge',
-      style: 'border-color: #48E9FF; background: #48E9FF55;' do %>
-        <div class="iab-icon">✨</div>
-        <div class="iab-name">
-          TESTER
-        </div>
-      <% end %>
+  <div class="item-left">
+    <div class="item-left-top <%= (defined? full_display) ? 'ilt-full' : 'ilt-summary' %><%= ((defined? show_replying) || (defined? showing)) && item.replying.present? ? ' il-display' : '' %>">
     </div>
-    <div class="item-account-info">
-      <%= link_to account_path(item.account.name_id), class: 'iai-plate' do %>
-        <% if item.account.icon %>
-          <%= image_tag item.account.icon.image_url(variant_type: 'icons'), class: 'iai-icon' %>
-        <% else %>
-          <img src="/images/icon.webp" class="iai-icon" />
-        <% end %>
-        <div class="iai-nameplate">
-          <div class="iai-name">
-            <%= item.account.name %>
-          </div>
-          <div class="iai-name_id">
-            @<%= item.account.name_id %>
-          </div>
+    <% middle_flag = (((defined? show_replying) || (defined? showing)) && item.replying.present?) || (((defined? show_repliers) || (defined? showing)) && item.repliers.present?) %>
+    <div class="item-left-middle<%= middle_flag ? ' il-display' : '' %>"></div>
+    <div class="item-left-bottom <%= (defined? full_display) ? 'ilb-full' : 'ilb-summary' %><%= ((defined? show_repliers) || (defined? showing)) && item.repliers.present? ? ' il-display' : '' %>">
+    </div>
+  </div>
+  <div class="item-wrap">
+    <div class="item-account">
+      <% if defined? full_display %>
+        <div class="item-account-badges">
+          <%= link_to emojis_path, class: 'iab-badge',
+          style: 'border-color: #5CFF23; background: #5CFF2355;' do %>
+            <div class="iab-icon">🍭</div>
+            <div class="iab-name">
+              開発者
+            </div>
+          <% end %>
+          <%= link_to emojis_path, class: 'iab-badge',
+          style: 'border-color: #48E9FF; background: #48E9FF55;' do %>
+            <div class="iab-icon">✨</div>
+            <div class="iab-name">
+              TESTER
+            </div>
+          <% end %>
         </div>
       <% end %>
-      <div class="iai-others">
-        <% if @current_account && @current_account.following.map(&:id).include?(item.account.id) %>
-          <%= button_to("フォロー中", follow_path(item.account.name_id), class: 'iai-button', method: :post) %>
-        <% elsif @current_account %>
-          <% if @current_account == item.account %>
-            <%= button_to("プロフィール", account_path(@current_account.name_id), class: 'iai-button', method: :get) %>
+      <div class="item-account-info">
+        <%= link_to account_path(item.account.name_id), class: 'iai-plate' do %>
+          <% if item.account.icon %>
+            <%= image_tag item.account.icon.image_url(variant_type: 'icons'), class: 'iai-icon' %>
           <% else %>
-            <%= button_to("フォロー", follow_path(item.account.name_id), class: 'iai-button', method: :post) %>
+            <img src="/images/icon.webp" class="iai-icon" />
           <% end %>
-        <% else %>
-          <%= button_to('ログイン', login_path, class: 'iai-button', method: :get) %>
+          <div class="iai-nameplate">
+            <div class="iai-name">
+              <%= item.account.name %>
+            </div>
+            <div class="iai-name_id">
+              @<%= item.account.name_id %>
+            </div>
+          </div>
+        <% end %>
+        <% if defined? full_display %>
+          <div class="iai-others">
+            <% if @current_account && @current_account.following.map(&:id).include?(item.account.id) %>
+              <%= button_to("フォロー中", follow_path(item.account.name_id), class: 'iai-button', method: :post) %>
+            <% elsif @current_account %>
+              <% if @current_account == item.account %>
+                <%= button_to("プロフィール", account_path(@current_account.name_id), class: 'iai-button', method: :get) %>
+              <% else %>
+                <%= button_to("フォロー", follow_path(item.account.name_id), class: 'iai-button', method: :post) %>
+              <% end %>
+            <% else %>
+              <%= button_to('ログイン', login_path, class: 'iai-button', method: :get) %>
+            <% end %>
+          </div>
         <% end %>
       </div>
     </div>
-  </div>
-  <div class="item-details">
-    <div class="id-tags">
-      <% if item.replying.size > 0 %>
-        <%= link_to item_path(item.aid), class: 'id-tag' do %>
-          <div class="id-tag-icon">←</div>
-          <div class="id-tag-name">返信</div>
+    <% if defined? full_display %>
+      <div class="item-details">
+        <div class="id-tags">
+          <% if item.replying.size > 0 %>
+            <%= link_to item_path(item.aid), class: 'id-tag' do %>
+              <div class="id-tag-icon">←</div>
+              <div class="id-tag-name">返信</div>
+            <% end %>
+          <% end %>
+          <% if item.quoting.size > 0 %>
+            <%= link_to item_path(item.aid), class: 'id-tag' do %>
+              <div class="id-tag-icon">→</div>
+              <div class="id-tag-name">引用</div>
+            <% end %>
+          <% end %>
+        </div>
+        <%= link_to item_path(item.aid), class: 'id-text' do %>
+          <%= item.human_attribute_enum(:visibility) %>・<%= item.created_at.strftime("%Y/%m/%d/ %k:%M:%S") %>
         <% end %>
-      <% end %>
-      <% if item.quoting.size > 0 %>
-        <%= link_to item_path(item.aid), class: 'id-tag' do %>
-          <div class="id-tag-icon">→</div>
-          <div class="id-tag-name">引用</div>
-        <% end %>
-      <% end %>
-    </div>
-    <%= link_to item_path(item.aid), class: 'id-text' do %>
-      <%= item.human_attribute_enum(:visibility) %>・<%= item.created_at.strftime("%Y/%m/%d/ %k:%M:%S") %>
-    <% end %>
-  </div>
-  <div class="item-content">
-    <%= safe_join(item.content.split("\n"),tag(:br)) %>
-  </div>
-  <div class="item-media" data-controller="image-viewer">
-
-
-    <% item.images.each do |image| %>
-      <%= image_tag image.image_url, class: 'item-image', data: { action: "click->image-viewer#openViewer", image_viewer_target: "previewImage" } %>
-    <% end %>
-
-    <div class="fullscreen-image-viewer hidden" data-image-viewer-target="viewer">
-      <div class="fiv-background" data-image-viewer-target="background" data-action="click->image-viewer#closeImage"></div>
-      <div class="fiv-container" data-image-viewer-target="container"></div>
-      <button class="fiv-reset" data-image-viewer-target="reset" data-action="click->image-viewer#resetImage">↺</button>
-      <button class="fiv-close" data-image-viewer-target="close" data-action="click->image-viewer#closeImage">×</button>
-      <button class="fiv-prev" data-image-viewer-target="prev" data-action="click->image-viewer#prevImage">◀</button>
-      <button class="fiv-next" data-image-viewer-target="next" data-action="click->image-viewer#nextImage">▶</button>
-    </div>
-
-
-
-
-
-
-
-    <% item.canvases.each do |canvas| %>
-      <%= image_tag canvas.image_url, class: 'item-image', style: 'image-rendering: pixelated;' %>
-    <% end %>
-    <% if false %>
-      <video controls class='video-view' id='video-<%= video.video_id %>'></video>
-      <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
-      <script>
-        var video = document.getElementById('video-<%= video.video_id %>');
-        var videoSrc = 'http://localhost:9000/development/variants/accounts/00000000000000/videos/<%= video.video_id %>/output.m3u8';
-        if (Hls.isSupported()) {
-          var hls = new Hls();
-          hls.loadSource(videoSrc);
-          hls.attachMedia(video);
-        }
-      </script>
-    <% end %>
-  </div>
-  <div class="item-details">
-    <div class="id-tags">
-      <% if item.usage_type != 'personal' %>
-        <%= link_to item_path(item.aid), class: 'id-tag' do %>
-          <div class="id-tag-icon">❕</div>
-          <div class="id-tag-name"><%= item.human_attribute_enum(:usage_type) %></div>
-        <% end %>
-      <% end %>
-    </div>
-    <%= link_to item_path(item.aid), class: 'id-text' do %>
-      <%= item.viewed_counter %>回・<%= item.aid %>
-    <% end %>
-  </div>
-  <div class="item-reactions">
-    <% if item.emojis.blank? %>
+      </div>
     <% else %>
-      <% item.emojis.each do |emoji| %>
-        <% react_flag = @current_account && Reaction.exists?({
-        account_id: @current_account.id,
-        emoji_id: emoji.id,
-        item_id: item.id
-        }) %>
-        <%= button_to item_react_path(item.aid), params: {emoji_aid: emoji.aid}, method: :post, class: 'ir-reaction',
-        style: "border-color: ##{react_flag ? 'ff4848' : 'DA48FF'}; background: ##{react_flag ? 'ff484855' : 'DA48FF55'};" do %>
-          <div class="ir-emoji">
-            <%= emoji.name %>
-          </div>
-          <div class="ir-count">
-            <%= item.reactions.where(emoji_id: emoji.id).size %>
-          </div>
+      <div class="item-summary-details">
+        <div class="">
+          <%= link_to item_path(item.aid), class: 'id-text' do %>
+            <%= item.human_attribute_enum(:visibility) %>
+            <%= "・#{item.human_attribute_enum(:usage_type)}" if (item.usage_type != 'personal') %>
+            <%= '・返信' if (item.replying.size > 0) %>
+            <%= '・引用' if (item.quoting.size > 0) %>
           <% end %>
-      <% end %>
+        </div>
+        <div class="">
+          <%= link_to item_path(item.aid), class: 'id-text' do %>
+            <%= item.viewed_counter %>回・<%= item.created_at.strftime("%m/%d/ %k:%M") %>
+          <% end %>
+        </div>
+      </div>
     <% end %>
-  </div>
-  <div class="item-panel">
-    <div class="ip-button ip-menu popup-menu" data-controller="popup-menu" data-popup-menu-target="popupMenu">
-      <div data-popup-menu-target="menuButton" data-action="click->popup-menu#toggleMenu" class="menu-button">
-        📋0
-      </div>
-      <div data-popup-menu-target="menu" class="menu" style="display: none;">
-        <button class="menu-item">リストに追加</button>
-        <button class="menu-item">シェアする</button>
-        <button class="menu-item">興味がない</button>
-        <button class="menu-item">フォロー/解除</button>
-        <button class="menu-item">ミュートする</button>
-        <button class="menu-item">ブロックする</button>
-        <button class="menu-item">アナリティクス</button>
-        <button class="menu-item">埋め込む</button>
-        <button class="menu-item">報告する</button>
-      </div>
+    <div class="item-content">
+      <%= safe_join(item.content.split("\n"),tag(:br)) %>
     </div>
-    <%= link_to item_quote_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-quote' do %>
-      📝<%= item.quoters.size %>
-    <% end %>
-    <div class="ip-button ip-diffuse">🎶<%= 0 %></div>
-    <%= link_to item_reply_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-reply' do %>
-      💬<%= item.repliers.size %>
-    <% end %>
-    <%= link_to item_react_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-react' do %>
-      😊<%= item.reactions.size %>
-    <% end %>
-  </div>
-  <div class="item-console">
-    <% if (defined? initial_replied) %>
-      返信する
-      <%= render 'items/form', initial_replied: initial_replied %>
-    <% end %>
-    <% if (defined? initial_quoted) %>
-      引用する
-      <%= render 'items/form', initial_quoted: initial_quoted %>
-    <% end %>
-    <% if defined? emojis %>
-      反応する
-      <% emojis.each do |emoji| %>
-        <%= button_to item_create_react_path(@item.aid), params: {emoji_aid: emoji.aid}, method: :post do %>
-          <% if false %>
-            <%= image_tag image_url(model: 'emojis', type: 'tb-emojis', aid: emoji.aid), class: '' %>
-          <% else %>
-            <%= emoji.name %>
-          <% end %>
-        <% end%>
+    <div class="item-media" data-controller="image-viewer">
+
+
+      <% item.images.each do |image| %>
+        <%= image_tag image.image_url, class: 'item-image', data: { action: "click->image-viewer#openViewer", image_viewer_target: "previewImage" } %>
       <% end %>
+
+      <div class="fullscreen-image-viewer hidden" data-image-viewer-target="viewer">
+        <div class="fiv-background" data-image-viewer-target="background" data-action="click->image-viewer#closeImage"></div>
+        <div class="fiv-container" data-image-viewer-target="container"></div>
+        <button class="fiv-reset" data-image-viewer-target="reset" data-action="click->image-viewer#resetImage">↺</button>
+        <button class="fiv-close" data-image-viewer-target="close" data-action="click->image-viewer#closeImage">×</button>
+        <button class="fiv-prev" data-image-viewer-target="prev" data-action="click->image-viewer#prevImage">◀</button>
+        <button class="fiv-next" data-image-viewer-target="next" data-action="click->image-viewer#nextImage">▶</button>
+      </div>
+
+
+
+
+
+
+
+      <% item.canvases.each do |canvas| %>
+        <%= image_tag canvas.image_url, class: 'item-image', style: 'image-rendering: pixelated;' %>
+      <% end %>
+      <% if false %>
+        <video controls class='video-view' id='video-<%= video.video_id %>'></video>
+        <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+        <script>
+          var video = document.getElementById('video-<%= video.video_id %>');
+          var videoSrc = 'http://localhost:9000/development/variants/accounts/00000000000000/videos/<%= video.video_id %>/output.m3u8';
+          if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+          }
+        </script>
+      <% end %>
+    </div>
+    <% if defined? full_display %>
+      <div class="item-details">
+        <div class="id-tags">
+          <% if item.usage_type != 'personal' %>
+            <%= link_to item_path(item.aid), class: 'id-tag' do %>
+              <div class="id-tag-icon">❕</div>
+              <div class="id-tag-name"><%= item.human_attribute_enum(:usage_type) %></div>
+            <% end %>
+          <% end %>
+        </div>
+        <%= link_to item_path(item.aid), class: 'id-text' do %>
+          <%= item.viewed_counter %>回・<%= item.aid %>
+        <% end %>
+      </div>
     <% end %>
+    <div class="item-reactions">
+      <% if item.emojis.blank? %>
+      <% else %>
+        <% item.emojis.each do |emoji| %>
+          <% react_flag = @current_account && Reaction.exists?({
+          account_id: @current_account.id,
+          emoji_id: emoji.id,
+          item_id: item.id
+          }) %>
+          <%= button_to item_react_path(item.aid), params: {emoji_aid: emoji.aid}, method: :post, class: 'ir-reaction',
+          style: "border-color: ##{react_flag ? 'ff4848' : 'DA48FF'}; background: ##{react_flag ? 'ff484855' : 'DA48FF55'};" do %>
+            <div class="ir-emoji">
+              <%= emoji.name %>
+            </div>
+            <div class="ir-count">
+              <%= item.reactions.where(emoji_id: emoji.id).size %>
+            </div>
+            <% end %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="item-panel">
+      <div class="ip-button ip-menu popup-menu" data-controller="popup-menu" data-action="click->popup-menu#toggleMenu" data-popup-menu-target="menuButton">
+        <div class="ipb-icon">
+          <%= render 'svgs/item/menu' %>
+        </div>
+        <div data-popup-menu-target="menu" class="menu" style="display: none;">
+          <button class="menu-item">リストに追加</button>
+          <button class="menu-item">シェアする</button>
+          <button class="menu-item">興味がない</button>
+          <button class="menu-item">フォロー/解除</button>
+          <button class="menu-item">ミュートする</button>
+          <button class="menu-item">ブロックする</button>
+          <button class="menu-item">アナリティクス</button>
+          <button class="menu-item">埋め込む</button>
+          <button class="menu-item">報告する</button>
+        </div>
+      </div>
+      <%= link_to item_quote_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-quote' do %>
+        <div class="ipb-icon"><%= render 'svgs/item/quote' %></div>
+        <div class="ipb-number"><%= item.quoters.size %></div>
+      <% end %>
+      <div class="ip-button ip-diffuse">
+        <div class="ipb-icon"><%= render 'svgs/item/diffuse' %></div>
+        <div class="ipb-number"><%= 0 %></div>
+      </div>
+      <%= link_to item_reply_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-reply' do %>
+        <div class="ipb-icon"><%= render 'svgs/item/reply' %></div>
+        <div class="ipb-number"><%= item.repliers.size %></div>
+      <% end %>
+      <%= link_to item_react_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-react' do %>
+        <div class="ipb-icon"><%= render 'svgs/item/reaction' %></div>
+        <div class="ipb-number"><%= item.reactions.size %></div>
+      <% end %>
+    </div>
+    <div class="item-console">
+      <% if (defined? initial_replied) %>
+        返信する
+        <%= render 'items/form', initial_replied: initial_replied %>
+      <% end %>
+      <% if (defined? initial_quoted) %>
+        引用する
+        <%= render 'items/form', initial_quoted: initial_quoted %>
+      <% end %>
+      <% if defined? emojis %>
+        反応する
+        <% emojis.each do |emoji| %>
+          <%= button_to item_create_react_path(@item.aid), params: {emoji_aid: emoji.aid}, method: :post do %>
+            <% if false %>
+              <%= image_tag image_url(model: 'emojis', type: 'tb-emojis', aid: emoji.aid), class: '' %>
+            <% else %>
+              <%= emoji.name %>
+            <% end %>
+          <% end%>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 </div>
 
 <% if defined? show_repliers %>
-  <div class="item-reply">
     <% if !item.repliers.empty? %>
-      <div class="item-reply-from">
-        📩返信
-      </div>
       <% item.repliers.each do |reply| %>
-        <%= render 'items/item', item: reply %>
+        <%= render 'items/item', item: reply, showing: 'showing' %>
       <% end %>
     <% end %>
-  </div>
 <% end %>

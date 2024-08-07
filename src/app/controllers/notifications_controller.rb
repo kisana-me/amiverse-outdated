@@ -1,6 +1,6 @@
 class NotificationsController < ApplicationController
   before_action :logged_in_account
-  before_action :admin_account, only: %i[ new create ]
+  before_action :administrator_account, only: %i[ new create ]
   def index
     @notifications = @current_account.notifications
   end

@@ -3,8 +3,8 @@ module TrendManagement
   def frequent_words(items:)
     natto = Natto::MeCab.new
     word_count = Hash.new(0)
-    items.each do |post|
-      natto.parse(post.content) do |n|
+    items.each do |item|
+      natto.parse(item.content) do |n|
         surface = n.surface
         feature = n.feature.split(',')
         if surface.length <= 3 || surface.match?(/[!?\s　]/) || (surface.match?(/\A[a-zA-Z]+\z/) && !(feature[0] == "名詞" && feature[1] == "固有名詞"))
@@ -14,6 +14,7 @@ module TrendManagement
       end
     end
     sorted_words = word_count.sort_by { |_, count| -count }.first(Rails.application.config.x.server_property.trend_search_words)#単語の頻出度順、大きくするとmeilisearchの回数が増える
+    # 検索する単語を追加する
     word_usage_count = {}
     sorted_words.to_a.each do |word, _|
       word_usage_count[word] = [items.search('"'+word+'"', limit: 500).count, _] # 検索結果数
