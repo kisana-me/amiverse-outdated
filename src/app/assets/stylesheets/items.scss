@@ -236,7 +236,6 @@
   height: 30px;
   text-align: center;
   color: var(--font-color);
-  margin: 2px;
 }
 .ip-button:hover {
   background: var(--hover-color);
@@ -287,6 +286,7 @@
 /* item-form */
 
 .item-form {
+  margin: 10px;
 }
 .item-form-reply, .item-form-quote {
   background: var(--inconspicuous-background-color);
@@ -297,6 +297,7 @@
   white-space: nowrap;
 }
 .item-form-top {
+  height: 38px;
   display: flex;
   justify-content: space-between;
 }
