@@ -1,31 +1,47 @@
 <% if @current_account.present? %>
   <% item = Item.new %>
   <%= form_with model: item, url: items_path do |f| %>
-    <%= render "shared/error_messages", instead: item %>
-    <% if (defined? initial_replied) %>
-      <%= f.hidden_field :replied, value: initial_replied %>
-      投稿:<%= initial_replied %>への返信
-    <% end %>
-    <% if (defined? initial_quoted) %>
-      <%= f.hidden_field :quoted, value: initial_quoted %>
-      投稿:<%= initial_quoted %>への引用
-    <% end %>
 
-    <div>
-      <%= f.label :visibility %>
-      <%= f.select :visibility, Item.visibilities.keys.map { |i| [i.humanize, i] } %>
-      <%= f.label :silent %>
-      <%= f.check_box :silent %>
-      <%= f.label :draft %>
-      <%= f.check_box :draft %>
-    </div>
+    <div class="item-form">
+      <%= render "shared/error_messages", instead: item %>
+      <div class="item-form-top">
+        <div class="ift-account">
+          <% if @current_account.icon %>
+            <%= image_tag @current_account.icon.image_url(variant_type: 'icons'), class: 'ift-account-icon' %>
+          <% else %>
+            <img src="/images/icon.webp" class="ift-account-icon" />
+          <% end %>
+          <div class="ift-account-nameplate">
+            <div class="ift-account-name">
+              <%= @current_account.name %>
+            </div>
+            <div class="ift-account-name_id">
+              @<%= @current_account.name_id %>
+            </div>
+          </div>
+        </div>
+        <% if (defined? initial_replied) %>
+          <%= f.hidden_field :replied, value: initial_replied %>
+          <div class="item-form-reply">返信</div>
+        <% end %>
+        <% if (defined? initial_quoted) %>
+          <%= f.hidden_field :quoted, value: initial_quoted %>
+          <div class="item-form-quote">引用</div>
+        <% end %>
+        <div class="ift-button-wrap">
+          <%= f.submit '投稿', class: 'ift-button' %>
+        </div>
+      </div>
+      <div class="item-form-share">
+        <%= f.label :visibility %>
+        <%= f.select :visibility, Item.visibilities.keys.map { |i| [i.humanize, i] } %>
+        <%= f.label :silent %>
+        <%= f.check_box :silent %>
+      </div>
+      <div class="item-form-content">
+        <%= f.text_area :content, placeholder: 'みんなに共有する...', class: 'ifc-textarea' %>
+      </div>
 
-    <div>
-      <%= f.label :content, style: "display: block" %>
-      <%= f.text_area :content %>
-    </div>
-
-    <div>
       <details>
         <summary>メディア</summary>
         <%= f.label :media %>
@@ -50,39 +66,26 @@
         <%= f.text_field :caution_message %>
       </details>
       <details>
-        <summary>投票</summary>
-      </details>
-      <details>
-        <summary>予約</summary>
-      </details>
-      <details>
-        <summary>場所</summary>
+        <summary>設定</summary>
+        <div>
+          <%= f.label :render_type %>
+          <%= f.select :render_type, Item.render_types.keys.map { |i| [i.humanize, i] } %>
+          <br />
+          <%= f.label :layout_type %>
+          <%= f.select :layout_type, Item.layout_types.keys.map { |i| [i.humanize, i] } %>
+          <br />
+          <%= f.label :usage_type %>
+          <%= f.select :usage_type, Item.usage_types.keys.map { |i| [i.humanize, i] } %>
+          <br />
+          <%= f.label :activitypub %>
+          <%= f.check_box :activitypub %>
+          <br />
+          <%= f.label :language %>
+          <%= f.select :language, Item.languages.keys.map { |i| [i.humanize, i] } %>
+        </div>
       </details>
     </div>
 
-    <details>
-      <summary>設定</summary>
-      <div>
-        <%= f.label :render_type %>
-        <%= f.select :render_type, Item.render_types.keys.map { |i| [i.humanize, i] } %>
-        <br />
-        <%= f.label :layout_type %>
-        <%= f.select :layout_type, Item.layout_types.keys.map { |i| [i.humanize, i] } %>
-        <br />
-        <%= f.label :usage_type %>
-        <%= f.select :usage_type, Item.usage_types.keys.map { |i| [i.humanize, i] } %>
-        <br />
-        <%= f.label :activitypub %>
-        <%= f.check_box :activitypub %>
-        <br />
-        <%= f.label :language %>
-        <%= f.select :language, Item.languages.keys.map { |i| [i.humanize, i] } %>
-      </div>
-    </details>
-
-    <div>
-      <%= f.submit %>
-    </div>
   <% end %>
 <% else %>
   <%= button_to('ログインして会話に参加', login_path, method: :get) %>

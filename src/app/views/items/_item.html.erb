@@ -240,15 +240,12 @@
     </div>
     <div class="item-console">
       <% if defined? initial_replied %>
-        返信する
         <%= render 'items/form', initial_replied: initial_replied %>
       <% end %>
       <% if defined? initial_quoted %>
-        引用する
         <%= render 'items/form', initial_quoted: initial_quoted %>
       <% end %>
       <% if defined? emojis %>
-        反応する
         <% emojis.each do |emoji| %>
           <%= button_to item_create_react_path(@item.aid), params: {emoji_aid: emoji.aid}, method: :post do %>
             <% if false %>
