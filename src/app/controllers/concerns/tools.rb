@@ -12,11 +12,15 @@ module Tools
   end
   def paged_objects(page:, objects:, per_page: 30)
     offset = paged_offset(page: page, per_page: per_page)
-    return objects.offset(
-      offset.to_i
-    ).limit(
-      per_page.to_i
-    )
+    if objects.is_a?(Array)
+      return objects.drop(offset.to_i).first(per_page.to_i)
+    else
+      return objects.offset(
+        offset.to_i
+      ).limit(
+        per_page.to_i
+      )
+    end
   end
   def generate_aid(model, column)
     loop do

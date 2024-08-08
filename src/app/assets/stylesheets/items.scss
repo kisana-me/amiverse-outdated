@@ -223,18 +223,17 @@
 /* item-panel / ip */
 
 .item-panel {
-  max-height: 27px;
+  max-height: 30px;
   display: flex;
   justify-content: space-evenly;
 }
 .ip-button {
   display: flex;
-  background: #ffffff3d;
   border-radius: 12px;
-  line-height: 21px;
+  line-height: 30px;
   font-size: 13px;
-  padding: 0 6px 0 4px;
-  height: 21px;
+  padding: 0 8px 0 4px;
+  height: 30px;
   text-align: center;
   color: var(--font-color);
   margin: 2px;
@@ -242,9 +241,12 @@
 .ip-button:hover {
   background: var(--hover-color);
 }
+.ipd-done{
+  background: #34ff2272;
+}
 .ipb-icon {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
 }

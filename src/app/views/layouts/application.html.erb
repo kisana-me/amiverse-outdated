@@ -56,38 +56,6 @@
               <%= yield %>
             </div>
           </div>
-        <% elsif layout_type == 'feed' %>
-          <% selected_tab = yield(:selected_tab) %>
-          <div class='main-header'>
-            <div class='main-header-logo'>
-            </div>
-            <div class='main-header-home'>
-              <% if selected_tab == 'home' %>
-                <%= t('.home') %>
-              <% else %>
-                <%= link_to t('.home'), root_path %>
-              <% end %>
-            </div>
-            <div class='main-header-following'>
-              <% if selected_tab == 'following' %>
-                <%= t('.following') %>
-              <% else %>
-                <%= link_to t('.following'), following_path %>
-              <% end %>
-            </div>
-            <div class='main-header-current'>
-              <% if selected_tab == 'current' %>
-                <%= t('.current') %>
-              <% else %>
-                <%= link_to t('.current'), current_path %>
-              <% end %>
-            </div>
-          </div>
-          <div class='shared-default-layout-out-container'>
-            <div class='shared-default-layout-in-container'>
-              <%= yield %>
-            </div>
-          </div>
         <% else %>
           <%= yield %>
         <% end %>

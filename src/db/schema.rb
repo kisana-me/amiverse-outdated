@@ -457,12 +457,12 @@ ActiveRecord::Schema[7.0].define(version: 905) do
   end
 
   create_table "diffusions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
-    t.bigint "diffused", null: false
-    t.bigint "diffuser", null: false
+    t.bigint "diffused_id", null: false
+    t.bigint "diffuser_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["diffused"], name: "fk_rails_847aa8acdd"
-    t.index ["diffuser"], name: "fk_rails_5248f1462e"
+    t.index ["diffused_id"], name: "fk_rails_da99593487"
+    t.index ["diffuser_id"], name: "fk_rails_1bf9c8c829"
   end
 
   create_table "emoji_categories", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
@@ -1087,8 +1087,8 @@ ActiveRecord::Schema[7.0].define(version: 905) do
   add_foreign_key "blocks", "accounts", column: "blocked"
   add_foreign_key "blocks", "accounts", column: "blocker"
   add_foreign_key "canvases", "accounts"
-  add_foreign_key "diffusions", "items", column: "diffused"
-  add_foreign_key "diffusions", "items", column: "diffuser"
+  add_foreign_key "diffusions", "accounts", column: "diffuser_id"
+  add_foreign_key "diffusions", "items", column: "diffused_id"
   add_foreign_key "emoji_categories", "categories"
   add_foreign_key "emojis", "accounts"
   add_foreign_key "follows", "accounts", column: "followed_id"

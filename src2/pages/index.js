@@ -66,6 +66,9 @@ export default function Home() {
           if (loggedIn) {
             return (
               <div>
+                フロントが未完成で不安定な為、
+                <Link href="https://api.amiverse.net/">API</Link>
+                バージョンのご使用をお勧めします。
                 こんにちは、{account.name}さん。
               </div>
             )
@@ -73,6 +76,9 @@ export default function Home() {
             return (
               <div>
                 Amiverse.netへようこそ！
+                フロントが未完成で不安定な為、
+                <Link href="https://api.amiverse.net/">API</Link>
+                バージョンのご使用をお勧めします。
                 <Link href="/login">ログイン</Link>
                 <Link href="/signup">サインアップ</Link>
               </div>

@@ -200,29 +200,50 @@
           <button class="menu-item">報告する</button>
         </div>
       </div>
-      <%= link_to item_quote_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-quote' do %>
-        <div class="ipb-icon"><%= render 'svgs/item/quote' %></div>
-        <div class="ipb-number"><%= item.quoters.size %></div>
+      <% if defined? initial_quoted %>
+        <%= link_to item_reload_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-quote' do %>
+          <div class="ipb-icon"><%= render 'svgs/item/quote' %></div>
+          <div class="ipb-number"><%= item.quoters.size %></div>
+        <% end %>
+      <% else %>
+        <%= link_to item_quote_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-quote' do %>
+          <div class="ipb-icon"><%= render 'svgs/item/quote' %></div>
+          <div class="ipb-number"><%= item.quoters.size %></div>
+        <% end %>
       <% end %>
-      <div class="ip-button ip-diffuse">
+      <%= link_to item_diffuse_path(item.aid), data: { turbo_stream: true }, class: "ip-button ip-diffuse#{item.diffused_accounts.include?(@current_account) ? ' ipd-done' : ''}" do %>
         <div class="ipb-icon"><%= render 'svgs/item/diffuse' %></div>
-        <div class="ipb-number"><%= 0 %></div>
-      </div>
-      <%= link_to item_reply_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-reply' do %>
-        <div class="ipb-icon"><%= render 'svgs/item/reply' %></div>
-        <div class="ipb-number"><%= item.repliers.size %></div>
+        <div class="ipb-number"><%= item.diffused_accounts.size %></div>
       <% end %>
-      <%= link_to item_react_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-react' do %>
-        <div class="ipb-icon"><%= render 'svgs/item/reaction' %></div>
-        <div class="ipb-number"><%= item.reactions.size %></div>
+      <% if defined? initial_replied %>
+        <%= link_to item_reload_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-reply' do %>
+          <div class="ipb-icon"><%= render 'svgs/item/reply' %></div>
+          <div class="ipb-number"><%= item.repliers.size %></div>
+        <% end %>
+      <% else %>
+        <%= link_to item_reply_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-reply' do %>
+          <div class="ipb-icon"><%= render 'svgs/item/reply' %></div>
+          <div class="ipb-number"><%= item.repliers.size %></div>
+        <% end %>
+      <% end %>
+      <% if defined? emojis %>
+        <%= link_to item_reload_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-react' do %>
+          <div class="ipb-icon"><%= render 'svgs/item/reaction' %></div>
+          <div class="ipb-number"><%= item.reactions.size %></div>
+        <% end %>
+      <% else %>
+        <%= link_to item_react_path(item.aid), data: { turbo_stream: true }, class: 'ip-button ip-react' do %>
+          <div class="ipb-icon"><%= render 'svgs/item/reaction' %></div>
+          <div class="ipb-number"><%= item.reactions.size %></div>
+        <% end %>
       <% end %>
     </div>
     <div class="item-console">
-      <% if (defined? initial_replied) %>
+      <% if defined? initial_replied %>
         返信する
         <%= render 'items/form', initial_replied: initial_replied %>
       <% end %>
-      <% if (defined? initial_quoted) %>
+      <% if defined? initial_quoted %>
         引用する
         <%= render 'items/form', initial_quoted: initial_quoted %>
       <% end %>

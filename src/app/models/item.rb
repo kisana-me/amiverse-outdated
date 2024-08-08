@@ -33,6 +33,12 @@ class Item < ApplicationRecord
   # reaction
   has_many :reactions
   has_many :emojis, through: :reactions
+  # diffusion
+  has_many :diffusions, foreign_key: 'diffused_id', class_name: 'Diffusion'
+  has_many :diffused_accounts, through: :diffusions, source: :diffuser
+  scope :with_diffused_at, -> {
+    select('items.id, items.content, items.created_at AS timestamp, \'item\' AS type')
+  }
   # validate
   validates :aid,
     presence: true,

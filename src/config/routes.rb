@@ -31,13 +31,14 @@ Rails.application.routes.draw do
 
   # === item === #
   resources :items, param: :aid do
+    get 'reload' => 'items#reload', as: 'reload'
     get 'reply' => 'items#new_reply', as: 'reply'
     get 'quote' => 'items#new_quote', as: 'quote'
     get 'react' => 'items#new_react', as: 'react'
+    get 'diffuse' => 'items#diffuse', as: 'diffuse'
     post 'reply' => 'items#create_reply', as: 'create_reply'
     post 'quote' => 'items#create_quote', as: 'create_quote'
     post 'react' => 'reactions#react', as: 'create_react'
-    # post 'diffuse' => 'items#create_diffuse', as: 'create_diffuse'
   end
 
   # === storage === #

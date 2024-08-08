@@ -5,24 +5,36 @@ class ItemsController < ApplicationController
   include ActivityPub
 
   def index
-    items = @current_account.items.where(
-      deleted: false
-    ).order(id: :desc).includes(
-      :account,
-      :images,
-      :videos,
-      :reactions,
-      :emojis,
-      :replying,
-      :repliers,
-      :quoting,
-      :quoters,
-      :canvases
-    )
+    # items = @current_account.items.where(
+    #   deleted: false
+    # ).order(id: :desc).includes(
+    #   :account,
+    #   :images,
+    #   :videos,
+    #   :reactions,
+    #   :emojis,
+    #   :replying,
+    #   :repliers,
+    #   :quoting,
+    #   :quoters,
+    #   :canvases
+    # )
+    # diffusions = Diffusion.where(diffuser: @current_account).includes(:diffused).all
+    # @combined = (items.map { |item| { type: 'item', object: item, timestamp: item.created_at } } +
+    #              diffusions.map { |diffusion| { type: 'diffusion', object: diffusion.diffused, timestamp: diffusion.created_at } })
+    #              .sort_by { |entry| entry[:timestamp] }
 
-    @page = current_page(page_param: params[:page])
-    @pages = total_page(objects: items)
-    @items = paged_objects(page: @page, objects: items)
+    # @page = current_page(page_param: params[:page])
+    # @pages = total_page(objects: @combined)
+    # @items = paged_objects(page: @page, objects: @combined)
+    items_query = Item.with_diffused_at.to_sql
+    diffusions_query = Diffusion.with_diffused_at.to_sql
+
+    union_query = "#{items_query} UNION ALL #{diffusions_query} ORDER BY timestamp DESC"
+
+    # 実行して結果をActiveRecordリレーションとして扱う
+    @items = ActiveRecord::Base.connection.execute(union_query)
+
   end
   def show
   end
@@ -87,7 +99,9 @@ class ItemsController < ApplicationController
   def destroy
     redirect_to items_url, notice: "未実装" 
   end
-
+  def reload
+    @item = get_item(aid: params[:item_aid])
+  end
   def new_reply
     #@item = Item.new
     @item = get_item(aid: params[:item_aid])
@@ -105,8 +119,19 @@ class ItemsController < ApplicationController
   end
   def diffuse
     @item = get_item(aid: params[:item_aid])
-    # 拡散する
-    redirect_to items_url, notice: "未実装" 
+    this_diffusion_params = {
+      diffuser_id: @current_account.id,
+      diffused_id: @item.id
+    }
+    if Diffusion.exists?(this_diffusion_params)
+      Diffusion.where(this_diffusion_params).delete_all
+      flash.now[:success] = '拡散を取り消しました'
+    elsif Diffusion.new(this_diffusion_params).save
+      flash.now[:success] = '拡散しました'
+    else
+      flash.now[:danger] = '拡散に失敗しました'
+      render 'items/show', status: :unprocessable_entity
+    end
   end
 
   private

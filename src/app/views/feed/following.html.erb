@@ -1,18 +1,35 @@
 <% provide(:title, t('.title')) %>
-<% provide(:layout_type, 'feed') %>
+<% provide(:layout_type, 'header') %>
 <% provide(:selected_nav, 'home') %>
-<% provide(:selected_tab, 'following') %>
 
-<div id="items">
-  <% if @items.present? %>
-    <%= render partial: 'items/item',
-      collection: @items,
-      as: :item
-    %>
-    <%= render 'shared/paging', page: @page, pages: @pages, page_to: '/' %>
-  <% else %>
-  <div>ありません</div>
-  <% end %>
-</div>
+<% content_for :header_content do %>
+  <div class='main-header-icon'>
+    <% if @current_account %>
+      <%= link_to account_path(@current_account.name_id) do %>
+        プロフ
+      <% end %>
+    <% else %>
+      <%= link_to login_path do %>
+        ログイン
+      <% end %>
+    <% end %>
+  </div>
+  <div class='main-header-home'>
+    <%= link_to t('.home'), root_path %>
+  </div>
+  <div class='main-header-following'>
+    <%= t('.following') %>
+  </div>
+  <div class='main-header-current'>
+    <%= link_to t('.current'), current_path %>
+  </div>
+  <div class='main-header-settings'>
+    <%= link_to settings_path do %>
+      設定
+    <% end %>
+  </div>
+<% end %>
+
+<%= render 'items/full_tl', timeline: @timeline, page: @page, pages: @pages %>
 
 <%= render 'items/new_button_1' %>

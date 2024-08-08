@@ -28,6 +28,8 @@ class Account < ApplicationRecord
   has_many :canvases
   belongs_to :icon, class_name: 'Image', foreign_key: 'icon_id', optional: true
   belongs_to :banner, class_name: 'Image', foreign_key: 'banner_id', optional: true
+  has_many :diffusions, class_name: 'Diffusion', foreign_key: 'diffuser_id'
+  has_many :diffused_items, through: :diffusions, source: :diffused
   # follow
   has_many :followed, class_name: 'Follow', foreign_key: 'followed_id'
   has_many :follower, class_name: 'Follow', foreign_key: 'follower_id'

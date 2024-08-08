@@ -1,0 +1,15 @@
+<%# require: timeline, page, pages %>
+<div id="items">
+  <% timeline.each do |tl| %>
+    <% if tl[:object].is_a?(Item) %>
+      <%= render 'items/item', item: tl[:object] %>
+    <% elsif tl[:object].is_a?(Diffusion) %>
+      <div><%= tl[:object].diffuser.name %>によって拡散されました</div>
+      <%= render 'items/item', item: tl[:object].diffused %>
+    <% end %>
+  <% end %>
+  <% if timeline.blank? %>
+    <div>アイテムが存在しません</div>
+  <% end %>
+  <%= render 'shared/paging', page: page, pages: pages, page_to: '/' %>
+</div>
