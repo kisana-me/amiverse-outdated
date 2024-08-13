@@ -99,7 +99,8 @@ a {
   background-color: #ff403abb;
 }
 .turbo-progress-bar {
-  background: linear-gradient(90deg, rgba(240,164,255,1) 0%, rgba(255,128,156,1) 16%, rgba(255,211,153,1) 36%, rgba(197,250,130,1) 57%, rgba(140,244,255,1) 80%, rgba(166,128,255,1) 100%);
+  //background: linear-gradient(90deg, rgba(240,164,255,1) 0%, rgba(255,128,156,1) 16%, rgba(255,211,153,1) 36%, rgba(197,250,130,1) 57%, rgba(140,244,255,1) 80%, rgba(166,128,255,1) 100%);
+  background: rgba(197,250,130,1);
 }
 ::-webkit-scrollbar{
   width: 5px;

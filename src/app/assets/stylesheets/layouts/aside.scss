@@ -1,24 +1,20 @@
-/* FORM-2 */
-.tab-container {
+aside {
   width: 260px;
   height: 100svh;
   top: 0px;
   position: sticky;
   flex-shrink: 0;
   z-index: 50;
-  display: inline-block;
+  display: none;
 }
 
-@media (max-width: 999.9px) {
-  /* FORM-1 */
-  .tab-container {
-    display: none;
+@media (min-width: 1000px) {
+  aside {
+    display: inline-block;
   }
 }
-
 @media (min-width: 1150px) {
-  /* FORM-3 */
-  .tab-container {
+  aside {
     width: 340px;
     display: inline-block;
   }

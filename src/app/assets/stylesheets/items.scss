@@ -223,17 +223,17 @@
 /* item-panel / ip */
 
 .item-panel {
-  max-height: 30px;
+  max-height: 24px;
   display: flex;
   justify-content: space-evenly;
 }
 .ip-button {
   display: flex;
   border-radius: 12px;
-  line-height: 30px;
+  line-height: 24px;
   font-size: 13px;
   padding: 0 8px 0 4px;
-  height: 30px;
+  height: 24px;
   text-align: center;
   color: var(--font-color);
 }
@@ -244,8 +244,9 @@
   background: #34ff2272;
 }
 .ipb-icon {
-  width: 30px;
-  height: 30px;
+  color: #bcbcbc;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
 }

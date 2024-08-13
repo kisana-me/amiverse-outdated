@@ -1,10 +1,9 @@
-<% provide(:layout_type, 'header') %>
+<% provide(:layout_type, 'full_header') %>
 <% provide(:title, 'みつける') %>
 <% provide(:selected_nav, 'discovery') %>
 
 <% content_for :header_content do %>
   <%= form_with url: search_path, method: :get do |f| %>
-    <%= f.label :query, "検索" %>
     <%= f.search_field :query, value: params[:query] %>
     <%= f.button "検索", name: nil, type: :submit %>
   <% end %>
