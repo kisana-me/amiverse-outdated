@@ -1,0 +1,16 @@
+<%= form_with model: @badge, url: administrations_badges_path do |f| %>
+
+  <%= f.label :name, '名前' %>
+  <%= f.text_field :name %>
+  <br />
+
+  <%= f.label :description, '説明' %>
+  <%= f.text_area :description %>
+  <br />
+
+  <%= f.label :image %>
+  <%= f.file_field :image %>
+  <br/>
+
+  <%= f.submit '作成' %>
+<% end %>

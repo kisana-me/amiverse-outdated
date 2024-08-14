@@ -1,0 +1,7 @@
+<% provide(:layout_type, 'header_text') %>
+<% provide(:header_text, 'roles') %>
+<% provide(:title, 'roles') %>
+
+<div style="overflow-y:scroll;">
+  <%= render 'administrations/shared/all_table', instead: @badges %>
+</div>

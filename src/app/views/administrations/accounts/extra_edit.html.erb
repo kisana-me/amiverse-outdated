@@ -13,6 +13,11 @@
     <%= f.label "role_aids_#{role.aid}", role.name_id %>
     <%= f.check_box :role_aids, { multiple: true, checked: @account.roles.include?(role) }, role.aid, nil %>
   <% end %>
+  <h3>Badges</h3>
+  <% Badge.all.each do |badge| %>
+    <%= f.label "badge_aids_#{badge.aid}", badge.name %>
+    <%= f.check_box :badge_aids, { multiple: true, checked: @account.badges.include?(badge) }, badge.aid, nil %>
+  <% end %>
 
   <br />
   <%= f.submit '更新' %>

@@ -16,7 +16,7 @@ class FeedController < ApplicationController
       :quoting,
       :quoters,
       :canvases,
-      account: [:icon]
+      account: [:icon, :badges]
     )
     diffusions = Diffusion.order(created_at: :desc).limit(1000)
     # 新生成機

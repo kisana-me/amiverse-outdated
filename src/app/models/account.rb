@@ -25,6 +25,8 @@ class Account < ApplicationRecord
   has_many :invitations, through: :account_invitations
   has_many :account_roles
   has_many :roles, through: :account_roles
+  has_many :account_badges
+  has_many :badges, through: :account_badges
   has_many :canvases
   belongs_to :icon, class_name: 'Image', foreign_key: 'icon_id', optional: true
   belongs_to :banner, class_name: 'Image', foreign_key: 'banner_id', optional: true

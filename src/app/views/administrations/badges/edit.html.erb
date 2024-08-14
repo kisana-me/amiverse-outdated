@@ -1,0 +1,21 @@
+<%= form_with model: @badge, url: administrations_badge_path(@badge.aid) do |f| %>
+
+  <%= f.label :name, '名前' %>
+  <%= f.text_field :name %>
+  <br />
+
+  <%= f.label :description, '説明' %>
+  <%= f.text_area :description %>
+  <br />
+
+  <% if @badge.original_key.present? %>
+    <%= image_tag @badge.image_url(variant_type: 'badges'), class: '' %>
+  <% else %>
+    <p>画像はありません</p>
+  <% end %>
+  <%= f.label :image %>
+  <%= f.file_field :image %>
+  <br/>
+
+  <%= f.submit '更新' %>
+<% end %>

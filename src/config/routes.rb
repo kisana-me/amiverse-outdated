@@ -120,14 +120,10 @@ Rails.application.routes.draw do
     resources :sessions, param: :uuid, except: %i[ show ]
     resources :items, param: :aid, except: %i[ show ]
     resources :invitations, param: :aid, except: %i[ show ]
-
-    # only admins #
-    resources :roles, param: :aid do
-      get 'add_account' => 'items#new_quote'
-      post 'add_account' => 'items#create_reply'
-    end
+    resources :roles, param: :aid
+    resources :badges, param: :aid
     resources :server_properties, param: :aid
-    #=== test ===#
+    # test
     get 'test' => 'test#index'
     get 'test/explore' => 'test#explore'
     get 'test/explore/:id' => 'test#show', constraints: { id: /.*/ }
@@ -138,7 +134,6 @@ Rails.application.routes.draw do
     post 'test/generate_ap_key_pair'
     get 'new_accounts' => 'test#new_accounts'
     post 'create_accounts' => 'test#create_accounts'
-    #===      ===#
   end
 
   namespace :v1 do

@@ -1,0 +1,9 @@
+<p><%= @badge.name %></p>
+<p><%= @badge.aid %></p>
+<p><%= @badge.description %></p>
+
+<% if @badge.original_key.present? %>
+  <%= image_tag @badge.image_url(variant_type: 'badges'), class: '' %>
+<% else %>
+  <p>画像はありません</p>
+<% end %>

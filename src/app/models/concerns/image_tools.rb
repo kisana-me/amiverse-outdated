@@ -17,35 +17,26 @@ module ImageTools
     downloaded_image = Tempfile.new(['downloaded_image'])
     converted_image = Tempfile.new(['converted_image'])
     s3.get_object(bucket: ENV["S3_BUCKET"], key: self.send(original_key_column), response_target: downloaded_image.path)
-    resize = "2048x2048>"
+    resize = "2048x2048>" # max2048
     extent = "" # 切り取る
     case variant_type
-    # icon
-    when 'icons'
-      resize = "400x400^"
-      extent = "400x400"
-    when 'tb-icons'
-      resize = "50x50^"
-      extent = "50x50"
-    # banner
-    when 'banners'
-      resize = "1600x1600^"
-      extent = "1600x1600"
-    when 'tb-banners'
-      resize = "400x400^"
-      extent = "400x400"
-    # image
-    when 'images'
+    when 'icons' # fit200
+      resize = "200x200^"
+      extent = "200x200"
+    when 'banners' # fit400x200
+      resize = "400x200^"
+      extent = "400x200"
+    when 'images' # max2048
       resize = "2048x2048>"
-    when 'tb-images'
-      resize = "700x700>"
-    when '4k-images'
+    when 'lite-images' # max720
+      resize = "720x720>"
+    when '4k-images' # max4096
       resize = "4096x4096>"
-    # emoji
-    when 'emojis'
-      resize = "200x200>"
-    when 'tb-emojis'
-      resize = "50x50>"
+    when 'emojis' # max300x200
+      resize = "300x200>"
+    when 'badges' # fit100
+      resize = "100x100^"
+      extent = "100x100"
     end
     image = MiniMagick::Image.open(downloaded_image.path)
     if image.frames.count > 1

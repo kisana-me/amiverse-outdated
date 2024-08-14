@@ -19,19 +19,19 @@
     <div class="item-account">
       <% if defined? full_display %>
         <div class="item-account-badges">
-          <%= link_to emojis_path, class: 'iab-badge',
-          style: 'border-color: #5CFF23; background: #5CFF2355;' do %>
-            <div class="iab-icon">🍭</div>
-            <div class="iab-name">
-              開発者
-            </div>
-          <% end %>
-          <%= link_to emojis_path, class: 'iab-badge',
-          style: 'border-color: #48E9FF; background: #48E9FF55;' do %>
-            <div class="iab-icon">✨</div>
-            <div class="iab-name">
-              TESTER
-            </div>
+          <% item.account.badges.each do |badge| %>
+            <%= link_to emojis_path, class: 'iab-badge', style: 'border-color: #5CFF23; background: #5CFF2355;' do %>
+              <div class="iab-icon">
+                <% if badge.original_key.present? %>
+                  <%= image_tag badge.image_url(variant_type: 'badges'), class: '' %>
+                <% else %>
+                  🍭
+                <% end %>
+              </div>
+              <div class="iab-name">
+                <%= badge.name %>
+              </div>
+            <% end %>
           <% end %>
         </div>
       <% end %>
@@ -46,8 +46,19 @@
             <div class="iai-name">
               <%= item.account.name %>
             </div>
-            <div class="iai-name_id">
-              @<%= item.account.name_id %>
+            <div class="iai-nameplate-under">
+              <div class="iai-name_id">
+                @<%= item.account.name_id %>
+              </div>
+              <% item.account.badges.each do |badge| %>
+                <div class='iai-badge'>
+                  <% if badge.original_key.present? %>
+                    <%= image_tag badge.image_url(variant_type: 'badges'), class: '' %>
+                  <% else %>
+                    🍭
+                  <% end %>
+                </div>
+              <% end %>
             </div>
           </div>
         <% end %>

@@ -43,6 +43,14 @@ class Administrations::AccountsController < Administrations::ApplicationControll
     else
       @account.roles.clear
     end
+    # badges
+    if params[:account] && params[:account][:badge_aids]
+      @account.badges.clear
+      badges_to_add = Badge.where(aid: params[:account][:badge_aids])
+      @account.badges << badges_to_add
+    else
+      @account.badges.clear
+    end
 
     if @account.save!
       flash[:success] = '変更しました'
