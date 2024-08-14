@@ -18,7 +18,7 @@ module ApDeliver
       digest: http_signature_data[1],
       to_be_signed: http_signature_data[2],
       signature: http_signature_data[3],
-      statement: statement,
+      statement: headers,
       content: body.to_json,
       response: res.body
     )

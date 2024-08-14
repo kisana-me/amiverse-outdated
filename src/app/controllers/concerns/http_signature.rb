@@ -11,7 +11,9 @@ module HttpSignature
       "(request-target): post #{URI.parse(to_url).path}",
       "date: #{current_time}",
       "host: #{to_host}",
-      "digest: SHA-256=#{digest}"].join("\n")
+      "digest: SHA-256=#{digest}",
+      "content-type: application/activity+json"
+    ].join("\n")
     signature = generate_signature(private_key, to_be_signed)
     return current_time, digest, to_be_signed, signature
   end
@@ -26,7 +28,7 @@ module HttpSignature
     statement = [
       "keyId=\"https://#{URI.parse(from_url).host}/@#{actor.name_id}#main-key\"",
       'algorithm="rsa-sha256"',
-      'headers="(request-target) date host digest"',
+      'headers="(request-target) date host digest content-type"',
       "signature=\"#{http_signature_data[3]}\""
     ].join(',')
     headers = {
