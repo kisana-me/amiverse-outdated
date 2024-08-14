@@ -1,32 +1,16 @@
 <% provide(:title, t('.title')) %>
-<% provide(:layout_type, 'header') %>
+<% provide(:layout_type, 'full_header') %>
 <% provide(:selected_nav, 'home') %>
 
 <% content_for :header_content do %>
-  <div class='main-header-icon'>
-    <% if @current_account %>
-      <%= link_to account_path(@current_account.name_id) do %>
-        プロフ
-      <% end %>
-    <% else %>
-      <%= link_to login_path do %>
-        ログイン
-      <% end %>
-    <% end %>
-  </div>
   <div class='main-header-home'>
-    <%= link_to t('.home'), root_path %>
+    <%= link_to t('feed.index.title'), root_path %>
   </div>
   <div class='main-header-following'>
-    <%= t('.following') %>
+    <%= t('feed.following.title') %>
   </div>
   <div class='main-header-current'>
-    <%= link_to t('.current'), current_path %>
-  </div>
-  <div class='main-header-settings'>
-    <%= link_to settings_path do %>
-      設定
-    <% end %>
+    <%= link_to t('feed.current.title'), current_path %>
   </div>
 <% end %>
 

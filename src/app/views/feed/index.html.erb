@@ -4,13 +4,13 @@
 
 <% content_for :header_content do %>
   <div class='main-header-home'>
-    <%= t('.home') %>
+    <%= t('feed.index.title') %>
   </div>
   <div class='main-header-following'>
-    <%= link_to t('.following'), following_path %>
+    <%= link_to t('feed.following.title'), following_path %>
   </div>
   <div class='main-header-current'>
-    <%= link_to t('.current'), current_path %>
+    <%= link_to t('feed.current.title'), current_path %>
   </div>
 <% end %>
 

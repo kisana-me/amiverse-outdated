@@ -7,7 +7,7 @@ module TrendManagement
       natto.parse(item.content) do |n|
         surface = n.surface
         feature = n.feature.split(',')
-        if surface.length <= 3 || surface.match?(/[!?！？\s　]/) || (surface.match?(/\A[a-zA-Z]+\z/) && !(feature[0] == "名詞" && feature[1] == "固有名詞"))
+        if surface.length <= 3 || surface.match?(/[!?！？　「」\s.,\/#@&"'$%()=\-~^\\|_{}\[\]。、*+;:`]/) || (surface.match?(/\A[a-zA-Z]+\z/) && !(feature[0] == "名詞" && feature[1] == "固有名詞"))
           next
         end
         word_count[surface] += 1
