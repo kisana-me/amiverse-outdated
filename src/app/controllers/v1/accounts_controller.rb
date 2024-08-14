@@ -1,4 +1,5 @@
 class V1::AccountsController < V1::ApplicationController
+  include AccountManagement
   before_action :set_account, only: %i[ show followers following ]
   def show
     render json: account_data(@account)
@@ -70,7 +71,7 @@ class V1::AccountsController < V1::ApplicationController
   end
   private
   def set_account
-    @account = find_account_by_nid(params[:name_id])
+    @account = find_account(params[:name_id])
   end
   def account_params
     params.require(:account).permit(

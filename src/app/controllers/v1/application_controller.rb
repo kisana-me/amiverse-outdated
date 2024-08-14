@@ -65,9 +65,9 @@ class V1::ApplicationController < ApplicationController
       :meta,
       :cache,
       :bot,
-      :kind,
-      :public_key
+      :kind
     ])
+    account_data_json['public_key'] = account.ap_public_key
     account_data_json['icon_url'] = ''
     account_data_json['banner_url'] = ''
     account_data_json['summary'] = account.description
