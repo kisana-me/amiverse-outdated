@@ -13,9 +13,9 @@
   <textarea><%= @key_pair[:public_key] %></textarea>
   <br/>
 <% end %>
-<%= button_to("生成", admin_test_generate_path,method: :post, data: { turbo: false }) %>
+<%= button_to("生成", administrations_test_generate_path,method: :post, data: { turbo: false }) %>
 <h2>Verify</h2>
-<%= form_with url: admin_test_verify_path, data: { turbo: false } do |f| %>
+<%= form_with url: administrations_test_verify_path, data: { turbo: false } do |f| %>
   <%= f.label :url, style: "display: block" %>
   <%= f.text_area :url, value: @verify.present? ? @verify[0] : '' %>
   <br/>
@@ -43,7 +43,7 @@
   <%= f.submit '検証' %>
 <% end %>
 <h2>Digest</h2>
-<%= form_with url: admin_test_digest_path, data: { turbo: false } do |f| %>
+<%= form_with url: administrations_test_digest_path, data: { turbo: false } do |f| %>
   <%= f.label :digest, style: "display: block" %>
   <%= f.text_area :digest, value: @digest.present? ? @digest : '' %>
   <br/>

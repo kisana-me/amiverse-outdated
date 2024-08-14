@@ -68,8 +68,8 @@ class Administrations::TestController < Administrations::ApplicationController
   def verify
     begin
       message = params[:message]
-      en_sign = generate_signature(@current_account.private_key, message)
-      result = verify_signature(@current_account.public_key, params[:signature], message)
+      en_sign = generate_signature(@current_account.ap_private_key, message)
+      result = verify_signature(@current_account.ap_public_key, params[:signature], message)
     rescue => e
       Rails.logger.info('====Error====')
       Rails.logger.info(e.message)
