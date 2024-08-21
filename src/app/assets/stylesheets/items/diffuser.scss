@@ -1,0 +1,87 @@
+.item-diffuser {
+  display: flex;
+  align-items: center;
+}
+.item-diffuser-text {
+  width: 56px;
+  height: 30px;
+  background: #444;
+  line-height: 30px;
+  border-radius: 7px;
+  flex-shrink: 0;
+  padding: 0 4px;
+}
+.item-diffuser-info {
+  margin: 0 0 0 6px;
+  display: flex;
+  height: 30px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-grow: 1;
+}
+.idi-plate {
+  color: var(--font-color);
+  min-width: 0;
+  display: flex;
+  flex-grow: 1;
+}
+.idi-icon-wrap {
+  border: 1px solid #2eeaff;
+  border-radius: 44px;
+  display: flex;
+  align-items: center;
+  aspect-ratio: 1 / 1;
+  justify-content: center;
+  height: 30px;
+  box-sizing: border-box;
+  position: relative;
+}
+.idi-status {
+  width: 4px;
+  height: 4px;
+  background: #ff1515;
+  border-radius: 4px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.idi-icon {
+  border-radius: 24px;
+  height: 26px;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  object-position: top center;
+}
+.idi-nameplate {
+  margin-left: 6px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.idi-name {
+  font-size: 14px;
+  line-height: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.idi-nameplate-under {
+  display: flex;
+  height: 12px;
+}
+.idi-name_id {
+  font-size: 10px;
+  line-height: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.idi-badges {
+  display: flex;
+  align-items: center;
+}
+.idi-badges img {
+  height: 12px;
+  margin: 0 0 0 4px;
+}

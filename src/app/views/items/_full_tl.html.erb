@@ -4,8 +4,7 @@
     <% if tl[:object].is_a?(Item) %>
       <%= render 'items/item', item: tl[:object] %>
     <% elsif tl[:object].is_a?(Diffusion) %>
-      <div><%= tl[:object].diffuser.name %>によって拡散されました</div>
-      <%= render 'items/item', item: tl[:object].diffused %>
+      <%= render 'items/item', item: tl[:object].diffused, diffuser: tl[:object].diffuser %>
     <% end %>
   <% end %>
   <% if timeline.blank? %>

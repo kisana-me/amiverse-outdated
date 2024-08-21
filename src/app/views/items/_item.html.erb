@@ -8,16 +8,53 @@
 
 <div class="item" id="item_<%= item.aid %>">
   <div class="item-left">
-    <div class="item-left-top <%= (defined? full_display) ? 'ilt-full' : 'ilt-summary' %><%= ((defined? show_replying) || (defined? showing)) && item.replying.present? ? ' il-display' : '' %>">
+    <div class="item-left-top<%= ((defined? show_replying) || (defined? showing)) && item.replying.present? ? ' il-display' : '' %>">
     </div>
     <% middle_flag = (((defined? show_replying) || (defined? showing)) && item.replying.present?) || (((defined? show_repliers) || (defined? showing)) && item.repliers.present?) %>
     <div class="item-left-middle<%= middle_flag ? ' il-display' : '' %>"></div>
-    <div class="item-left-bottom <%= (defined? full_display) ? 'ilb-full' : 'ilb-summary' %><%= ((defined? show_repliers) || (defined? showing)) && item.repliers.present? ? ' il-display' : '' %>">
+    <div class="item-left-bottom<%= ((defined? show_repliers) || (defined? showing)) && item.repliers.present? ? ' il-display' : '' %>">
     </div>
   </div>
   <div class="item-wrap">
+    <% if defined? diffuser %>
+      <div class="item-diffuser">
+        <div class="item-diffuser-text">♻️ 拡散</div>
+        <div class="item-diffuser-info">
+          <%= link_to account_path(diffuser.name_id), class: 'idi-plate' do %>
+            <div class="idi-icon-wrap">
+              <div class="idi-status">
+              </div>
+              <% if diffuser.icon %>
+                <%= image_tag diffuser.icon.image_url(variant_type: 'icons'), class: 'idi-icon' %>
+              <% else %>
+                <img src="/images/icon.webp" class="idi-icon" />
+              <% end %>
+            </div>
+            <div class="idi-nameplate">
+              <div class="idi-name">
+                <%= diffuser.name %>
+              </div>
+              <div class="idi-nameplate-under">
+                <div class="idi-name_id">
+                  @<%= diffuser.name_id %>
+                </div>
+                <% diffuser.badges.each do |badge| %>
+                  <div class='idi-badges'>
+                    <% if badge.original_key.present? %>
+                      <%= image_tag badge.image_url(variant_type: 'badges'), class: '' %>
+                    <% else %>
+                      🍭
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
     <div class="item-account">
-      <% if defined? full_display %>
+      <% if false %>
         <div class="item-account-badges">
           <% item.account.badges.each do |badge| %>
             <%= link_to emojis_path, class: 'iab-badge', style: 'border-color: #5CFF23; background: #5CFF2355;' do %>
@@ -37,11 +74,15 @@
       <% end %>
       <div class="item-account-info">
         <%= link_to account_path(item.account.name_id), class: 'iai-plate' do %>
-          <% if item.account.icon %>
-            <%= image_tag item.account.icon.image_url(variant_type: 'icons'), class: 'iai-icon' %>
-          <% else %>
-            <img src="/images/icon.webp" class="iai-icon" />
-          <% end %>
+          <div class="iai-icon-wrap">
+            <div class="iai-status">
+            </div>
+            <% if item.account.icon %>
+              <%= image_tag item.account.icon.image_url(variant_type: 'icons'), class: 'iai-icon' %>
+            <% else %>
+              <img src="/images/icon.webp" class="iai-icon" />
+            <% end %>
+          </div>
           <div class="iai-nameplate">
             <div class="iai-name">
               <%= item.account.name %>
@@ -51,7 +92,7 @@
                 @<%= item.account.name_id %>
               </div>
               <% item.account.badges.each do |badge| %>
-                <div class='iai-badge'>
+                <div class='iai-badges'>
                   <% if badge.original_key.present? %>
                     <%= image_tag badge.image_url(variant_type: 'badges'), class: '' %>
                   <% else %>
@@ -79,53 +120,22 @@
         <% end %>
       </div>
     </div>
-    <% if defined? full_display %>
-      <div class="item-details">
-        <div class="id-tags">
-          <% if item.replying.size > 0 %>
-            <%= link_to item_path(item.aid), class: 'id-tag' do %>
-              <div class="id-tag-icon">←</div>
-              <div class="id-tag-name">返信</div>
-            <% end %>
-          <% end %>
-          <% if item.quoting.size > 0 %>
-            <%= link_to item_path(item.aid), class: 'id-tag' do %>
-              <div class="id-tag-icon">→</div>
-              <div class="id-tag-name">引用</div>
-            <% end %>
-          <% end %>
-        </div>
-        <%= link_to item_path(item.aid), class: 'id-text' do %>
-          <%= item.human_attribute_enum(:visibility) %>・<%= item.created_at.strftime("%Y/%m/%d/ %k:%M:%S") %>
-        <% end %>
+    <%= link_to item_path(item.aid), class: 'item-details' do %>
+      <div class="">
+          <%= '💬 返信' if (item.replying.size > 0) %>
+          <%= '💭 引用' if (item.quoting.size > 0) %>
       </div>
-    <% else %>
-      <div class="item-summary-details">
-        <div class="">
-          <%= link_to item_path(item.aid), class: 'id-text' do %>
-            <%= item.human_attribute_enum(:visibility) %>
-            <%= "・#{item.human_attribute_enum(:usage_type)}" if (item.usage_type != 'personal') %>
-            <%= '・返信' if (item.replying.size > 0) %>
-            <%= '・引用' if (item.quoting.size > 0) %>
-          <% end %>
-        </div>
-        <div class="">
-          <%= link_to item_path(item.aid), class: 'id-text' do %>
-            <%= item.viewed_counter %>回・<%= item.created_at.strftime("%m/%d/ %k:%M") %>
-          <% end %>
-        </div>
+      <div class="">
+        <%= "・#{item.human_attribute_enum(:usage_type)}" if (item.usage_type != 'personal') %>
       </div>
     <% end %>
     <div class="item-content">
       <%= safe_join(item.content.split("\n"),tag(:br)) %>
     </div>
     <div class="item-media" data-controller="image-viewer">
-
-
       <% item.images.each do |image| %>
         <%= image_tag image.image_url, class: 'item-image', data: { action: "click->image-viewer#openViewer", image_viewer_target: "previewImage" } %>
       <% end %>
-
       <div class="fullscreen-image-viewer hidden" data-image-viewer-target="viewer">
         <div class="fiv-background" data-image-viewer-target="background" data-action="click->image-viewer#closeImage"></div>
         <div class="fiv-container" data-image-viewer-target="container"></div>
@@ -134,13 +144,6 @@
         <button class="fiv-prev" data-image-viewer-target="prev" data-action="click->image-viewer#prevImage">◀</button>
         <button class="fiv-next" data-image-viewer-target="next" data-action="click->image-viewer#nextImage">▶</button>
       </div>
-
-
-
-
-
-
-
       <% item.canvases.each do |canvas| %>
         <%= image_tag canvas.image_url, class: 'item-image', style: 'image-rendering: pixelated;' %>
       <% end %>
@@ -158,19 +161,12 @@
         </script>
       <% end %>
     </div>
-    <% if defined? full_display %>
-      <div class="item-details">
-        <div class="id-tags">
-          <% if item.usage_type != 'personal' %>
-            <%= link_to item_path(item.aid), class: 'id-tag' do %>
-              <div class="id-tag-icon">❕</div>
-              <div class="id-tag-name"><%= item.human_attribute_enum(:usage_type) %></div>
-            <% end %>
-          <% end %>
-        </div>
-        <%= link_to item_path(item.aid), class: 'id-text' do %>
-          <%= item.viewed_counter %>回・<%= item.aid %>
-        <% end %>
+    <%= link_to item_path(item.aid), class: 'item-details' do %>
+      <div class="">
+        <%= item.human_attribute_enum(:visibility) %>
+      </div>
+      <div class="">
+        <%= item.viewed_counter %>回, <%= item.created_at.strftime("%Y/%m/%d/ %k:%M") %>
       </div>
     <% end %>
     <div class="item-reactions">
