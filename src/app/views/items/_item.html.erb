@@ -161,6 +161,70 @@
         </script>
       <% end %>
     </div>
+    
+    <% if (item.quoting.size > 0) %>
+      <div class="item-show-quoting">
+        <div class="item-account-info">
+          <%= link_to account_path(item.quoting.first.account.name_id), class: 'iai-plate' do %>
+            <div class="iai-icon-wrap">
+              <div class="iai-status">
+              </div>
+              <% if item.quoting.first.account.icon %>
+                <%= image_tag item.quoting.first.account.icon.image_url(variant_type: 'icons'), class: 'iai-icon' %>
+              <% else %>
+                <img src="/images/icon.webp" class="iai-icon" />
+              <% end %>
+            </div>
+            <div class="iai-nameplate">
+              <div class="iai-name">
+                <%= item.quoting.first.account.name %>
+              </div>
+              <div class="iai-nameplate-under">
+                <div class="iai-name_id">
+                  @<%= item.quoting.first.account.name_id %>
+                </div>
+                <% item.quoting.first.account.badges.each do |badge| %>
+                  <div class='iai-badges'>
+                    <% if badge.original_key.present? %>
+                      <%= image_tag badge.image_url(variant_type: 'badges'), class: '' %>
+                    <% else %>
+                      🍭
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <div class="item-content">
+          <%= safe_join(item.quoting.first.content.split("\n"),tag(:br)) %>
+        </div>
+        <div class="item-media" data-controller="image-viewer">
+          <% item.quoting.first.images.each do |image| %>
+            <%= image_tag image.image_url, class: 'item-image', data: { action: "click->image-viewer#openViewer", image_viewer_target: "previewImage" } %>
+          <% end %>
+          <div class="fullscreen-image-viewer hidden" data-image-viewer-target="viewer">
+            <div class="fiv-background" data-image-viewer-target="background" data-action="click->image-viewer#closeImage"></div>
+            <div class="fiv-container" data-image-viewer-target="container"></div>
+            <button class="fiv-reset" data-image-viewer-target="reset" data-action="click->image-viewer#resetImage">↺</button>
+            <button class="fiv-close" data-image-viewer-target="close" data-action="click->image-viewer#closeImage">×</button>
+            <button class="fiv-prev" data-image-viewer-target="prev" data-action="click->image-viewer#prevImage">◀</button>
+            <button class="fiv-next" data-image-viewer-target="next" data-action="click->image-viewer#nextImage">▶</button>
+          </div>
+          <% item.quoting.first.canvases.each do |canvas| %>
+            <%= image_tag canvas.image_url, class: 'item-image', style: 'image-rendering: pixelated;' %>
+          <% end %>
+        </div>
+        <%= link_to item_path(item.quoting.first.aid), class: 'item-details' do %>
+          <div class="">
+            <%= item.quoting.first.human_attribute_enum(:visibility) %>
+          </div>
+          <div class="">
+            <%= item.quoting.first.viewed_counter %>回, <%= item.quoting.first.created_at.strftime("%Y/%m/%d/ %k:%M") %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
     <%= link_to item_path(item.aid), class: 'item-details' do %>
       <div class="">
         <%= item.human_attribute_enum(:visibility) %>
