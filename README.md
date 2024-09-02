@@ -1,23 +1,16 @@
 # Amiverse
 
-インターネットの要素をごちゃまぜにした全く新しいソーシャルメディアです。
+新しいソーシャルメディアです!
 
-OSSではないですが、[インストール手順](https://github.com/Kisana528/amiverse/wiki/Install)を見れば皆さん簡単に利用できます。
+# 構築方法
 
-[Wiki](https://github.com/Kisana528/amiverse/wiki)の方にいろいろ書いてます。
-
-
-
-
-
-
-
-# 本番環境構築方法
+Dockerさえあればすぐに構築可能です
 
 ## ダウンロード
+
 クローンします
 ```
-git clone https://github.com/Kisana528/amiverse.git
+git clone https://github.com/kisana-me/amiverse.git
 ```
 権限等を適切に設定してください
 ```
@@ -37,6 +30,7 @@ git reset --hard origin/main
 ```
 
 ## 作成
+
 app内bashに入る
 ```
 docker compose run --rm app bash
@@ -54,7 +48,7 @@ db作成とマイグレート
 rails db:create && rails db:migrate
 ```
 ブラウザで[MiniIO Console](http://localhost:9001/)を開きバケットと、
-プレフィックス'variants'の読み取り権限付与と、リージョンを設定。
+プレフィックス'variants'の読み取り権限付与と、リージョンを設定
 seedあれば./src/db/seeds.rbを保存後
 ```
 rails db:seed
@@ -71,9 +65,10 @@ Docker Composeで起動
 ```
 docker compose up -d --build
 ```
-以上で完了。
+以上で完了
 
 ## メンテナンス
+
 compose起動中app内に入るには
 ```
 docker container exec -it amiverse-app-1 bash

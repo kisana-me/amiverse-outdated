@@ -10,7 +10,7 @@ module ApplicationHelper
     end
   end
   def full_url(path)
-    return File.join(ENV["API_URL"], path)
+    return File.join(ENV["FRONT_URL"], path)
   end
   def to_page(current_page, where_to_go)
     current_page = current_page.to_i
