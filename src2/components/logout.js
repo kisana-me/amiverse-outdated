@@ -1,13 +1,10 @@
 import React, { useContext } from 'react'
 import axios from '@/lib/axios'
-import { appContext } from '@/pages/_app'
+import { useMainContext } from '@/contexts/main_context'
 import { useRouter } from 'next/router'
 
 export default function Logout() {
-  const setLoginLoading = useContext(appContext).setLoginLoading
-  const loggedIn = useContext(appContext).loggedIn
-  const setLoggedIn = useContext(appContext).setLoggedIn
-  const setFlash = useContext(appContext).setFlash
+  const { setLoginLoading, loggedIn, setLoggedIn, setFlash } = useMainContext()
   const router = useRouter()
 
   const handleLogout = async () => {

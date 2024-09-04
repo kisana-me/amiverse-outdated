@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react'
 import axios from '@/lib/axios'
-import {appContext} from '@/pages/_app'
+import { useMainContext } from '@/contexts/main_context'
 import ItemAccount from '@/components/item_account'
 import Post from '@/components/post'
 
 export default function Items() {
-  const loggedIn = useContext(appContext).loggedIn
+  const { loggedIn } = useMainContext()
   const [items, setItems] = useState([])
   let ignore = false
 

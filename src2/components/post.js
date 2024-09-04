@@ -1,10 +1,9 @@
 import React, { useState, useContext } from 'react'
 import axios from '@/lib/axios'
-import { appContext } from '@/pages/_app'
+import { useMainContext } from '@/contexts/main_context'
 
 export default function Post() {
-  const setFlash = useContext(appContext).setFlash
-  const loggedIn = useContext(appContext).loggedIn
+  const { loggedIn, setFlash } = useMainContext()
   const [content, setContent] = useState('')
   const [nsfw, setNsfw] = useState(false)
   const [cw, setCw] = useState(false)

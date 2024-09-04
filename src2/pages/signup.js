@@ -1,14 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react'
 import axios from '@/lib/axios'
-import { appContext } from './_app'
 import { useRouter } from 'next/router'
+import { useMainContext } from '@/contexts/main_context'
 
 export default function Signup() {
-  const loggedIn = useContext(appContext).loggedIn
-  const setLoggedIn = useContext(appContext).setLoggedIn
-  const loginStatus = useContext(appContext).loginStatus
-  const setLoginStatus = useContext(appContext).setLoginStatus
-  const setFlashMessage = useContext(appContext).setFlashMessage
+  const { loggedIn, setLoggedIn, loginStatus, setLoginStatus, setFlashMessage } = useMainContext()
   const router = useRouter()
   const [signupStatus, setSignupStatus] = useState('未確認')
   const [invitationChecked, setInvitationChecked] = useState(false)

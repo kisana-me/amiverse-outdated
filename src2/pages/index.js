@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from '@/lib/axios'
 import Link from 'next/link'
-import {MaterialSymbols10k, MaterialSymbolsHomeRounded, JisakuMenuBar, HomeSvg, HomeFrameSvg} from '@/lib/svg'
+import { MaterialSymbols10k, MaterialSymbolsHomeRounded, JisakuMenuBar, HomeSvg, HomeFrameSvg } from '@/lib/svg'
 import HeaderText from '@/components/header_text'
 import Items from '@/components/items'
 import { useMainContext } from '@/contexts/main_context'

@@ -1,7 +1,7 @@
 import axios from '@/lib/axios'
 import { useContext, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { appContext } from '@/pages/_app'
+import { useMainContext } from '@/contexts/main_context'
 import Link from 'next/link'
 import Image from 'next/image'
 import Items from '@/components/items'
@@ -103,8 +103,7 @@ export async function getServerSideProps({req, res, context, query}) {
 
 export default function Account({ isActivity }) {
   if(!isActivity){
-    const setFlash = useContext(appContext).setFlash
-    const loggedIn = useContext(appContext).loggedIn
+    const { loggedIn, setFlash } = useMainContext()
     const { query = {} } = useRouter()
     const [account, setAccount] = useState({})
     const [scrollY, setScrollY] = useState(1)
