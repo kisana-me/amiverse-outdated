@@ -1,6 +1,21 @@
 body, h1, h2, h3, p {
   margin: 0;
 }
+html {
+  scrollbar-width: thin;
+}
+.html-light {
+  background-color: #ffffff;
+  scrollbar-color: #000000 #ffffff;
+}
+.html-dark {
+  background-color: #000000;
+  scrollbar-color: #ffffff #000000;
+}
+a {
+  text-decoration: none;
+  display: inline-block;
+}
 :root {
   /* Main Settings */
   --color-1: white;
@@ -29,47 +44,34 @@ body, h1, h2, h3, p {
   --dark-9: #e7e7e7;
 }
 :root .light-mode {
-  --background-color: #cecece;
-  --main-container-background-color: #ffffff;
-  --font-color: black;
+  --background-color: #fff;
+  --font-color: #000;
   --link-color: var(--light-0);
-  --border-color: #000000;
-  --name-color: #4cfec354;
-  --fixed-name-color: #ffffff99;
-  --profile-color: #ccd7ec;
-  --account-tab-color: #88d095;
+  --border-color: #acacac;
+  --transparent-background-color: #0000003f;
   --content-color: #fff;
   --shadow-color: #808080;
-  --blur-color: #0008;
+  --blur-color: #fff8;
   --primary-color: blue;
+  --button-color: #000;
+  --button-font-color: #fff;
+  --hover-color: #b5b5b588;
+  --inconspicuous-font-color: #6b6b6b;
+  --inconspicuous-background-color: #d8d8d8;
 }
 :root .dark-mode {
-  --background-color: #1d1d1d;
-  --main-container-background-color: #141414;
-  --font-color: white;
+  --background-color: #000;
+  --font-color: #fff;
   --link-color: var(--dark-0);
-  --border-color: #fff;
-  --name-color: #dc59d194;
-  --fixed-name-color: #00000099;
-  --profile-color: #2c2f35;
-  --account-tab-color: #2c3d2f;
+  --border-color: #7c7c7c;
+  --transparent-background-color: #00000060;
   --content-color: #141414;
   --shadow-color: #808080;
   --blur-color: #0008;
   --primary-color: darkblue;
-}
-a {
-  color: var(--link-color);
-  text-decoration: none;
-  display: inline-block;
-}
-::-webkit-scrollbar{
-  width: 5px;
-  height: 5px;
-}
-::-webkit-scrollbar-track{
-  background-color: #232323;
-}
-::-webkit-scrollbar-thumb{
-  background-color: #f4bfbf;
+  --button-color: #fff;
+  --button-font-color: #000;
+  --hover-color: #fff8;
+  --inconspicuous-font-color: #bcbcbc;
+  --inconspicuous-background-color: #444;
 }

@@ -1,28 +1,23 @@
-import React, { useEffect, useState, useContext, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from '@/lib/axios'
 import Link from 'next/link'
-import {appContext} from '@/pages/_app'
 import {MaterialSymbols10k, MaterialSymbolsHomeRounded, JisakuMenuBar, HomeSvg, HomeFrameSvg} from '@/lib/svg'
 import HeaderText from '@/components/header_text'
 import Items from '@/components/items'
+import { useMainContext } from '@/contexts/main_context'
 
 export default function Home() {
-  const loading = useContext(appContext).loading
-  const loggedIn = useContext(appContext).loggedIn
-  const modalTrigger = useContext(appContext).modalTrigger
-  const account = useContext(appContext).account
-  const setFlashKind = useContext(appContext).setFlashKind
-  const setFlashMessage = useContext(appContext).setFlashMessage
+  const {loading, loggedIn, account, setFlashKind, setFlashMessage} = useMainContext()
   const [loadItems, setloadItems] = useState(true)
-  const [items, setItems] = useState([])
+  const [timeline, setTimeline] = useState([])
   const [page, setPage] = useState(1)
 
   useEffect(() => {
     if (!loading) {
       const fetchItems = async () => {
-        await axios.post('/tl/current', {'page': page})
+        await axios.post('/tl', {'page': page})
           .then(res => {
-            setItems(res.data)
+            setTimeline(res.data)
             setloadItems(false)
           })
           .catch(err => {
@@ -92,7 +87,7 @@ export default function Home() {
           <HomeSvg width="2em" height="2em" />
         </div>
         <div>
-          <Items items={items} loadItems={loadItems} />
+          <Items items={timeline} loadItems={loadItems} />
         </div>
       </HeaderText>
     </>

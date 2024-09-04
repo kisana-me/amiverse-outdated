@@ -26,51 +26,53 @@
     <% dark_mode = false %>
     <% dark_mode ||= session[:setting]['dark_mode'] if session[:setting] %>
     <% dark_mode ||= @current_account.settings['default']['dark_mode'] if @current_account && @current_account.settings['default'] %>
-    <div class="main-container <%= dark_mode ? 'dark-mode' : 'light-mode' %>" id="main-container">
-      <%= render 'layouts/header' %>
-      <main>
-        <% layout_type = yield(:layout_type) %>
-        <% if layout_type == 'default' %>
-          <div class='shared-default-layout-out-container'>
-            <div class='shared-default-layout-in-container'>
-              <%= yield %>
+    <div class="wrap <%= dark_mode ? 'dark-mode' : 'light-mode' %> <%= false ? 'red-theme' : 'green-theme' %>">
+      <div class="container">
+        <%= render 'layouts/header' %>
+        <main>
+          <% layout_type = yield(:layout_type) %>
+          <% if layout_type == 'default' %>
+            <div class='shared-default-layout-out-container'>
+              <div class='shared-default-layout-in-container'>
+                <%= yield %>
+              </div>
             </div>
-          </div>
-        <% elsif layout_type == 'header' %>
-          <div class='main-header'>
-            <%= yield(:header_content) %>
-          </div>
-          <div class='shared-default-layout-out-container'>
-            <div class='shared-default-layout-in-container'>
-              <%= yield %>
+          <% elsif layout_type == 'header' %>
+            <div class='main-header'>
+              <%= yield(:header_content) %>
             </div>
-          </div>
-        <% elsif layout_type == 'full_header' %>
-          <%= render 'layouts/main_full_header' %>
-          <div class='shared-default-layout-out-container'>
-            <div class='shared-default-layout-in-container'>
-              <%= yield %>
+            <div class='shared-default-layout-out-container'>
+              <div class='shared-default-layout-in-container'>
+                <%= yield %>
+              </div>
             </div>
-          </div>
-        <% elsif layout_type == 'header_text' %>
-          <div class='main-header'>
-            <div class='main-header-text'>
-              <%= yield(:header_text) %>
+          <% elsif layout_type == 'full_header' %>
+            <%= render 'layouts/main_full_header' %>
+            <div class='shared-default-layout-out-container'>
+              <div class='shared-default-layout-in-container'>
+                <%= yield %>
+              </div>
             </div>
-          </div>
-          <div class='shared-default-layout-out-container'>
-            <div class='shared-default-layout-in-container'>
-              <%= yield %>
+          <% elsif layout_type == 'header_text' %>
+            <div class='main-header'>
+              <div class='main-header-text'>
+                <%= yield(:header_text) %>
+              </div>
             </div>
+            <div class='shared-default-layout-out-container'>
+              <div class='shared-default-layout-in-container'>
+                <%= yield %>
+              </div>
+            </div>
+          <% else %>
+            <%= yield %>
+          <% end %>
+          <div class="flash" id="flash">
+            <%= render 'shared/flash' %>
           </div>
-        <% else %>
-          <%= yield %>
-        <% end %>
-        <div class="flash" id="flash">
-          <%= render 'shared/flash' %>
-        </div>
-      </main>
-      <%= render 'layouts/aside' %>
+        </main>
+        <%= render 'layouts/aside' %>
+      </div>
     </div>
   </body>
 </html>

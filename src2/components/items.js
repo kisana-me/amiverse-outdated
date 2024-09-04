@@ -20,7 +20,7 @@ export default function Items({ items = [], loadItems = false }) {
             return (
               <>
                 {items.map(item => (
-                  <Item key={item.aid} item={item} />
+                  <Item key={item.item.aid} item={item.item} />
                 ))}
               </>
             )

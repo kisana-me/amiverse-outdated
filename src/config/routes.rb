@@ -140,7 +140,7 @@ Rails.application.routes.draw do
     root 'resources#index'
 
     # session
-    post 'sessions/new' => 'sessions#new'
+    get 'sessions/new' => 'sessions#new'
     post 'sessions/check' => 'sessions#check'
     post 'login' => 'sessions#login'
     delete 'logout' => 'sessions#logout'

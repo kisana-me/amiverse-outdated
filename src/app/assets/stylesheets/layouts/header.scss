@@ -2,7 +2,6 @@ header {
   width: 100%;
   height: 60px;
   position: fixed;
-  top: auto;
   bottom: 0px;
   padding: 0px;
   box-sizing: border-box;
@@ -10,6 +9,7 @@ header {
   background: var(--blur-color);
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   z-index: 110;
 }
 /* 三つの要素 */
@@ -72,6 +72,9 @@ nav {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.header-nav-post-remover {
+  display: none;
+}
 .header-new-item {
   display: none;
   color: var(--button-font-color);
@@ -88,7 +91,7 @@ nav {
 
 
 
-@media (min-width: 700px) {
+@media (min-width: 700px) and (min-height: 660px) {
   header {
     width: 70px;
     height: 100svh;
@@ -114,7 +117,7 @@ nav {
     flex-direction: column;
     justify-content: normal;
   }
-  .header-new-item {
+  .header-nav-post-remover {
     display: flex;
   }
 }

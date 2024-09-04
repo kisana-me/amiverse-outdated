@@ -48,13 +48,13 @@ export default function SkeletonItem({  }) {
       <style jsx>{`
 
         .item-skeleton {
-          background: var(--background-color);
+          background: #373737;
           border-radius: 7px;
         }
         .no-item-skeleton {
           position: absolute;
           display: block;
-          background: var(--background-color);
+          background: #373737;
           overflow: hidden;
           z-index: 3;
           margin-top: 10px;

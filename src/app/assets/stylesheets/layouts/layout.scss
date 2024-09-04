@@ -1,4 +1,5 @@
-.main-container {
+.wrap {}
+.container {
   display: flex;
   background-color: var(--background-color);
   color: var(--font-color);
@@ -8,7 +9,6 @@ main {
   min-height: 100svh;
   padding-bottom: 60px;
   box-sizing: border-box;
-  background-color: var(--background-color);
 }
 .shared-default-layout-in-container {
   width: 100%;
@@ -22,7 +22,7 @@ main {
 
 
 
-@media (min-width: 700px) {
+@media (min-width: 700px) and (min-height: 660px) {
   main {
     border-left: 0.5px solid var(--border-color);
     width: calc(100% - 70px);
