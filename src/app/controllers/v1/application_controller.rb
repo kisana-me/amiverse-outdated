@@ -121,7 +121,7 @@ class V1::ApplicationController < ApplicationController
     timeline_data_json = tl.map do |c|
       if c[:object].is_a?(Item)
         { object: 'item', item: item_data(c[:object]) }
-      elsif tl[:object].is_a?(Diffusion)
+      elsif c[:object].is_a?(Diffusion)
         { object: 'diffuse', item: item_data(c[:object].diffused), diffuser: with_account_data(c[:object].diffuser) }
       end
     end
