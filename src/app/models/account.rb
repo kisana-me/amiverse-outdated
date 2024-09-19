@@ -96,6 +96,21 @@ class Account < ApplicationRecord
     end
   end
 
+  def icon_url
+    if self.icon
+      self.icon.image_url(variant_type: 'icons')
+    else
+      full_back_url("/images/icon.webp")
+   end
+  end
+  def banner_url
+    if self.banner
+      self.banner.image_url(variant_type: 'banners')
+    else
+      full_back_url("/images/banner.webp")
+   end
+  end
+
   def check_allowed_content
     if activitypub # ap keysがあるか
       if ap_private_key.blank? || ap_public_key.blank?

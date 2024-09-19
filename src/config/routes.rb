@@ -145,11 +145,10 @@ Rails.application.routes.draw do
     post 'login' => 'sessions#login'
     delete 'logout' => 'sessions#logout'
 
-    # timeline
-    post 'tl' => 'timelines#index'
-    post 'tl/follow' => 'timelines#follow'#
-    post 'tl/current' => 'timelines#current'#
-    post 'tl/group/:group_aid' => 'timelines#group'#
+    # feed
+    post 'feed/index' => 'feed#index'
+    post 'feed/follow' => 'feed#follow'
+    post 'feed/current' => 'feed#current'
 
     # account
     post '@:name_id' => 'accounts#show', as: 'account'

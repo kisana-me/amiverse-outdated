@@ -7,7 +7,7 @@
   <% if @item.account.icon %>
     <% provide(:image, @item.account.icon.image_url(variant_type: 'icons')) %>
   <% else %>
-    <% provide(:image, full_url('/images/icon.webp')) %>
+    <% provide(:image, full_front_url('/images/icon.webp')) %>
   <% end %>
 
 

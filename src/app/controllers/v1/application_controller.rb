@@ -5,17 +5,17 @@ class V1::ApplicationController < ApplicationController
 
   def api_admin_account
     unless @current_account&.administrator?
-      render status: 403
+      head :forbidden
     end
   end
   def api_logged_in_account
     unless @current_account
-      render status: 401
+      head :unauthorized
     end
   end
   def api_logged_out_account
     if @current_account
-      render status: 400
+      head :bad_request
     end
   end
 
@@ -84,8 +84,8 @@ class V1::ApplicationController < ApplicationController
       :bot,
       :kind
     ])
-    account_data_json['icon_url'] = ''
-    account_data_json['banner_url'] = ''
+    account_data_json['icon_url'] = account.icon_url
+    account_data_json['banner_url'] = account.banner_url
     return account_data_json
   end
   def ap_account_data(account)

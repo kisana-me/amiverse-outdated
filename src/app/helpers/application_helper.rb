@@ -9,8 +9,11 @@ module ApplicationHelper
       page_title + " | " + base_title
     end
   end
-  def full_url(path)
+  def full_front_url(path)
     return File.join(ENV["FRONT_URL"], path)
+  end
+  def full_back_url(path)
+    return File.join(ENV["BACK_URL"], path)
   end
   def to_page(current_page, where_to_go)
     current_page = current_page.to_i

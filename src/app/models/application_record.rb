@@ -1,6 +1,7 @@
 class ApplicationRecord < ActiveRecord::Base
   primary_abstract_class
   include ImageTools
+  include ApplicationHelper
 
   def self.human_attribute_enum_value(attr_name, value)
     return if value.blank?

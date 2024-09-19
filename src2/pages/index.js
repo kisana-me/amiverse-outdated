@@ -15,7 +15,7 @@ export default function Home() {
   useEffect(() => {
     if (!loading) {
       const fetchItems = async () => {
-        await axios.post('/tl', {'page': page})
+        await axios.post('/feed/index', {'page': page})
           .then(res => {
             setTimeline(res.data)
             setloadItems(false)

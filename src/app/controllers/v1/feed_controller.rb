@@ -1,6 +1,6 @@
-class V1::TimelinesController < V1::ApplicationController
-before_action :api_logged_in_account, except: %i[ current ]    
-  #skip_before_action :verify_authenticity_token
+class V1::FeedController < V1::ApplicationController
+  # before_action :api_logged_in_account, except: %i[ current ]
+
   def index
     items = Item.where(
       silent: false,
