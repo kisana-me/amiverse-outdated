@@ -67,7 +67,7 @@ class V1::ApplicationController < ApplicationController
       :bot,
       :kind
     ])
-    account_data_json['public_key'] = account.ap_public_key
+    account_data_json['public_key'] = ''
     account_data_json['icon_url'] = ''
     account_data_json['banner_url'] = ''
     account_data_json['summary'] = account.description
@@ -109,9 +109,15 @@ class V1::ApplicationController < ApplicationController
     item_data_json['reactions'] = []
     return item_data_json
   end
+  def feed_former(item)
+    return {
+      object: 'item',
+      item: item_data(item)
+    }
+  end
   def items_data(items)
     return items.map {|item|
-      item_data(item)
+      feed_former(item)
     }
   end
 
