@@ -4,28 +4,10 @@ import { useMainContext } from '@/contexts/main_context'
 import ItemAccount from '@/components/item_account'
 import Post from '@/components/post'
 
-export default function Items() {
+export default function index() {
   const { loggedIn } = useMainContext()
   const [items, setItems] = useState([])
   let ignore = false
-
-  async function created(){
-    const ActionCable = await import('actioncable')
-    const cable = ActionCable.createConsumer(process.env.NEXT_PUBLIC_FRONT_WS_URL)
-    cable.subscriptions.create( "ItemsChannel",{
-      connected() {
-        // Called when the subscription is ready for use on the server
-        console.log('connected : ', this)
-      },
-      disconnected() {
-        // Called when the subscription has been terminated by the server
-      },
-      received(data) {
-        // Called when there's incoming data on the websocket for this channel
-        setItems((prevItems)=>([...prevItems, data]))
-      }
-    })
-  }
   useEffect(() => {
     if (!ignore && loggedIn) {
       const fetchItems = async () => {
@@ -36,7 +18,6 @@ export default function Items() {
       fetchItems()
       created()
       console.log(items)
-
     }
     return () => {ignore = true}
   },[loggedIn])

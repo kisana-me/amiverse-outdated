@@ -1,30 +1,15 @@
 {
     "theme_color": "#3cf635",
-    "background_color": "#f335f6",
+    "background_color": "#3cf635",
     "display": "standalone",
     "scope": "/",
     "start_url": "/",
-    "name": "amiverse",
-    "description": "amiverse for pwa",
-    "short_name": "afp",
+    "name": "Amiverse.net",
+    "description": "Amiverse.net",
+    "short_name": "Amiverse",
     "icons": [
         {
-            "src": "/icon-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-256x256.png",
-            "sizes": "256x256",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-384x384.png",
-            "sizes": "384x384",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-512x512.png",
+            "src": "/amiverse-alpha.png",
             "sizes": "512x512",
             "type": "image/png"
         }

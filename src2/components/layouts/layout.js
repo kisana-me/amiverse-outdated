@@ -5,7 +5,7 @@ import Header from './header'
 import Aside from './aside'
 
 export default function Layout({ children }) {
-  const { setLoading, loadingMessage, darkThreme, flashKind, flashMessage, loginForm} = useMainContext()
+  const { setLoading, loadingMessage, darkThreme, flashKind, setFlashMessage, flashMessage, loginForm} = useMainContext()
   const [removeFlash, setRemoveFlash] = useState(false)
 
   const handleClick = () => {

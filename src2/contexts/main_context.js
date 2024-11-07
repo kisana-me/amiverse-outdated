@@ -8,9 +8,11 @@ export const MainContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [loadingMessage, setLoadingMessage] = useState('セッション作成中')
   const [loggedIn, setLoggedIn] = useState(false)
-  const [account, setAccount] = useState({})
-  const [flashKind, setFlashKind] = useState('')
-  const [flashMessage, setFlashMessage] = useState('')
+  const [currentAccount, setCurrentAccount] = useState({})
+  const [flashKind, setFlashKind] = useState('')//廃止
+  const [flashMessage, setFlashMessage] = useState('')//廃止
+  const [toastNotifications, setToastNotifications] = useState([])//移行先
+  const [feeds, setFeeds] = useState({})
   const [modal, setModal] = useState(false)
   const modalTrigger = () => setModal(!modal)
   const [darkThreme, setDarkThreme] = useState(false)
@@ -42,7 +44,7 @@ export const MainContextProvider = ({ children }) => {
         setLoadingMessage('アカウント情報確認中')
         const res = await axios.post('/sessions/check')
         setLoggedIn(res.data.logged_in)
-        setAccount(res.data.account)
+        setCurrentAccount(res.data.account)
       } catch (err) {
         setFlashKind('danger')
         setFlashMessage(err.response ? 'アカウントエラー' : 'サーバーエラー')
@@ -58,9 +60,11 @@ export const MainContextProvider = ({ children }) => {
       loading, setLoading,
       loadingMessage, setLoadingMessage,
       loggedIn, setLoggedIn,
-      account, setAccount,
+      currentAccount, setCurrentAccount,
       flashKind, setFlashKind,
       flashMessage, setFlashMessage,
+      toastNotifications, setToastNotifications,
+      feeds, setFeeds,
       modal, setModal, modalTrigger,
       darkThreme, setDarkThreme, darkThremeTrigger,
       loggedInPage, loggedOutPage

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { useMainContext } from '@/contexts/main_context'
 import Link from 'next/link'
 
 export default function Header() {
+  const router = useRouter()
   const {  } = useMainContext()
 
   return (
@@ -56,13 +58,13 @@ export default function Header() {
         <Link href='/'>
           <div className='header-list-container'>
             <div className="header-list-icon">
-              {true ?
+              {router.pathname == '/' ?
                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M86 42.0273C86 40.2308 85.1951 38.5289 83.8064 37.3893L53.3117 12.362C51.0725 10.5243 47.8402 10.5488 45.6291 12.4201L16.1238 37.392C14.7768 38.5321 14 40.2072 14 41.9719V82.1895C14 85.5032 16.6863 88.1895 20 88.1895H34C37.3137 88.1895 40 85.5032 40 82.1895V67.1895C40 63.8758 42.6863 61.1895 46 61.1895H54C57.3137 61.1895 60 63.8758 60 67.1895V82.1895C60 85.5032 62.6863 88.1895 66 88.1895H80C83.3137 88.1895 86 85.5032 86 82.1895V42.0273Z" fill="currentColor"/>
                 </svg>
               :
                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <mask id="mask0_43_16" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="14" y="11" width="72" height="78">
+                <mask id="mask0_43_16" maskUnits="userSpaceOnUse" x="14" y="11" width="72" height="78">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M86 42.8377C86 41.0413 85.1951 39.3394 83.8064 38.1997L53.3117 13.1725C51.0725 11.3348 47.8402 11.3592 45.6291 13.2306L16.1238 38.2025C14.7768 39.3425 14 41.0177 14 42.7824V83C14 86.3137 16.6863 89 20 89H34C37.3137 89 40 86.3137 40 83V68C40 64.6863 42.6863 62 46 62H54C57.3137 62 60 64.6863 60 68V83C60 86.3137 62.6863 89 66 89H80C83.3137 89 86 86.3137 86 83V42.8377Z" fill="white"/>
                 </mask>
                 <g mask="url(#mask0_43_16)">
@@ -76,10 +78,10 @@ export default function Header() {
             </div>
           </div>
         </Link>
-        <Link href='/'>
+        <Link href='/discovery'>
           <div className='header-list-container'>
             <div className="header-list-icon">
-              {false ?
+              {router.pathname == '/discovery' ?
                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M15 45C15 61.5685 28.4315 75 45 75C61.5685 75 75 61.5685 75 45C75 28.4315 61.5685 15 45 15C28.4315 15 15 28.4315 15 45ZM45 10C25.67 10 10 25.67 10 45C10 64.33 25.67 80 45 80C53.7652 80 61.7778 76.778 67.9181 71.4537L86.2049 89.7405C87.1812 90.7168 88.7642 90.7168 89.7405 89.7405C90.7168 88.7642 90.7168 87.1812 89.7405 86.2049L71.4537 67.9181C76.778 61.7778 80 53.7652 80 45C80 25.67 64.33 10 45 10ZM45 20C31.1929 20 20 31.1929 20 45C20 58.8071 31.1929 70 45 70C58.8071 70 70 58.8071 70 45C70 31.1929 58.8071 20 45 20Z" fill="currentColor"/>
                 </svg>
@@ -94,10 +96,10 @@ export default function Header() {
             </div>
           </div>
         </Link>
-        <Link href='/'>
+        <Link href='/dashboard'>
           <div className='header-list-container'>
             <div className="header-list-icon">
-              {false ?
+              {router.pathname == '/dashboard' ?
                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M19 15C16.7909 15 15 16.7909 15 19V41C15 43.2091 16.7909 45 19 45H41C43.2091 45 45 43.2091 45 41V19C45 16.7909 43.2091 15 41 15H19ZM66 15C59.9249 15 55 19.9249 55 26V45H74C80.0751 45 85 40.0751 85 34V15H66ZM15 66C15 59.9249 19.9249 55 26 55H45V74C45 80.0751 40.0751 85 34 85H15V66ZM59 55C56.7909 55 55 56.7909 55 59V81C55 83.2091 56.7909 85 59 85H81C83.2091 85 85 83.2091 85 81V59C85 56.7909 83.2091 55 81 55H59Z" fill="currentColor"/>
                 </svg>
@@ -115,10 +117,10 @@ export default function Header() {
             </div>
           </div>
         </Link>
-        <Link href='/'>
+        <Link href='/notifications'>
           <div className='header-list-container'>
             <div className="header-list-icon">
-              {false ?
+              {router.pathname == '/notifications' ?
                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M44 17C44 15.8954 44.8954 15 46 15H54C55.1046 15 56 15.8954 56 17V20.0233C56 20.9518 56.6422 21.7493 57.5293 22.0234C64.1612 24.0728 69.6515 29.0656 72.2208 35.7778L86.9607 74.285C87.462 75.5946 86.4951 77 85.0929 77H64.8157C63.77 77 62.9174 77.8115 62.6906 78.8323C61.3979 84.65 56.207 89 50 89C43.793 89 38.6021 84.65 37.3094 78.8323C37.0826 77.8115 36.23 77 35.1843 77H14.9071C13.5049 77 12.538 75.5946 13.0393 74.285L27.7792 35.7777C30.3485 29.0656 35.8388 24.0728 42.4707 22.0234C43.3578 21.7493 44 20.9518 44 20.0233V17Z" fill="currentColor"/>
                 </svg>
@@ -129,14 +131,14 @@ export default function Header() {
               }
             </div>
             <div className="header-list-text">
-              Notification
+              Notifications
             </div>
           </div>
         </Link>
-        <Link href='/'>
+        <Link href='/communities'>
           <div className='header-list-container'>
             <div className="header-list-icon">
-              {false ?
+              {router.pathname == '/communities' ?
                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M50 11C41.7157 11 35 17.7157 35 26C35 34.2843 41.7157 41 50 41C58.2843 41 65 34.2843 65 26C65 17.7157 58.2843 11 50 11ZM27 89H3L5.33701 66.2348C6.10882 58.7164 12.4421 53 20 53C24.4135 53 28.4094 54.9493 31.1241 58.0685C34.0147 50.3662 41.4379 45 50 45C58.5621 45 65.9853 50.3662 68.8759 58.0685C71.5906 54.9493 75.5865 53 80 53C87.5579 53 93.8912 58.7164 94.663 66.2348L97 89H73H63H37H27ZM69 38C69 31.9249 73.9249 27 80 27C86.0751 27 91 31.9249 91 38C91 44.0751 86.0751 49 80 49C73.9249 49 69 44.0751 69 38ZM20 27C13.9249 27 9 31.9249 9 38C9 44.0751 13.9249 49 20 49C26.0751 49 31 44.0751 31 38C31 31.9249 26.0751 27 20 27Z" fill="currentColor"/>
                 </svg>

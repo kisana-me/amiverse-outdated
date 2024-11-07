@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import { useMainContext } from '@/contexts/main_context'
 
 export default function Notifications() {
-  const { loggedIn } = useMainContext()
+  const { loading, loggedIn, toastNotifications } = useMainContext()
   let ignore = false
   useEffect(() => {
     if (!ignore && loggedIn) {
@@ -15,7 +15,7 @@ export default function Notifications() {
     <>
       <h1>通知</h1>
       <div className="div_1">
-        <h2>検索</h2>
+        <p>未実装</p>
       </div>
       <style jsx>{`
         .div_1 {

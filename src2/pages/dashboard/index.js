@@ -2,11 +2,11 @@ import React, { useEffect, useState, useContext } from 'react'
 import { useMainContext } from '@/contexts/main_context'
 import Link from 'next/link'
 
-export default function Dashboard() {
-  const { loggedIn, loggedInPage, account } = useMainContext()
+export default function index() {
+  const { loggedIn, loggedInPage, currentAccount } = useMainContext()
   let ignore = false
   useEffect(() => {
-    loggedInPage()
+    // loggedInPage()
     if (!ignore && loggedIn) {
       // fetch
     }
@@ -15,11 +15,12 @@ export default function Dashboard() {
 
   return (
     <>
-      <h1>Amiverse</h1>
+      <h1>ダッシュボード</h1>
       <div className="div_1">
         <h2>アカウント</h2>
-        <Link href={loggedIn ? '/@' + account.name_id : '/login'}>
-          あかうんと
+        
+        <Link href={loggedIn ? '/@' + currentAccount.name_id : '/login'}>
+          {loggedIn ? currentAccount.name + 'さんのページへ': 'ログインする' }
         </Link>
       </div>
       <style jsx>{`
