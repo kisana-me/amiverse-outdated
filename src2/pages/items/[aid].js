@@ -13,21 +13,22 @@ export default function Aid() {
   const [item, setItem] = useState({})
   const [loadingItem, setLoadingItem] = useState(true)
   async function fetchItem() {
-    await axios.post('/items' + router.query.aid)
+    await axios.post('/items/' + router.query.aid)
       .then(res => {
-        setAccount(res.data)
+        setItem(res.data)
         setLoadingItem(false)
         setFlashMessage('データ取得完了')
       })
       .catch(err => {
-        setFlashMessage('アカウント取得エラー')
+        setFlashMessage('アイテム取得エラー')
+        console.log( err)
       })
   }
   useEffect(() => {
     if (loading) {
       return
     }
-    //fetchItem()
+    fetchItem()
   },[loading])
 
   return (

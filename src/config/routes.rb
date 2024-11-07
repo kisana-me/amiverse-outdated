@@ -162,7 +162,7 @@ Rails.application.routes.draw do
     # item
     post 'items' => 'items#index', as: 'items'
     post 'items/create' => 'items#create', as: 'create_items'
-    post 'items/:item_id' => 'items#show', as: 'item'
+    post 'items/:aid' => 'items#show', as: 'item'
 
     # activity pub
     post 'activitypub/inbox' => 'activity_pub#inbox'
