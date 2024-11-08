@@ -18,7 +18,7 @@ export default function Loading() {
     <div className={`${showLoading ? 'show-loading' : 'hide-loading'}`}>
       <div className='loading-logo-wrap'>
         <div className={`loading-logo-ring1 ${loading ? '' : 'loading-logo-ring2'}`}></div>
-        <img className='loading-logo' src='/amiverse.svg' />
+        <img className='loading-logo' src='/ast-imgs/amiverse-v3-alpha.svg' />
       </div>
       <div className='loading-details'>
         <div className='loading-message'>{loadingMessage}</div>

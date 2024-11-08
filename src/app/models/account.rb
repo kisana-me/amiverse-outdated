@@ -100,14 +100,14 @@ class Account < ApplicationRecord
     if self.icon
       self.icon.image_url(variant_type: 'icons')
     else
-      full_back_url("/images/icon.webp")
+      full_back_url("/ast-imgs/icon.png")
    end
   end
   def banner_url
     if self.banner
       self.banner.image_url(variant_type: 'banners')
     else
-      full_back_url("/images/banner.webp")
+      full_back_url("/ast-imgs/banner.png")
    end
   end
 
