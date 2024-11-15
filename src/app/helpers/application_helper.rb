@@ -46,4 +46,29 @@ module ApplicationHelper
     )
     return url
   end
+
+  def url_and_hashtag_linker(text)
+    url_regex = %r{https?://[^\s　]+}
+    hashtag_regex = /#[^\s　]+/
+
+    text = text.gsub(url_regex) do |url|
+      scheme_after = url.sub(%r{^https?://}, "").sub(%r{/$}, "")
+      domain, path = scheme_after.split("/", 2)
+      case domain
+      when "amiverse.net"
+        "<a href=\"#{url}\" class=\"inside-link\">#{scheme_after}</a>"
+      when "api.amiverse.net"
+        "<a href=\"/#{path}\" class=\"inside-link\">#{scheme_after}</a>"
+      else
+        "<a href=\"#{url}\" target=\"_blank\" rel=\"noopener noreferrer\">#{scheme_after}</a>"
+      end
+    end
+
+    text = text.gsub(hashtag_regex) do |hashtag|
+      ht_txt = hashtag.delete_prefix("#")
+      "<a href=\"/search?query=#{ht_txt}\">#{hashtag}</a>"
+    end
+    
+    text.html_safe
+  end
 end

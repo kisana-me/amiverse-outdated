@@ -130,7 +130,7 @@
       </div>
     <% end %>
     <div class="item-content">
-      <%= safe_join(item.content.split("\n"),tag(:br)) %>
+      <%= safe_join(item.content.split("\n").map { |line| url_and_hashtag_linker(line) }, tag(:br)) %>
     </div>
     <div class="item-media" data-controller="image-viewer">
       <% item.images.each do |image| %>
