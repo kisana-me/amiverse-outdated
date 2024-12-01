@@ -12,6 +12,7 @@ export default function Home() {
   const [page, setPage] = useState(1)
 
   function updateFeed() {
+    setFeeds({})
     setloadItems(true)
     fetchItems()
   }
