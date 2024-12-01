@@ -12,7 +12,9 @@ export default function Home() {
   const [page, setPage] = useState(1)
 
   async function updateFeed() {
+    console.log("b", feeds)
     setFeeds({})
+    console.log("a", feeds)
     setloadItems(true)
     await fetchItems()
   }
@@ -20,7 +22,7 @@ export default function Home() {
   async function fetchItems() {
     await axios.post('/feed/index', {'page': page})
       .then(res => {
-        setFeeds({index: res.data})
+        setFeeds({...feeds, index: res.data})
         setloadItems(false)
       })
       .catch(err => {
