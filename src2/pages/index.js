@@ -20,7 +20,7 @@ export default function Home() {
   async function fetchItems() {
     await axios.post('/feed/index', {'page': page})
       .then(res => {
-        setFeeds({...feeds,index: res.data})
+        setFeeds({index: res.data})
         setloadItems(false)
       })
       .catch(err => {
