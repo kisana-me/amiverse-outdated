@@ -1,5 +1,5 @@
 class V1::ApplicationController < ApplicationController
-  protect_from_forgery
+  skip_forgery_protection
 
   private
 
@@ -25,13 +25,9 @@ class V1::ApplicationController < ApplicationController
     cookies['CSRF-TOKEN'] = {
       value: form_authenticity_token,
       domain: :all,
-      expires: 1.year.from_now,
       secure: ENV["RAILS_SECURE_COOKIES"].present?,
       httponly: true
     }
-  end
-  def set_csrf_token_header
-    response.set_header('X-CSRF-Token', form_authenticity_token)
   end
 
   # ACCOUNT

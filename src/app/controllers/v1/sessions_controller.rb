@@ -1,10 +1,8 @@
 class V1::SessionsController < V1::ApplicationController
   before_action :api_logged_out_account, only: %i[ create ]
   before_action :api_logged_in_account, only: %i[ destroy ]
-  protect_from_forgery except: :new
 
   def new
-    set_csrf_token_cookie
     render body: nil
   end
   def check
@@ -19,7 +17,6 @@ class V1::SessionsController < V1::ApplicationController
   end
   def login
     account = Account.find_by(name_id: params[:name_id].downcase,
-
       deleted: false
     )
     if account && account.authenticate(params[:password])

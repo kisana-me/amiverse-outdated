@@ -51,7 +51,6 @@ export const MainContextProvider = ({ children }) => {
 
   async function startUp() {
     try {
-      await axios.get('/sessions/new')
       setLoadingMessage('アカウント情報確認中')
       const res = await axios.post('/sessions/check')
       setLoggedIn(res.data.logged_in)

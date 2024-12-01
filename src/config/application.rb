@@ -14,7 +14,6 @@ module App
         resource "*",
           headers: :any,
           methods: [:get, :post, :put, :patch, :delete, :head, :options],
-          expose: ['X-CSRF-Token'],
           credentials: true
       end
     end
