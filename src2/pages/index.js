@@ -16,12 +16,8 @@ export default function Home() {
   }
 
   async function updateFeed() {
-    console.log("b", feeds)
     setFeeds({'test': false})
-    console.log("a", feeds)
     setloadItems(false)
-    await sleep(1000)
-    console.log("m", feeds)
     await fetchItems()
   }
 
