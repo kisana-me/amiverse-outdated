@@ -8,17 +8,13 @@ import { useMainContext } from '@/contexts/main_context'
 export default function Home() {
   const {loading, loggedIn, currentAccount, setFlashKind, setFlashMessage, feeds, setFeeds} = useMainContext()
   const [loadItems, setloadItems] = useState(true)
-  const [timeline, setTimeline] = useState([])
+  const [updating, setUpdating] = useState(false)
   const [page, setPage] = useState(1)
 
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms))
-  }
-
   async function updateFeed() {
-    setFeeds({'test': false})
-    setloadItems(false)
+    setUpdating(true)
     await fetchItems()
+    setUpdating(false)
   }
 
   async function fetchItems() {
@@ -97,7 +93,7 @@ export default function Home() {
             )
           }
         })()}
-        <button onClick={updateFeed}>フィードを更新</button>
+        <button onClick={updateFeed} disabled={updating}>{updating ? '更新中' : 'フィードを更新'}</button>
         <Link href="/items/new">作成</Link>
         <div>
           <Items items={feeds['index']} loadItems={loadItems} />
