@@ -11,10 +11,10 @@ export default function Home() {
   const [timeline, setTimeline] = useState([])
   const [page, setPage] = useState(1)
 
-  function updateFeed() {
+  async function updateFeed() {
     setFeeds({})
     setloadItems(true)
-    fetchItems()
+    await fetchItems()
   }
 
   async function fetchItems() {
