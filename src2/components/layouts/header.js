@@ -154,7 +154,7 @@ export default function Header() {
           </div>
         </Link>
         <div className='header-nav-post-remover'>
-        <Link href='/'>
+        <Link href='/items/new'>
           <div className='header-list-container header-new-item'>
             <div className="header-list-icon">
               <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">

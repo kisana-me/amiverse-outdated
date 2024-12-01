@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useMainContext } from '@/contexts/main_context'
 import Link from 'next/link'
+import Logout from '@/components/logout'
 
 export default function index() {
   const { loggedIn, loggedInPage, currentAccount } = useMainContext()
@@ -13,15 +14,30 @@ export default function index() {
     return () => {ignore = true}
   },[loggedIn])
 
+  const ifLoggedIn = (
+    <>
+      <h2>アカウント</h2>
+      <Link href={loggedIn ? '/@' + currentAccount.name_id : '/login'}>
+        {loggedIn ? currentAccount.name + 'さんのページへ': 'ログインする' }
+      </Link>
+      <Logout />
+    </>
+  )
+
+  const ifLoggedOut = (
+    <>
+      <h2>アカウント</h2>
+      <p>ログインする</p>
+      <Link href="/login">ここから</Link>
+    </>
+  )
+
   return (
     <>
       <h1>ダッシュボード</h1>
       <div className="div_1">
-        <h2>アカウント</h2>
+        {loggedIn ? ifLoggedIn : ifLoggedOut }
         
-        <Link href={loggedIn ? '/@' + currentAccount.name_id : '/login'}>
-          {loggedIn ? currentAccount.name + 'さんのページへ': 'ログインする' }
-        </Link>
       </div>
       <style jsx>{`
         .div_1 {

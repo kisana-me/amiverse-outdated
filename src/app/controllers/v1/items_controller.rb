@@ -13,21 +13,16 @@ class V1::ItemsController < V1::ApplicationController
     render json: item_data(@item)
   end
   def create
-    # @item = Item.new(
-    #   content: params[:content],
-    #   sensitive: params[:sensitive]
-    # )
-    # @item.account_id = @current_account.id
-    # @item.item_id = generate_aid(Item, 'item_id')
-    # @item.uuid = SecureRandom.uuid
-    # @item.item_type = 'plane'
-    # if @item.save
-    #   #front_deliver(create_note(@item), @current_account.name_id, @current_account.private_key, 'https://amiverse.net', 'https://mstdn.jp/inbox', @current_account.public_key)
-    #   ActionCable.server.broadcast('items_channel', serialize_item(@item))
-    #   render json: {success: true}
-    # else
-    #   render json: {success: false}
-    # end
+    @item = Item.new(
+      content: params[:content]
+    )
+    @item.account = @current_account
+    @item.aid = generate_aid(Item, 'aid')
+    if @item.save
+      render json: { is_done: true, item_aid: @item.aid }
+    else
+      render json: { is_done: false }
+    end
   end
   private
   def set_item

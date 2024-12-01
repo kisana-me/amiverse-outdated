@@ -11,6 +11,11 @@ export default function Home() {
   const [timeline, setTimeline] = useState([])
   const [page, setPage] = useState(1)
 
+  function updateFeed() {
+    setloadItems(true)
+    fetchItems()
+  }
+
   async function fetchItems() {
     await axios.post('/feed/index', {'page': page})
       .then(res => {
@@ -87,6 +92,8 @@ export default function Home() {
             )
           }
         })()}
+        <button onClick={updateFeed}>フィードを更新</button>
+        <Link href="/items/new">作成</Link>
         <div>
           <Items items={feeds['index']} loadItems={loadItems} />
         </div>
