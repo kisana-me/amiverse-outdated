@@ -11,11 +11,14 @@ export default function Home() {
   const [timeline, setTimeline] = useState([])
   const [page, setPage] = useState(1)
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
   async function updateFeed() {
-    console.log("b", feeds)
     setFeeds({})
-    console.log("a", feeds)
     setloadItems(true)
+    await sleep(1000)
     await fetchItems()
   }
 
