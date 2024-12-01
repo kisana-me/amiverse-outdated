@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 export default function Header() {
   const router = useRouter()
-  const {  } = useMainContext()
+  const { loggedIn, currentAccount } = useMainContext()
 
   return (
     <header>
@@ -169,19 +169,19 @@ export default function Header() {
         </div>
       </nav>
       <div className="header-container2">
-        {false ?
-          <Link href='/'>
+        {loggedIn ?
+          <Link href={ '/@' + currentAccount.name_id }>
             <div className='header-list-container'>
               <div className="header-list-icon">
                 <img src="/images/icon.webp" className="header-list-image" />
               </div>
               <div className="header-list-text">
-                name@name_id
+                {currentAccount.name}
               </div>
             </div>
           </Link>
         :
-        <Link href='/'>
+        <Link href='/login'>
           <div className='header-list-container'>
             <div className="header-list-icon">
               <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -194,7 +194,7 @@ export default function Header() {
           </div>
         </Link>
         }
-        <Link href='/'>
+        <Link href='/settings'>
           <div className='header-list-container'>
             <div className="header-list-icon">
               {false ?

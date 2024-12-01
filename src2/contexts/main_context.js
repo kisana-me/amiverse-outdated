@@ -36,22 +36,36 @@ export const MainContextProvider = ({ children }) => {
     }
   }
 
+  async function fetchCurrentAccount() {
+    try {
+      const res = await axios.post('/sessions/check')
+      setLoggedIn(res.data.logged_in)
+      setCurrentAccount(res.data.account)
+    } catch (err) {
+      setLoggedIn(false)
+      setCurrentAccount({})
+      setFlashKind('danger')
+      setFlashMessage(err.response ? 'クライアントFCAエラー' : 'サーバーFCAエラー')
+    }
+  }
+
+  async function startUp() {
+    try {
+      await axios.get('/sessions/new')
+      setLoadingMessage('アカウント情報確認中')
+      const res = await axios.post('/sessions/check')
+      setLoggedIn(res.data.logged_in)
+      setCurrentAccount(res.data.account)
+    } catch (err) {
+      setFlashKind('danger')
+      setFlashMessage(err.response ? 'アカウントエラー' : 'サーバーエラー')
+    }
+    setLoadingMessage('ロード完了')
+    setLoading(false)
+  }
+
   useEffect(() => {
     setDarkThreme(window.matchMedia('(prefers-color-scheme: dark)').matches)
-    async function startUp() {
-      try {
-        await axios.get('/sessions/new')
-        setLoadingMessage('アカウント情報確認中')
-        const res = await axios.post('/sessions/check')
-        setLoggedIn(res.data.logged_in)
-        setCurrentAccount(res.data.account)
-      } catch (err) {
-        setFlashKind('danger')
-        setFlashMessage(err.response ? 'アカウントエラー' : 'サーバーエラー')
-      }
-      setLoadingMessage('ロード完了')
-      setLoading(false)
-    }
     startUp()
   },[])
   
@@ -67,7 +81,8 @@ export const MainContextProvider = ({ children }) => {
       feeds, setFeeds,
       modal, setModal, modalTrigger,
       darkThreme, setDarkThreme, darkThremeTrigger,
-      loggedInPage, loggedOutPage
+      loggedInPage, loggedOutPage,
+      fetchCurrentAccount
     }}>
       {children}
     </MainContext.Provider>

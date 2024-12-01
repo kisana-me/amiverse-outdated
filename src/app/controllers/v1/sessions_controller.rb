@@ -19,18 +19,14 @@ class V1::SessionsController < V1::ApplicationController
   end
   def login
     account = Account.find_by(name_id: params[:name_id].downcase,
-      activated: true,
-      locked: false,
-      silenced: false,
-      suspended: false,
-      frozen: false,
+
       deleted: false
     )
     if account && account.authenticate(params[:password])
       log_in account
       render json: { logged_in: true }
     else
-      render json: { logged_in: false }, status: 401
+      render json: { logged_in: false }
     end
   end
   def logout

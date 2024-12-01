@@ -8,21 +8,16 @@ export default function Logout() {
   const router = useRouter()
 
   const handleLogout = async () => {
-    setLoginLoading(true)
     await axios.delete('/logout')
       .then(response => {
         if (!response.data.logged_in) {
           setLoggedIn(false)
           router.push('/').then(() => {
-            setFlash('ログアウトしました')
-            setLoginLoading(false)
           })
         } else {
-          setFlash('ログアウトできませんでした')
         }
       })
       .catch(err => {
-        setFlash('ログアウト通信例外')
       })
   }
 
