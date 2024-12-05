@@ -3,8 +3,7 @@ import { useContext, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
-import Item from '@/components/item'
-import SkeletonItem from '@/components/skeleton_item'
+import Item from '@/components/items/item'
 import { useMainContext } from '@/contexts/main_context'
 
 export default function Aid() {
@@ -35,7 +34,7 @@ export default function Aid() {
     <>
       <div className="">
         {loadingItem ?
-          <SkeletonItem/>
+          ''
         :
           <Item item={item}/>
         }
