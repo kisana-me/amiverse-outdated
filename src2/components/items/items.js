@@ -20,7 +20,7 @@ export default function Items({ items = [], loadItems = false }) {
             return (
               <>
                 {items.map(item => (
-                  item.object == 'diffuse' ? <Item key={item.item.aid + '-d-' + item.diffuser.aid} item={item.item} /> : <Item key={item.item.aid} item={item.item} /> 
+                  <Item key={item.item.aid + ((item.object == 'diffuse') ? '-d-' + item.diffuser.aid : '')} item={item.item} />
                 ))}
               </>
             )

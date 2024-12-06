@@ -7,7 +7,7 @@ export default function Aside() {
 
   return (
     <aside>
-      <div class="">
+      <div>
         <h2>トレンド</h2>
         <div>
           <div>
