@@ -59,9 +59,8 @@ export default function Item({ item }) {
 
         <div className="item-reaction">
           {item.reactions.map(reaction => (
-            <div key={reaction.reaction_id}>
-              <button>{reaction.content}</button>
-              <div>{reaction.count}</div>
+            <div key={reaction.emoji.id}>
+              <button>{reaction.emoji.name + ' ' + reaction.reaction_count}</button>
             </div>
           ))}
         </div>

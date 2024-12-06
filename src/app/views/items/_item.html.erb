@@ -236,7 +236,8 @@
     <div class="item-reactions">
       <% if item.emojis.blank? %>
       <% else %>
-        <% item.emojis.each do |emoji| %>
+        <% get_reactions(item.reactions).each do |data| %>
+          <% emoji = data[:emoji] %>
           <% react_flag = @current_account && Reaction.exists?({
           account_id: @current_account.id,
           emoji_id: emoji.id,
@@ -248,9 +249,9 @@
               <%= emoji.name %>
             </div>
             <div class="ir-count">
-              <%= item.reactions.where(emoji_id: emoji.id).size %>
+              <%= data[:reaction_count] %>
             </div>
-            <% end %>
+          <% end %>
         <% end %>
       <% end %>
     </div>

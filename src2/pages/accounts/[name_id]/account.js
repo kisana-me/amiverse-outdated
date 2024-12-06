@@ -3,7 +3,7 @@ import { useContext, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
-import Items from '@/components/items'
+import Items from '@/components/items/items'
 import { useMainContext } from '@/contexts/main_context'
 
 export default function Account() {

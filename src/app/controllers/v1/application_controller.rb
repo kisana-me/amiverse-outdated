@@ -102,7 +102,7 @@ class V1::ApplicationController < ApplicationController
     account_data_json = with_account_data(item.account)
     item_data_json['account'] = account_data_json
     images_array_json = []
-    item_data_json['reactions'] = []
+    item_data_json['reactions'] = item_reactions(item.reactions)
     return item_data_json
   end
   def feed_former(item)
@@ -115,6 +115,28 @@ class V1::ApplicationController < ApplicationController
     return items.map {|item|
       feed_former(item)
     }
+  end
+
+  ## ITEM/REACTIONS
+
+  def item_reactions(reactions)
+    rwe = reactions.joins(:emoji)
+    return rwe.group("emoji_id").map {|r|
+    {
+      reaction_count: rwe.where(emoji_id: r.emoji_id).count, 
+      emoji: item_emoji(r.emoji)
+    }
+    }
+  end
+  def item_emoji(emoji)
+    data = emoji.as_json(only: [
+      :aid,
+      :name,
+      :name_id,
+      :created_at,
+    ])
+    data['test'] = []
+    return data
   end
 
   # TIMELINE

@@ -71,4 +71,13 @@ module ApplicationHelper
     
     text.html_safe
   end
+
+  def get_reactions(reactions)
+    rwe = reactions.joins(:emoji)
+    rwe.group("emoji_id").map do |r| {
+      reaction_count: rwe.where(emoji_id: r.emoji_id).count, 
+      emoji: r.emoji
+    }
+    end
+  end
 end
