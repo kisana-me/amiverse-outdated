@@ -2,25 +2,6 @@ export default function ItemConsole({}) {
   return (
     <>
       <div className="console">
-        <div className="console-rating">
-          <button className='console-button crb crb-left'>
-            <div className="console-icon">
-              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M48.2111 17.5777C48.9482 16.1036 51.0518 16.1036 51.7889 17.5777L83.9299 81.8598C84.7138 83.4275 83.2452 85.1736 81.5664 84.6699L50.5747 75.3724C50.1998 75.2599 49.8002 75.26 49.4253 75.3724L18.4336 84.6699C16.7548 85.1736 15.2862 83.4275 16.0701 81.8598L48.2111 17.5777Z" fill="currentColor"/>
-              </svg>
-            </div>
-            <div className="console-number">0</div>
-          </button>
-          <button className='console-button crb crb-right'>
-            <div className="console-icon">
-              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M51.7889 82.4223C51.0518 83.8964 48.9482 83.8964 48.2111 82.4223L16.0701 18.1402C15.2862 16.5725 16.7548 14.8264 18.4336 15.3301L49.4253 24.6276C49.8002 24.7401 50.1998 24.74 50.5747 24.6276L81.5664 15.3301C83.2452 14.8264 84.7138 16.5725 83.9299 18.1402L51.7889 82.4223Z" fill="currentColor"/>
-              </svg>
-            </div>
-            <div className="console-number">0</div>
-          </button>
-        </div>
-
         <button className='console-button cnb cb-emojis'>
           <div className="console-icon">
             <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -65,7 +46,6 @@ export default function ItemConsole({}) {
       <style jsx>{`
         .console {
           height: 22px;
-          margin-bottom: 4px;
           display: flex;
           justify-content: space-between;
         }
@@ -77,17 +57,17 @@ export default function ItemConsole({}) {
           align-items: center;
           overflow: hidden;
           background: inherit;
-          color: white;
+          color: #bcbcbc;
           border: 1px solid #0000;
           cursor: pointer;
         }
         .crb-left {
-          border: 1px solid #c5c5c5;
+          border: 1px solid #bcbcbc;
           border-right: 0.5px solid;
           border-radius: 6px 0 0 6px;
         }
         .crb-right {
-          border: 1px solid #c5c5c5;
+          border: 1px solid #bcbcbc;
           border-left: 0.5px solid;
           border-radius: 0 6px 6px 0;
         }
@@ -106,7 +86,7 @@ export default function ItemConsole({}) {
           border-radius: 6px;
           max-width: 60px;
         }
-        .cnb:hover, .crb:hover {
+        .cnb:hover {
           background: #fff3;
         }
       `}</style>

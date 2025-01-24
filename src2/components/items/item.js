@@ -56,8 +56,8 @@ export default function Item({ item }) {
             </Link>
           </div>
         </div>
-        <ItemConsole className="margin-top-4px" />
-        <ItemReactions reactions={item.reactions} className="margin-top-4px" />
+        <ItemReactions reactions={item.reactions} />
+        <ItemConsole />
       </div>
       <style jsx>{`
         .item {
@@ -70,14 +70,13 @@ export default function Item({ item }) {
           justify-content: space-between;
           font-size: 12px;
           line-height: 12px;
+          color: #939393;
         }
         .item-top-info {
           margin-top: 4px;
         }
         .iti-left {}
-        .iti-right {
-          color: #939393;
-        }
+        .iti-right {}
         .item-bottom-info{
           color: #939393;
           margin-bottom: 4px;
