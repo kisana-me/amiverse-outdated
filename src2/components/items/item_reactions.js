@@ -3,7 +3,14 @@ export default function ItemReactions({ reactions }) {
     <>
       <div className="reactions">
         {reactions.map(reaction => (
-          <button className="reaction">{reaction.emoji.name + ' ' + reaction.reaction_count}</button>
+          <button className="reaction">
+            <div className="reaction-icon">
+              {reaction.emoji.name}
+            </div>
+            <div className="reaction-number">
+              {reaction.reaction_count}
+            </div>
+          </button>
         ))}
       </div>
       <style jsx>{`
@@ -18,12 +25,14 @@ export default function ItemReactions({ reactions }) {
         .reaction {
           display: flex;
           align-items: center;
-          border: 1px solid;
+          color: white;
+          background: #f003;
+          border: 1px solid red;
           border-radius: 8px;
           padding: 0 7px 0 4px;
           font-size: 13px;
           line-height: 22px;
-          margin: 2px;
+          margin-right: 4px;
           box-sizing: border-box;
           height: 22px;
           cursor: pointer;
