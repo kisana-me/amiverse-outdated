@@ -78,21 +78,6 @@ docker container exec -it amiverse-app-1 bash
 docker compose logs --follow --tail '1000'
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-# 実装予定
-- Redis(揮発性メモリ上でデータ管理)
-- Es(検索最適化)
-
 # 開発ルール
 ## ブランチ
 - main - プロダクションとして公開するもの
