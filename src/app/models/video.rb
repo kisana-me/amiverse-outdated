@@ -27,6 +27,15 @@ class Video < ApplicationRecord
     end
     s3_upload(key: key, file: file, content_type: content_type)
   end
+
+  def video_url
+    type = "mp4"
+    key = "/variants/videos/#{type}/#{self.aid}.#{type}"
+    bucket_key = File.join(ENV["S3_BUCKET"], key)
+    url = File.join(ENV["S3_PUBLIC_ENDPOINT"], bucket_key)
+    return url
+  end
+
   private
   def video_type
     unless video_data

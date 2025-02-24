@@ -10,23 +10,19 @@ class VideosController < ApplicationController
     # end
   end
   def create
-    # #@video = Video.new(video_params)
-    # #@video.aid = generate_aid(Video, 'aid')
-    # #@video.account = @current_account
-    # if @video.save
-    #   EncodeJob.perform_later(
-    #     video: @video,
-    #     aid: @video.aid,
-    #     key: "/videos/#{@video.aid}.#{@video.video_data.original_filename.split('.').last.downcase}"
-    #   )
-    #   flash[:success] = "アップロードしました"
-    #   redirect_to settings_storage_path
-    # else
-    #   flash[:danger] = "アップロードできませんでした#{@video.errors.full_messages.join(", ")}"
-    #   redirect_to settings_storage_path
-    # end
-
-    flash[:notice] = "この機能は今後実装予定"
+    @video = Video.new(video_params)
+    @video.aid = generate_aid(Video, 'aid')
+    @video.account = @current_account
+    if @video.save
+      EncodeJob.perform_later(
+        video: @video,
+        aid: @video.aid,
+        key: "/videos/#{@video.aid}.#{@video.video_data.original_filename.split('.').last.downcase}"
+      )
+      flash[:success] = "アップロードしました"
+    else
+      flash[:danger] = "アップロードできませんでした#{@video.errors.full_messages.join(", ")}"
+    end
     redirect_to settings_storage_path
   end
   def update

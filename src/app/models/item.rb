@@ -70,11 +70,11 @@ class Item < ApplicationRecord
     #     @item.audios << Audio.find_by(aid: aid)
     #   end
     # end
-    # if params[:item][:selected_videos].present? # 動画
-    #   params[:item][:selected_videos].each do |aid|
-    #     @item.videos << Video.find_by(aid: aid)
-    #   end
-    # end
+    if selected_videos.present? # 動画
+      selected_videos.each do |aid|
+        self.videos << Video.find_by(aid: aid)
+      end
+    end
     if selected_canvases.present? # キャンバス
       selected_canvases.each do |aid|
         self.canvases << Canvas.find_by(aid: aid)
@@ -104,8 +104,8 @@ class Item < ApplicationRecord
     if selected_audios.present?
       errors.add(:selected_audios, ':音源の設定に対応していません')
     end
-    if selected_videos.present?
-      errors.add(:selected_videos, ':動画の設定に対応していません')
-    end
+    # if selected_videos.present?
+    #   errors.add(:selected_videos, ':動画の設定に対応していません')
+    # end
   end
 end

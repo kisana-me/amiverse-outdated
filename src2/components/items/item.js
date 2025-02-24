@@ -35,8 +35,19 @@ export default function Item({ item }) {
           {(() => {
             if (item.images && item.images.length > 0) {
               return item.images.map(image => (
-                <div key={image.image_id}>
+                <div key={image.aid}>
                   <img src={image.url} className="item-content-image"></img>
+                </div>
+              ))
+            } else {
+              return
+            }
+          })()}
+          {(() => {
+            if (item.videos && item.videos.length > 0) {
+              return item.videos.map(video => (
+                <div key={video.aid}>
+                  <video src={video.url} className="item-content-video" controls="controls"></video>
                 </div>
               ))
             } else {
@@ -89,6 +100,12 @@ export default function Item({ item }) {
           min-height: 40px;
           padding: 5px;
           overflow-wrap: break-word;
+        }
+        .item-content-image {
+          width: 100%;
+        }
+        .item-content-video {
+          width: 100%;
         }
       `}</style>
     </>

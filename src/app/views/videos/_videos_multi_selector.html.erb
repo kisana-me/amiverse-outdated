@@ -1,0 +1,5 @@
+<% videos.each do |video| %>
+  <%= f.check_box selecteds, { multiple: true }, video.aid, nil %>
+  <%= f.label "#{selecteds}_#{video.aid}", video.name %>
+  <%= video_tag video.video_url, class: 'storage-images-image' %>
+<% end %>

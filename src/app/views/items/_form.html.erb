@@ -52,10 +52,7 @@
         </details>
         <details>
           <summary>動画を添付</summary>
-          <% @current_account.videos.each do |video| %>
-            <%= f.check_box :selected_videos, { multiple: true }, video.video_id, nil %>
-            <%= f.label video.video_id %>
-          <% end %>
+          <%= render 'videos/videos_multi_selector', f: f, selecteds: 'selected_videos', videos: @current_account.videos.where(deleted: false) %>
         </details>
       </details>
       <details>

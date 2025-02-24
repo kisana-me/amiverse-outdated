@@ -101,7 +101,12 @@ class V1::ApplicationController < ApplicationController
     ])
     account_data_json = with_account_data(item.account)
     item_data_json['account'] = account_data_json
-    images_array_json = []
+    item_data_json['images'] = item.images.map {|image|
+      image(image)
+    }
+    item_data_json['videos'] = item.videos.map {|video|
+      video(video)
+    }
     item_data_json['reactions'] = item_reactions(item.reactions)
     return item_data_json
   end
@@ -155,7 +160,7 @@ class V1::ApplicationController < ApplicationController
   # MEDIA
 
   def image(image)
-    return image.as_json(only: [
+    json_data = image.as_json(only: [
       :aid,
       :name,
       :description,
@@ -163,9 +168,21 @@ class V1::ApplicationController < ApplicationController
       :warning_message,
       :meta
     ])
+    json_data['url'] = image.image_url
+    return json_data
   end
   def audio
   end
-  def video
+  def video(video)
+    json_data = video.as_json(only: [
+      :aid,
+      :name,
+      :description,
+      :sensitive,
+      :warning_message,
+      :meta
+    ])
+    json_data['url'] = video.video_url
+    return json_data
   end
 end
