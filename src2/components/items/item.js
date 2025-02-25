@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useState } from 'react'
 import ItemAccount from '@/components/items/item_account'
 import ItemReactions from '@/components/items/item_reactions'
 import ItemConsole from '@/components/items/item_console'
@@ -13,7 +14,10 @@ const formatDate = (isoString) => {
   const seconds = ('0' + date.getSeconds()).slice(-2)
   return `${year}年 ${month}月 ${day}日 ${hours}時 ${minutes}分 ${seconds}秒`
 }
+
 export default function Item({ item }) {
+  const [consoleDisabled, setConsoleDisabled] = useState(false);
+
   return (
     <>
       <div className="item">
@@ -68,7 +72,15 @@ export default function Item({ item }) {
           </div>
         </div>
         <ItemReactions reactions={item.reactions} />
-        <ItemConsole />
+        <ItemConsole 
+          disabled={consoleDisabled} 
+          toggleDisabled={() => {
+            setConsoleDisabled(true);
+            setTimeout(() => {
+              setConsoleDisabled(false);
+            }, 1000);
+          }}
+        />
       </div>
       <style jsx>{`
         .item {

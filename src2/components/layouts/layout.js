@@ -5,7 +5,7 @@ import Header from './header'
 import Aside from './aside'
 
 export default function Layout({ children }) {
-  const { setLoading, loadingMessage, darkThreme, flashKind, setFlashMessage, flashMessage, loginForm} = useMainContext()
+  const { setLoading, loadingMessage, darkThreme, flashKind, setFlashMessage, flashMessage, loginForm, overlay, setOverlay } = useMainContext()
   const [removeFlash, setRemoveFlash] = useState(false)
 
   const handleClick = () => {
@@ -28,6 +28,7 @@ export default function Layout({ children }) {
         </main>
         <Aside />
         {flashMessage ? <div className={`flash  flash-${flashKind}`} onClick={handleClick}>{flashMessage}</div> : ''}
+        {overlay && <div className="global-overlay" />}
       </div>
       <style jsx>{`
         .wrap {}
@@ -76,6 +77,16 @@ export default function Layout({ children }) {
           main {
             width: calc(100% - 200px - 340px);
           }
+        }
+
+        .global-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 100;
         }
       `}</style>
     </div>

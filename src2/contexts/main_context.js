@@ -17,6 +17,7 @@ export const MainContextProvider = ({ children }) => {
   const modalTrigger = () => setModal(!modal)
   const [darkThreme, setDarkThreme] = useState(false)
   const darkThremeTrigger = () => setDarkThreme(!darkThreme)
+  const [overlay, setOverlay] = useState(false)
   const router = useRouter()
   const loggedInPage = () => {
     if(!loggedIn){
@@ -67,7 +68,28 @@ export const MainContextProvider = ({ children }) => {
     setDarkThreme(window.matchMedia('(prefers-color-scheme: dark)').matches)
     startUp()
   },[])
-  
+
+  // overlayの状態が変更されたときにスクロールを制御
+  useEffect(() => {
+    const preventDefault = (e) => {
+      e.preventDefault()
+    }
+    if (overlay) {
+      // スクロールを無効化
+      document.addEventListener('wheel', preventDefault, { passive: false })
+      document.addEventListener('touchmove', preventDefault, { passive: false })
+    } else {
+      // スクロールを有効化
+      document.removeEventListener('wheel', preventDefault)
+      document.removeEventListener('touchmove', preventDefault)
+    }
+    return () => {
+      // クリーンアップ
+      document.removeEventListener('wheel', preventDefault)
+      document.removeEventListener('touchmove', preventDefault)
+    }
+  }, [overlay])
+
   return (
     <MainContext.Provider value={{
       loading, setLoading,
@@ -81,7 +103,8 @@ export const MainContextProvider = ({ children }) => {
       modal, setModal, modalTrigger,
       darkThreme, setDarkThreme, darkThremeTrigger,
       loggedInPage, loggedOutPage,
-      fetchCurrentAccount
+      fetchCurrentAccount,
+      overlay, setOverlay
     }}>
       {children}
     </MainContext.Provider>

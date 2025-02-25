@@ -164,6 +164,9 @@ Rails.application.routes.draw do
     post 'items/create' => 'items#create', as: 'create_items'
     post 'items/:aid' => 'items#show', as: 'item'
 
+    # discovery
+    post 'discovery' => 'discovery#index', as: 'discovery'
+
     # activity pub
     post 'activitypub/inbox' => 'activity_pub#inbox'
   end
