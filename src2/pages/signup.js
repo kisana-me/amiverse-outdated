@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react'
 import axios from '@/lib/axios'
 import { useRouter } from 'next/router'
-import { useMainContext } from '@/contexts/main_context'
+import { useToastsContext } from '@/contexts/toasts_context'
 
 export default function Signup() {
-  const { loggedIn, setLoggedIn, loginStatus, setLoginStatus, setFlashMessage } = useMainContext()
+  const { addToast } = useToastsContext()
   const router = useRouter()
   const [signupStatus, setSignupStatus] = useState('未確認')
   const [invitationChecked, setInvitationChecked] = useState(false)
@@ -45,7 +45,7 @@ export default function Signup() {
     .then(res => {
       if (res.data.status == 'created') {
         setSignupStatus('作成されました')
-        setFlashMessage('作成したよ')
+        addToast('作成したよ')
         router.push('/')
       } else if (res.data.status == 'rollbacked') {
         setSignupStatus(res.data.message)

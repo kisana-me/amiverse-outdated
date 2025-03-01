@@ -1,5 +1,5 @@
 class V1::ItemsController < V1::ApplicationController
-  before_action :api_logged_in_account, only: %i[ create ]
+  before_action :api_logged_in_account, except: %i[ show ]
   before_action :set_item, only: %i[ show ]
   include ActivityPub
 
@@ -24,6 +24,33 @@ class V1::ItemsController < V1::ApplicationController
       render json: { is_done: false }
     end
   end
+
+  def react
+    item = Item.find_by(
+      aid: params[:item_aid],
+      visibility: :public_share,
+      status: :shared,
+      deleted: false
+    )
+    emoji = Emoji.find_by(
+      aid: params[:emoji_aid],
+      deleted: false
+    )
+    this_react_params = {
+      account_id: @current_account.id,
+      emoji_id: emoji.id,
+      item_id: item.id
+    }
+    if Reaction.exists?(this_react_params)
+      Reaction.where(this_react_params).delete_all
+      render json: { status: 'deleted' }
+    elsif Reaction.new(this_react_params).save
+      render json: { status: 'reacted' }
+    else
+      render json: { status: 'error' }
+    end
+  end
+
   private
   def set_item
     @item = Item.find_by(

@@ -5,9 +5,11 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Items from '@/components/items/items'
 import { useMainContext } from '@/contexts/main_context'
+import { useToastsContext } from '@/contexts/toasts_context'
 
 export default function Account() {
-  const {loading, loggedIn, setFlashKind, setFlashMessage} = useMainContext()
+  const { loading } = useMainContext()
+  const { addToast } = useToastsContext()
   const { query = {} } = useRouter()
   const [account, setAccount] = useState({})
   const [nameId, setNameId] = useState('')
@@ -18,10 +20,10 @@ export default function Account() {
       await axios.post('/@' + query.name_id)
         .then(res => {
           setAccount(res.data)
-          setFlashMessage('データ取得完了')
+          addToast('データ取得完了')
         })
         .catch(err => {
-          setFlashMessage('アカウント取得エラー')
+          addToast('アカウント取得エラー')
         })
     }
     if(query.name_id){

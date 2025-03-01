@@ -9,10 +9,7 @@ export const MainContextProvider = ({ children }) => {
   const [loadingMessage, setLoadingMessage] = useState('セッション作成中')
   const [loggedIn, setLoggedIn] = useState(false)
   const [currentAccount, setCurrentAccount] = useState({})
-  const [flashKind, setFlashKind] = useState('')//廃止
-  const [flashMessage, setFlashMessage] = useState('')//廃止
-  const [toastNotifications, setToastNotifications] = useState([])//移行先
-  const [feeds, setFeeds] = useState({})
+  const [feeds, setFeeds] = useState([])
   const [modal, setModal] = useState(false)
   const modalTrigger = () => setModal(!modal)
   const [darkThreme, setDarkThreme] = useState(false)
@@ -21,8 +18,7 @@ export const MainContextProvider = ({ children }) => {
   const router = useRouter()
   const loggedInPage = () => {
     if(!loggedIn){
-      setFlashKind('info')
-      setFlashMessage(`${router.pathname}へアクセスするにはログインしてください`)
+      addToast(`${router.pathname}へアクセスするにはログインしてください`)
       console.log(flashMessage)
       router.push('/')
       return
@@ -30,8 +26,7 @@ export const MainContextProvider = ({ children }) => {
   }
   const loggedOutPage = () => {
     if(loggedIn){
-      setFlashKind('info')
-      setFlashMessage(`ログイン済みですので${router.pathname}へアクセスできません`)
+      addToast(`ログイン済みですので${router.pathname}へアクセスできません`)
       router.push('/')
       return
     }
@@ -45,8 +40,7 @@ export const MainContextProvider = ({ children }) => {
     } catch (err) {
       setLoggedIn(false)
       setCurrentAccount({})
-      setFlashKind('danger')
-      setFlashMessage(err.response ? 'クライアントFCAエラー' : 'サーバーFCAエラー')
+      addToast(err.response ? 'クライアントFCAエラー' : 'サーバーFCAエラー')
     }
   }
 
@@ -57,8 +51,7 @@ export const MainContextProvider = ({ children }) => {
       setLoggedIn(res.data.logged_in)
       setCurrentAccount(res.data.account)
     } catch (err) {
-      setFlashKind('danger')
-      setFlashMessage(err.response ? 'アカウントエラー' : 'サーバーエラー')
+      addToast(err.response ? 'アカウントエラー' : 'サーバーエラー')
     }
     setLoadingMessage('ロード完了')
     setLoading(false)
@@ -96,9 +89,6 @@ export const MainContextProvider = ({ children }) => {
       loadingMessage, setLoadingMessage,
       loggedIn, setLoggedIn,
       currentAccount, setCurrentAccount,
-      flashKind, setFlashKind,
-      flashMessage, setFlashMessage,
-      toastNotifications, setToastNotifications,
       feeds, setFeeds,
       modal, setModal, modalTrigger,
       darkThreme, setDarkThreme, darkThremeTrigger,

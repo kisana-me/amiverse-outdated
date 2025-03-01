@@ -4,12 +4,15 @@ import Link from 'next/link'
 import HeaderText from '@/components/header_text'
 import Items from '@/components/items/items'
 import { useMainContext } from '@/contexts/main_context'
+import { useToastsContext } from '@/contexts/toasts_context'
 
 export default function Home() {
-  const {loading, loggedIn, currentAccount, setFlashKind, setFlashMessage, feeds, setFeeds} = useMainContext()
+  const {loading, loggedIn, currentAccount, feeds, setFeeds} = useMainContext()
   const [loadItems, setloadItems] = useState(true)
   const [updating, setUpdating] = useState(false)
   const [page, setPage] = useState(1)
+
+  const { addToast } = useToastsContext()
 
   async function updateFeed() {
     setUpdating(true)
@@ -21,14 +24,14 @@ export default function Home() {
     await axios.post('/feed/index', {'page': page})
       .then(res => {
         setFeeds({...feeds, index: res.data})
+        addToast('タイムライン取得完了')
         setloadItems(false)
       })
       .catch(err => {
-        setFlashKind('danger')
         if (err.response) {
-          setFlashMessage('タイムライン取得エラー:未ログイン')
+          addToast('タイムライン取得エラー:未ログイン')
         } else {
-          setFlashMessage('タイムライン取得エラー:不明')
+          addToast('タイムライン取得エラー:不明')
         }
         setloadItems(false)
       })

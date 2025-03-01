@@ -5,21 +5,37 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Item from '@/components/items/item'
 import { useMainContext } from '@/contexts/main_context'
+import { useToastsContext } from '@/contexts/toasts_context'
 
 export default function Aid() {
-  const {loading, loggedIn, setFlashKind, setFlashMessage} = useMainContext()
+  const { loading, feeds } = useMainContext()
+  const { addToast } = useToastsContext()
   const router = useRouter()
   const [item, setItem] = useState({})
   const [loadingItem, setLoadingItem] = useState(true)
+
+  function findItemByAid(feeds, item_aid) {
+    if (!Array.isArray(feeds)) return null
+    return feeds.find(feed => feed.object === "item" && feed.item.aid === item_aid)?.item || null
+  }
+
   async function fetchItem() {
+    const cached_item = findItemByAid(feeds.index, router.query.aid)
+    if(cached_item){
+      setItem(cached_item)
+      console.log("ari")
+      console.log(cached_item)
+      setLoadingItem(false)
+      return
+    }
     await axios.post('/items/' + router.query.aid)
       .then(res => {
         setItem(res.data)
         setLoadingItem(false)
-        setFlashMessage('データ取得完了')
+        addToast('データ取得完了')
       })
       .catch(err => {
-        setFlashMessage('アイテム取得エラー')
+        addToast('アイテム取得エラー')
         console.log( err)
       })
   }
@@ -34,7 +50,7 @@ export default function Aid() {
     <>
       <div className="">
         {loadingItem ?
-          ''
+          'ロード中'
         :
           <Item item={item}/>
         }

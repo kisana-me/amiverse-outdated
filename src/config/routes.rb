@@ -160,9 +160,13 @@ Rails.application.routes.draw do
     post 'signup/create' => 'signup#create'
 
     # item
-    post 'items' => 'items#index', as: 'items'
+    # post 'items' => 'items#index', as: 'items'
     post 'items/create' => 'items#create', as: 'create_items'
+    post 'items/react' => 'items#react', as: 'react'
     post 'items/:aid' => 'items#show', as: 'item'
+
+    # emoji
+    post 'emojis' => 'emojis#index', as: 'emojis'
 
     # discovery
     post 'discovery' => 'discovery#index', as: 'discovery'

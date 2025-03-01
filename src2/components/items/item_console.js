@@ -1,18 +1,35 @@
-import React, { useState, useRef } from 'react';
-import ToggleMenu from '../common/toggle_menu';
+import React, { useState, useRef } from 'react'
+import ToggleMenu from '@/components/common/toggle_menu'
+import { useToastsContext } from '@/contexts/toasts_context'
+import { useEmojisContext } from '@/contexts/emojis_context'
+import EmojisMenu from '@/components/emojis/emojis_menu'
+import axios from 'axios'
 
-export default function ItemConsole({ disabled = false, toggleDisabled }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isEmojiMenuOpen, setIsEmojiMenuOpen] = useState(false);
-  const menuButtonRef = useRef(null);
-  const emojiButtonRef = useRef(null);
+export default function ItemConsole({ item_aid, disabled = false, toggleDisabled }) {
+  const { addToast } = useToastsContext()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isEmojiMenuOpen, setIsEmojiMenuOpen] = useState(false)
+  const menuButtonRef = useRef(null)
+  const emojiButtonRef = useRef(null)
+  const {emojis, fetchEmojis} = useEmojisContext()
 
-  const emojis = [
-    '🔍', '👍', '❤️', '😂', '🤔',
-    '😮', '🎉', '🎊', '🌈', 
-    '🐱', '🐈', '🎸', '✨',
-    '💉', '⬜', '💯', '🚑', '🛫'
-  ];
+  const itemReact = async (emoji_aid) => {
+    // すでにリアクションを付けていないか調べる
+    await axios.post('items/react', { item_aid, emoji_aid })
+      .then(res => {
+        if (res.data.status == 'reacted') {
+          addToast('リアクションしました')
+        } else if (res.data.status == 'deleted'){
+          addToast('リアクションを削除しました')
+        } else {
+          console.log(res.data.status)
+          addToast(`エラー/${res.data.status}`)
+        }
+      })
+      .catch(err => {
+        console.log(err.response)
+      })
+  }
 
   return (
     <>
@@ -78,34 +95,18 @@ export default function ItemConsole({ disabled = false, toggleDisabled }) {
         </button>
       </div>
 
-      {/* 絵文字メニュー */}
       <ToggleMenu 
         isOpen={isEmojiMenuOpen && !disabled} 
         onClose={() => setIsEmojiMenuOpen(false)} 
         buttonRef={emojiButtonRef}
       >
-        <div className="emoji-menu">
-          <div className="emoji-grid">
-            {emojis.map((emoji, index) => (
-              <div key={index} className="emoji-item" onClick={() => {
-                console.log(`Emoji ${emoji} selected`);
-                setIsEmojiMenuOpen(false);
-              }}>
-                {emoji}
-              </div>
-            ))}
-          </div>
-          <div className="emoji-footer">
-            <div className="emoji-recent">
-              <span className="emoji-recent-icon">🕒</span>
-              <span>最近使用</span>
-            </div>
-            <div className="emoji-search">検索</div>
-          </div>
-        </div>
+        <EmojisMenu clicked={(emoji_aid) => {
+          setIsEmojiMenuOpen(false)
+          console.log(emoji_aid)
+          itemReact(emoji_aid)
+        }}/>
       </ToggleMenu>
 
-      {/* 通常のメニュー */}
       <ToggleMenu 
         isOpen={isMenuOpen && !disabled} 
         onClose={() => setIsMenuOpen(false)} 
@@ -175,60 +176,6 @@ export default function ItemConsole({ disabled = false, toggleDisabled }) {
         }
         .cnb:hover:not(:disabled) {
           background: #fff3;
-        }
-        
-        /* 絵文字メニューのスタイル */
-        :global(.emoji-menu) {
-          width: 300px;
-          padding: 10px;
-          background-color: #222;
-          border-radius: 8px;
-        }
-        
-        :global(.emoji-grid) {
-          display: grid;
-          grid-template-columns: repeat(6, 1fr);
-          gap: 10px;
-          margin-bottom: 15px;
-        }
-        
-        :global(.emoji-item) {
-          font-size: 24px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 40px;
-          cursor: pointer;
-          border-radius: 5px;
-          transition: background-color 0.2s;
-        }
-        
-        :global(.emoji-item:hover) {
-          background-color: #333;
-        }
-        
-        :global(.emoji-footer) {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding-top: 10px;
-          border-top: 1px solid #444;
-          color: #aaa;
-          font-size: 14px;
-        }
-        
-        :global(.emoji-recent) {
-          display: flex;
-          align-items: center;
-          gap: 5px;
-        }
-        
-        :global(.emoji-recent-icon) {
-          font-size: 16px;
-        }
-        
-        :global(.emoji-search) {
-          cursor: pointer;
         }
       `}</style>
     </>

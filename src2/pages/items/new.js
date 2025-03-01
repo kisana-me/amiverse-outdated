@@ -1,13 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react'
 import axios from '@/lib/axios'
 import { useRouter } from 'next/router'
-import { useMainContext } from '@/contexts/main_context'
-import ItemAccount from '@/components/item_account'
-import Post from '@/components/post'
+import { useToastsContext } from '@/contexts/toasts_context'
 
 export default function New() {
   const router = useRouter()
-  const { loggedIn, setFlashKind, setFlashMessage } = useMainContext()
+  const { addToast } = useToastsContext
   const [itemContent, setItemContent] = useState('')
 
   async function createItem(e) {
@@ -18,8 +16,7 @@ export default function New() {
     .then(res => {
       if (res.data.is_done) {
         console.log('item/create:完了')
-        setFlashKind('info')
-        setFlashMessage(`投稿しました`)
+        addToast(`投稿しました`)
         router.push('/')
         // router.push('/items/' + res.data.item_aid)
       } else {

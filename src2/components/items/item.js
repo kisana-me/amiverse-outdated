@@ -72,7 +72,8 @@ export default function Item({ item }) {
           </div>
         </div>
         <ItemReactions reactions={item.reactions} />
-        <ItemConsole 
+        <ItemConsole
+          item_aid={item.aid}
           disabled={consoleDisabled} 
           toggleDisabled={() => {
             setConsoleDisabled(true);

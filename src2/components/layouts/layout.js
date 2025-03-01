@@ -3,19 +3,14 @@ import { useMainContext } from '@/contexts/main_context'
 import Loading from './loading'
 import Header from './header'
 import Aside from './aside'
+import { useToastsContext } from '@/contexts/toasts_context'
 
 export default function Layout({ children }) {
-  const { setLoading, loadingMessage, darkThreme, flashKind, setFlashMessage, flashMessage, loginForm, overlay, setOverlay } = useMainContext()
-  const [removeFlash, setRemoveFlash] = useState(false)
+  const { overlay } = useMainContext()
+  const { toasts } = useToastsContext()
 
   const handleClick = () => {
-    if(removeFlash){
-      setFlashMessage('')
-      setRemoveFlash(false)
-    } else {
-      setFlashMessage(flashMessage + '(もう一度押して削除)')
-      setRemoveFlash(true)
-    }
+    // トースト通知の即時非表示
   }
   
   return (
@@ -27,7 +22,11 @@ export default function Layout({ children }) {
           {children}
         </main>
         <Aside />
-        {flashMessage ? <div className={`flash  flash-${flashKind}`} onClick={handleClick}>{flashMessage}</div> : ''}
+        {toasts.filter((toast) => toast.status === "show").map((toast, index) => (
+          <div key={index} className="flash" style={{ bottom: `${70+40*index}px`}} >
+            {toast.message}
+          </div>
+        ))}
         {overlay && <div className="global-overlay" />}
       </div>
       <style jsx>{`
@@ -50,7 +49,6 @@ export default function Layout({ children }) {
           position: fixed;
           right: 10px;
           background-color: #4fff67bb;
-          bottom: 70px;
           z-index: 200;
         }
         @media (min-width: 700px) and (min-height: 660px) {
