@@ -1,6 +1,6 @@
 class V1::EmojisController < V1::ApplicationController
   # before_action :api_logged_in_account
-  include Serializers
+  # include Serializers
 
   def index
     emojis = Emoji.all
