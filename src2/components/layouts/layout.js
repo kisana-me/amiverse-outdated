@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { useMainContext } from '@/contexts/main_context'
+import { useCommonContext } from '@/contexts/common_context'
 import Loading from './loading'
 import Header from './header'
 import Aside from './aside'
 import { useToastsContext } from '@/contexts/toasts_context'
 
 export default function Layout({ children }) {
-  const { overlay } = useMainContext()
+  const { overlay, isMenuOpen, setIsMenuOpen } = useCommonContext()
   const { toasts } = useToastsContext()
 
   const handleClick = () => {
@@ -28,6 +28,7 @@ export default function Layout({ children }) {
           </div>
         ))}
         {overlay && <div className="global-overlay" />}
+        {isMenuOpen && <div className="global-menu-overlay" onClick={()=>{setIsMenuOpen(false)}} />}
       </div>
       <style jsx>{`
         .wrap {}
@@ -84,7 +85,16 @@ export default function Layout({ children }) {
           right: 0;
           bottom: 0;
           background: rgba(0, 0, 0, 0.5);
-          z-index: 100;
+          z-index: 90;
+        }
+        .global-menu-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 86;
         }
       `}</style>
     </div>

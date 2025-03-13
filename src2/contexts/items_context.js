@@ -6,6 +6,7 @@ const ItemsContext = createContext()
 export const ItemsContextProvider = ({ children }) => {
   const [itemsLoading, setItemsLoading] = useState(false)
   const [items, setItems] = useState([])
+  const [feeds, setFeeds] = useState([])
 
   async function fetchItems(category = '') {
     if(false){
@@ -30,7 +31,8 @@ export const ItemsContextProvider = ({ children }) => {
   return (
     <ItemsContext.Provider value={{
       itemsLoading, setItemsLoading,
-      items, setItems
+      items, setItems,
+      feeds, setFeeds
     }}>
       {children}
     </ItemsContext.Provider>

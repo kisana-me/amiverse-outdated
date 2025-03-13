@@ -9,13 +9,8 @@ export const MainContextProvider = ({ children }) => {
   const [loadingMessage, setLoadingMessage] = useState('セッション作成中')
   const [loggedIn, setLoggedIn] = useState(false)
   const [currentAccount, setCurrentAccount] = useState({})
-  const [feeds, setFeeds] = useState([])
-  const [modal, setModal] = useState(false)
-  const modalTrigger = () => setModal(!modal)
-  const [darkThreme, setDarkThreme] = useState(false)
-  const darkThremeTrigger = () => setDarkThreme(!darkThreme)
-  const [overlay, setOverlay] = useState(false)
   const router = useRouter()
+
   const loggedInPage = () => {
     if(!loggedIn){
       addToast(`${router.pathname}へアクセスするにはログインしてください`)
@@ -58,30 +53,8 @@ export const MainContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    setDarkThreme(window.matchMedia('(prefers-color-scheme: dark)').matches)
     startUp()
   },[])
-
-  // overlayの状態が変更されたときにスクロールを制御
-  useEffect(() => {
-    const preventDefault = (e) => {
-      e.preventDefault()
-    }
-    if (overlay) {
-      // スクロールを無効化
-      document.addEventListener('wheel', preventDefault, { passive: false })
-      document.addEventListener('touchmove', preventDefault, { passive: false })
-    } else {
-      // スクロールを有効化
-      document.removeEventListener('wheel', preventDefault)
-      document.removeEventListener('touchmove', preventDefault)
-    }
-    return () => {
-      // クリーンアップ
-      document.removeEventListener('wheel', preventDefault)
-      document.removeEventListener('touchmove', preventDefault)
-    }
-  }, [overlay])
 
   return (
     <MainContext.Provider value={{
@@ -89,12 +62,8 @@ export const MainContextProvider = ({ children }) => {
       loadingMessage, setLoadingMessage,
       loggedIn, setLoggedIn,
       currentAccount, setCurrentAccount,
-      feeds, setFeeds,
-      modal, setModal, modalTrigger,
-      darkThreme, setDarkThreme, darkThremeTrigger,
       loggedInPage, loggedOutPage,
-      fetchCurrentAccount,
-      overlay, setOverlay
+      fetchCurrentAccount
     }}>
       {children}
     </MainContext.Provider>

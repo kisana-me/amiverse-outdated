@@ -12,7 +12,7 @@ export default function index() {
   useEffect(() => {
     // 非同期関数を定義して即時実行
     const fetchData = async () => {
-      if (!ignore && loggedIn) {
+      if (!ignore) {
         setLoading(true)
         // fetch POST
         await axios.post('/discovery', {'page': 'page'})
@@ -28,7 +28,7 @@ export default function index() {
     }
     fetchData()
     return () => {ignore = true}
-  },[loggedIn])
+  },[])
 
   // 日付をフォーマットする関数
   const formatDate = (dateString) => {

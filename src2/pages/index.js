@@ -4,10 +4,15 @@ import Link from 'next/link'
 import HeaderText from '@/components/header_text'
 import Items from '@/components/items/items'
 import { useMainContext } from '@/contexts/main_context'
+import { useCommonContext } from '@/contexts/common_context'
 import { useToastsContext } from '@/contexts/toasts_context'
+import { useItemsContext } from '@/contexts/items_context'
 
 export default function Home() {
-  const {loading, loggedIn, currentAccount, feeds, setFeeds} = useMainContext()
+  const {loading, loggedIn, currentAccount } = useMainContext()
+  const { feeds, setFeeds } = useItemsContext()
+  const { isMenuOpen, setIsMenuOpen, menuTrigger } = useCommonContext()
+
   const [loadItems, setloadItems] = useState(true)
   const [updating, setUpdating] = useState(false)
   const [page, setPage] = useState(1)
@@ -77,9 +82,6 @@ export default function Home() {
           if (loggedIn) {
             return (
               <div>
-                フロントが未完成で不安定な為、
-                <Link href="https://api.amiverse.net/">API</Link>
-                バージョンのご使用をお勧めします。
                 こんにちは、{currentAccount.name}さん。
               </div>
             )
@@ -96,6 +98,8 @@ export default function Home() {
             )
           }
         })()}
+        aaaaaaaaaaaaasssssssss<button onClick={() => {menuTrigger()}}>メニュー</button>
+        <div>{isMenuOpen ? '開' : '閉'}</div>
         <button onClick={updateFeed} disabled={updating}>{updating ? '更新中' : 'フィードを更新'}</button>
         <Link href="/items/new">作成</Link>
         <div>

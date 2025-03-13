@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useMainContext } from '@/contexts/main_context'
-import { useCommonContext } from '@/contexts/common_context'
+import { useMenuContext } from '@/contexts/menu_context'
 import Link from 'next/link'
 
 export default function Header() {
   const router = useRouter()
   const { loggedIn, currentAccount } = useMainContext()
-  const { isMenuOpen, setIsMenuOpen } = useCommonContext()
+  const { isMenuOpen, setIsMenuOpen, toggleMenu } = useMenuContext()
 
   return (
-    <header className={isMenuOpen ? 'show-header' : ''}>
+    <header>
       <div className="header-container1">
         <Link href='/'>
           <div className='header-list-container'>
@@ -220,29 +220,27 @@ export default function Header() {
       </div>
       <style jsx>{`
         header {
-          width: 200px;
-          height: 100svh;
-          left: 0;
-          position: sticky;
-          padding: 30px 5px;
+          width: 100%;
+          height: 60px;
+          position: fixed;
+          bottom: 0px;
+          padding: 0px;
           box-sizing: border-box;
           backdrop-filter: blur(3px);
           background: var(--blur-color);
           display: flex;
           flex-direction: column;
           flex-shrink: 0;
-          z-index: 88;
-          transition: left 0.5s ease-in-out;
+          z-index: 110;
         }
         /* 三つの要素 */
         .header-container1 {
-          height: 60px;
-          margin: 0 0 60px 0;
-          position: static;
+          // display: none; 以下のSVGに悪影響
+          height: 0;
+          margin: 0;
+          bottom: -100px;
+          position: fixed;
           box-sizing: border-box;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
         }
         nav {
           width: 100%;
@@ -250,28 +248,25 @@ export default function Header() {
           margin: 0px;
           padding: 0px;
           display: flex;
-          flex-direction: column;
-          justify-content: normal;
+          flex-direction: row;
+          justify-content: space-around;
           align-items: center;
           flex-grow: 1;
         }
         .header-container2 {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
+
         }
         /* 子要素 */
         .header-list-container {
-          width: 190px;
+          width: 50px;
           height: 50px;
-          padding: 10px;
           margin: 5px 0;
-          border-radius: 5px;
+          border-radius: 30px;
           box-sizing: border-box;
           display: flex;
-          flex-direction: row;
-          justify-content: flex-start;
+          flex-direction: column;
           align-items: center;
+          justify-content: center;
           color: var(--font-color);
         }
         .header-list-container:hover {
@@ -293,10 +288,13 @@ export default function Header() {
         }
         .header-list-text {
           margin-left: 7px;
-          display: inline-block;
+          display: none;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+        }
+        .header-nav-post-remover {
+          display: none;
         }
         .header-new-item {
           color: var(--button-font-color);
@@ -310,34 +308,52 @@ export default function Header() {
           border-radius: 18px;
           display: block;
         }
-        @media (max-width: 700px) {
+        @media (min-width: 700px) and (min-height: 660px) {
           header {
-            left: -200px;
-            position: fixed;
-          }
-          header.show-header {
-            left: 0;
-          }
-        }
-        @media (min-width: 700px) and (min-height: 660px) and (max-width: 1300px) {
-          header {
-            width: 70px;            
+            width: 70px;
+            height: 100svh;
+            position: sticky;
+            padding: 30px 5px;
+            top: 0px;
+            left: 0px;
           }
           .header-container1 {
+            height: 60px;
+            margin-bottom: 60px;
+            position: static;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
           }
           .header-container2 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
           }
           nav {
+            flex-direction: column;
+            justify-content: normal;
+          }
+          .header-nav-post-remover {
+            display: flex;
+          }
+        }
+        @media (min-width: 1300px) {
+          header {
+            width: 200px;
           }
           .header-list-container {
-            width: 50px;
-            padding: 0;
-            border-radius: 30px;
+            width: 190px;
+            padding: 10px;
+            border-radius: 5px;
             flex-direction: row;
-            justify-content: space-around;
+            justify-content: flex-start;
+          }
+          nav {
+            align-items: normal;
           }
           .header-list-text {
-            display: none;
+            display: inline-block;
           }
         }
       `}</style>
