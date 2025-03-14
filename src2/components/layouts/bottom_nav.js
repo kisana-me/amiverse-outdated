@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useMainContext } from '@/contexts/main_context'
-import { useMenuContext } from '@/contexts/menu_context'
 import Link from 'next/link'
 
-export default function Header() {
+export default function BottomNav() {
   const router = useRouter()
-  const { loggedIn, currentAccount } = useMainContext()
-  const { isMenuOpen, setIsMenuOpen, toggleMenu } = useMenuContext()
 
   return (
-    <header>
+    <>
       <nav>
         <Link href='/'>
           <div className='header-list-container'>
@@ -110,32 +105,22 @@ export default function Header() {
             </div>
           </div>
         </Link>
-        <div className='header-nav-post-remover'>
-        <Link href='/items/new'>
-          <div className='header-list-container header-new-item'>
-            <div className="header-list-icon">
-              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" clipRule="evenodd" d="M55 12C55 10.8954 54.1046 10 53 10H47C45.8954 10 45 10.8954 45 12V43C45 44.1046 44.1046 45 43 45H12C10.8954 45 10 45.8954 10 47V53C10 54.1046 10.8954 55 12 55H43C44.1046 55 45 55.8954 45 57V88C45 89.1046 45.8954 90 47 90H53C54.1046 90 55 89.1046 55 88V57C55 55.8954 55.8954 55 57 55H88C89.1046 55 90 54.1046 90 53V47C90 45.8954 89.1046 45 88 45H57C55.8954 45 55 44.1046 55 43V12Z" fill="currentColor"/>
-              </svg>
-            </div>
-            <div className="header-list-text">
-              Post
-            </div>
-          </div>
-        </Link>
-        </div>
       </nav>
       <style jsx>{`
         nav {
           width: 100%;
-          height: 100%;
+          height: 60px;
           margin: 0px;
           padding: 0px;
+          position: fixed;
+          bottom: 0;
           display: flex;
           flex-direction: row;
           justify-content: space-around;
           align-items: center;
           flex-grow: 1;
+          backdrop-filter: blur(3px);
+          background: var(--blur-color);
         }
         .header-list-container {
           width: 50px;
@@ -173,9 +158,6 @@ export default function Header() {
           overflow: hidden;
           text-overflow: ellipsis;
         }
-        .header-nav-post-remover {
-          display: none;
-        }
         .header-new-item {
           color: var(--button-font-color);
           background: var(--button-color);
@@ -194,6 +176,6 @@ export default function Header() {
           }
         }
       `}</style>
-    </header>
+    </>
   )
 }

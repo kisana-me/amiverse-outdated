@@ -3,12 +3,15 @@ import { useContext, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
+import MainHeader from '@/components/layouts/main_header'
 import Item from '@/components/items/item'
 import { useMainContext } from '@/contexts/main_context'
+import { useItemsContext } from '@/contexts/items_context'
 import { useToastsContext } from '@/contexts/toasts_context'
 
 export default function Aid() {
-  const { loading, feeds } = useMainContext()
+  const { loading } = useMainContext()
+  const { feeds } = useItemsContext()
   const { addToast } = useToastsContext()
   const router = useRouter()
   const [item, setItem] = useState({})
@@ -48,6 +51,9 @@ export default function Aid() {
 
   return (
     <>
+      <MainHeader>
+        投稿
+      </MainHeader>
       <div className="">
         {loadingItem ?
           'ロード中'

@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from 'react'
-import { useCommonContext } from '@/contexts/common_context'
+import { useOverlayContext } from '@/contexts/overlay_context'
 
 export default function ToggleMenu({ isOpen, onClose, children, buttonRef }) {
   // widthが700px未満の時はスタイルを変更すべきだ。
-  const { setOverlay } = useCommonContext()
+  const { setOverlay } = useOverlayContext()
   const menuRef = useRef(null)
 
   // メニューの位置を計算して調整する

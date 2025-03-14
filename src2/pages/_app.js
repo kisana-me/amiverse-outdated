@@ -2,7 +2,7 @@ import '@/styles/globals.css'
 import Head from '@/components/head'
 import Layout from '@/components/layouts/layout'
 import { MainContextProvider } from '@/contexts/main_context'
-import { CommonContextProvider } from '@/contexts/common_context'
+import { OverlayContextProvider } from '@/contexts/overlay_context'
 import { ThemeContextProvider } from '@/contexts/theme_context'
 import { ToastsContextProvider } from '@/contexts/toasts_context'
 import { ItemsContextProvider } from '@/contexts/items_context'
@@ -12,7 +12,7 @@ export default function App({ Component, pageProps }) {
 
   return (
     <MainContextProvider>
-    <CommonContextProvider>
+    <OverlayContextProvider>
     <ThemeContextProvider>
     <ToastsContextProvider>
     <ItemsContextProvider>
@@ -25,7 +25,7 @@ export default function App({ Component, pageProps }) {
     </ItemsContextProvider>
     </ToastsContextProvider>
     </ThemeContextProvider>
-    </CommonContextProvider>
+    </OverlayContextProvider>
     </MainContextProvider>
   )
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useMainContext } from '@/contexts/main_context'
 import Link from 'next/link'
+import MainHeader from '@/components/layouts/main_header'
 import Logout from '@/components/logout'
 
 export default function index() {
@@ -34,7 +35,9 @@ export default function index() {
 
   return (
     <>
-      <h1>ダッシュボード</h1>
+      <MainHeader>
+        ダッシュボード
+      </MainHeader>
       <div className="div_1">
         {loggedIn ? ifLoggedIn : ifLoggedOut }
         

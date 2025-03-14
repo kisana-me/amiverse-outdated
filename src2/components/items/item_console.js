@@ -7,7 +7,7 @@ import axios from 'axios'
 
 export default function ItemConsole({ item_aid, disabled = false, toggleDisabled }) {
   const { addToast } = useToastsContext()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isHeaderMenuOpen, setIsHeaderMenuOpen] = useState(false)
   const [isEmojiMenuOpen, setIsEmojiMenuOpen] = useState(false)
   const menuButtonRef = useRef(null)
   const emojiButtonRef = useRef(null)
@@ -83,7 +83,7 @@ export default function ItemConsole({ item_aid, disabled = false, toggleDisabled
         <button 
           ref={menuButtonRef}
           className='console-button cnb cb-menu'
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onClick={() => setIsHeaderMenuOpen(!isHeaderMenuOpen)}
           disabled={disabled}
         >
           <div className="console-icon">
@@ -108,8 +108,8 @@ export default function ItemConsole({ item_aid, disabled = false, toggleDisabled
       </ToggleMenu>
 
       <ToggleMenu 
-        isOpen={isMenuOpen && !disabled} 
-        onClose={() => setIsMenuOpen(false)} 
+        isOpen={isHeaderMenuOpen && !disabled} 
+        onClose={() => setIsHeaderMenuOpen(false)} 
         buttonRef={menuButtonRef}
       >
         <div className="menu-item">リスト追加</div>

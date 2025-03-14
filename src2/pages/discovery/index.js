@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useMainContext } from '@/contexts/main_context'
+import MainHeader from '@/components/layouts/main_header'
 import axios from 'axios'
 
 export default function index() {
@@ -39,7 +40,9 @@ export default function index() {
 
   return (
     <>
-      <h1>みつける</h1>
+      <MainHeader>
+        みつける
+      </MainHeader>
       <div className="div_1">
         <h2>検索</h2>
         <p>未実装</p>

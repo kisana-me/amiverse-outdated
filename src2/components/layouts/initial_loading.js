@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useMainContext } from '@/contexts/main_context'
 
-export default function Loading() {
+export default function InitialLoading() {
   const { loading, setLoading, loadingMessage } = useMainContext()
   const [showLoading, setShowLoading] = useState(loading)
 
@@ -15,14 +15,16 @@ export default function Loading() {
   }, [loading])
 
   return (
-    <div className={`${showLoading ? 'show-loading' : 'hide-loading'}`}>
-      <div className='loading-logo-wrap'>
-        <div className={`loading-logo-ring1 ${loading ? '' : 'loading-logo-ring2'}`}></div>
-        <img className='loading-logo' src='/ast-imgs/amiverse-v3-alpha.svg' />
-      </div>
-      <div className='loading-details'>
-        <div className='loading-message'>{loadingMessage}</div>
-        <div className='loading-close-button' onClick={() => setLoading(false)} >閉じる</div>
+    <>
+      <div className={`${showLoading ? 'show-loading' : 'hide-loading'}`}>
+        <div className='loading-logo-wrap'>
+          <div className={`loading-logo-ring1 ${loading ? '' : 'loading-logo-ring2'}`}></div>
+          <img className='loading-logo' src='/ast-imgs/amiverse-v3-alpha.svg' />
+        </div>
+        <div className='loading-details'>
+          <div className='loading-message'>{loadingMessage}</div>
+          <div className='loading-close-button' onClick={() => setLoading(false)} >閉じる</div>
+        </div>
       </div>
       <style jsx>{`
         .show-loading {
@@ -87,6 +89,6 @@ export default function Loading() {
           display: inline;
         }
       `}</style>
-    </div>
+    </>
   )
 }

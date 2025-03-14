@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useMainContext } from '@/contexts/main_context'
 import Link from 'next/link'
+import MainHeader from '@/components/layouts/main_header'
 
 export default function index() {
   const { loggedIn, loggedInPage, currentAccount } = useMainContext()
@@ -15,7 +16,7 @@ export default function index() {
 
   return (
     <>
-      <h1>コミュニティ</h1>
+      <MainHeader>コミュニティ</MainHeader>
       <div className="div_1">
         <p>未実装</p>
       </div>

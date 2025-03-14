@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useMainContext } from '@/contexts/main_context'
+import MainHeader from '@/components/layouts/main_header'
 
 export default function Notifications() {
   const { loading, loggedIn, toastNotifications } = useMainContext()
@@ -13,7 +14,7 @@ export default function Notifications() {
 
   return (
     <>
-      <h1>通知</h1>
+      <MainHeader>通知</MainHeader>
       <div className="div_1">
         <p>未実装</p>
       </div>
