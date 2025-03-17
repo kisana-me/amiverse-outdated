@@ -5,7 +5,8 @@ export default function ItemAccount({ account }) {
     <>
       <div className="item-account-info">
         <Link href={'/@' + account.name_id} className="iai-plate" style={{
-          color: '#fff',
+          color: 'inherit',
+          textDecoration: 'none',
           minWidth: 0,
           display: 'flex',
           flexGrow: 1
@@ -52,7 +53,6 @@ export default function ItemAccount({ account }) {
           justify-content: center;
           height: 50px;
           box-sizing: border-box;
-          position: relative;
         }
         .iai-status {
           width: 8px;

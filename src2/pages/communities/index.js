@@ -18,7 +18,22 @@ export default function index() {
     <>
       <MainHeader>コミュニティ</MainHeader>
       <div className="div_1">
-        <p>未実装</p>
+        {loggedIn ? (<>
+          <div>
+            <div>コミュニティ一覧</div>
+            <div>テストコミュニティ1</div>
+          </div>
+        </>) : (<>
+          <div>
+            <div>ログインしよう</div>
+            <div>簡易ログインフォーム</div>
+          </div>
+          <hr />
+        </>)}
+        <div>
+          <div>おすすめコミュニティ</div>
+          <div>テストコミュニティ2</div>
+        </div>
       </div>
       <style jsx>{`
         .div_1 {

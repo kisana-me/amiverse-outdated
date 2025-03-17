@@ -13,7 +13,7 @@ export default function Header() {
     <>
       <header className={isHeaderMenuOpen ? 'show-header' : ''}>
         <div className="header-container1">
-          <Link href='/'>
+          <Link href='/' style={{color: 'inherit', textDecoration: 'none'}}>
             <div className='header-list-container'>
               <div className="header-list-icon">
                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,7 +58,7 @@ export default function Header() {
           </Link>
         </div>
         <nav>
-          <Link href='/'>
+          <Link href='/' style={{color: 'inherit', textDecoration: 'none'}}>
             <div className='header-list-container'>
               <div className="header-list-icon">
                 {router.pathname == '/' ?
@@ -81,7 +81,7 @@ export default function Header() {
               </div>
             </div>
           </Link>
-          <Link href='/discovery'>
+          <Link href='/discovery' style={{color: 'inherit', textDecoration: 'none'}}>
             <div className='header-list-container'>
               <div className="header-list-icon">
                 {router.pathname == '/discovery' ?
@@ -99,7 +99,7 @@ export default function Header() {
               </div>
             </div>
           </Link>
-          <Link href='/dashboard'>
+          <Link href='/dashboard' style={{color: 'inherit', textDecoration: 'none'}}>
             <div className='header-list-container'>
               <div className="header-list-icon">
                 {router.pathname == '/dashboard' ?
@@ -120,7 +120,7 @@ export default function Header() {
               </div>
             </div>
           </Link>
-          <Link href='/notifications'>
+          <Link href='/notifications' style={{color: 'inherit', textDecoration: 'none'}}>
             <div className='header-list-container'>
               <div className="header-list-icon">
                 {router.pathname == '/notifications' ?
@@ -138,7 +138,7 @@ export default function Header() {
               </div>
             </div>
           </Link>
-          <Link href='/communities'>
+          <Link href='/communities' style={{color: 'inherit', textDecoration: 'none'}}>
             <div className='header-list-container'>
               <div className="header-list-icon">
                 {router.pathname == '/communities' ?
@@ -156,7 +156,7 @@ export default function Header() {
               </div>
             </div>
           </Link>
-          <Link href='/items/new'>
+          <Link href='/items/new' style={{color: 'inherit', textDecoration: 'none'}}>
             <div className='header-list-container header-new-item'>
               <div className="header-list-icon">
                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -171,10 +171,10 @@ export default function Header() {
         </nav>
         <div className="header-container2">
           {loggedIn ?
-            <Link href={ '/@' + currentAccount.name_id }>
+            <Link href={ '/@' + currentAccount.name_id } style={{color: 'inherit', textDecoration: 'none'}}>
               <div className='header-list-container'>
                 <div className="header-list-icon">
-                  <img src="/images/icon.webp" className="header-list-image" />
+                  <img src="/ast-imgs/icon.png" className="header-list-image" />
                 </div>
                 <div className="header-list-text">
                   {currentAccount.name}
@@ -182,7 +182,7 @@ export default function Header() {
               </div>
             </Link>
           :
-          <Link href='/login'>
+          <Link href='/login' style={{color: 'inherit', textDecoration: 'none'}}>
             <div className='header-list-container'>
               <div className="header-list-icon">
                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -195,7 +195,7 @@ export default function Header() {
             </div>
           </Link>
           }
-          <Link href='/settings'>
+          <Link href='/settings' style={{color: 'inherit', textDecoration: 'none'}}>
             <div className='header-list-container'>
               <div className="header-list-icon">
                 {false ?

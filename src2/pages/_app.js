@@ -5,6 +5,7 @@ import { MainContextProvider } from '@/contexts/main_context'
 import { OverlayContextProvider } from '@/contexts/overlay_context'
 import { ThemeContextProvider } from '@/contexts/theme_context'
 import { ToastsContextProvider } from '@/contexts/toasts_context'
+import { TrendsContextProvider } from '@/contexts/trends_context'
 import { ItemsContextProvider } from '@/contexts/items_context'
 import { EmojisContextProvider } from '@/contexts/emojis_context'
 
@@ -15,6 +16,7 @@ export default function App({ Component, pageProps }) {
     <OverlayContextProvider>
     <ThemeContextProvider>
     <ToastsContextProvider>
+    <TrendsContextProvider>
     <ItemsContextProvider>
     <EmojisContextProvider>
       <Head />
@@ -23,6 +25,7 @@ export default function App({ Component, pageProps }) {
       </Layout>
     </EmojisContextProvider>
     </ItemsContextProvider>
+    </TrendsContextProvider>
     </ToastsContextProvider>
     </ThemeContextProvider>
     </OverlayContextProvider>

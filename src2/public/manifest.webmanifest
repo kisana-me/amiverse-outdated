@@ -9,8 +9,8 @@
     "short_name": "Amiverse",
     "icons": [
         {
-            "src": "/amiverse-alpha.png",
-            "sizes": "512x512",
+            "src": "/ast-imgs/amiverse-v3-alpha-400x400.png",
+            "sizes": "400x400",
             "type": "image/png"
         }
     ]

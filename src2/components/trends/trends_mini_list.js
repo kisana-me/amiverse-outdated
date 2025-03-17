@@ -1,73 +1,47 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { useMainContext } from '@/contexts/main_context'
-import MainHeader from '@/components/layouts/main_header'
-import axios from 'axios'
-import { formatRelativeTime } from '@/lib/format_time'
+import { useEffect } from 'react'
 import { useTrendsContext } from '@/contexts/trends_context'
+import { formatRelativeTime } from '@/lib/format_time'
 
-export default function index() {
+export default function TrendsMiniList() {
   const { trends, trendsLoading, fetchTrends } = useTrendsContext()
-  const { loggedIn } = useMainContext()
-  const [lastUpdated, setLastUpdated] = useState('')
-  
+
   useEffect(() => {
     fetchTrends()
-  },[])
-
-  // 日付をフォーマットする関数
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
-  }
+  }, [])
 
   return (
     <>
-      <MainHeader>
-        みつける
-      </MainHeader>
-      <div className="div_1">
-        <h2>検索</h2>
-        <p>未実装</p>
-      </div>
-      
-      <div className="trends-container">
-        <h2>トレンド</h2>
-        {trendsLoading ? (
-          <>
-            <div className="skeleton-last-updated"></div>
-            <ul className="trends-list">
-              {[...Array(5)].map((_, index) => (
-                <li key={index} className="trend-item skeleton-item">
-                  <span className="skeleton-word"></span>
-                  <span className="skeleton-count"></span>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <>
-            {trends.map(({ category, last_updated_at, data }) => (
-              <div key={category}>
-                <h2>c:{category}</h2>
-                <p>Last updated at: {formatRelativeTime(new Date(last_updated_at))}</p>
-                <ul className="trends-list">
-                  {data.map((t, index) => (
-                    <li key={index} className="trends-item">
-                      <span className="trends-word">{t.word}</span>
-                      <span className="trends-count">{t.count}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+      {trendsLoading ? (
+        <>
+          <div className="skeleton-last-updated"></div>
+          <ul className="trends-list">
+            {[...Array(5)].map((_, index) => (
+              <li key={index} className="trend-item skeleton-item">
+                <span className="skeleton-word"></span>
+                <span className="skeleton-count"></span>
+              </li>
             ))}
-          </>
-        )}
-      </div>
-      
+          </ul>
+        </>
+      ) : (
+        <>
+          {trends.map(({ category, last_updated_at, data }) => (
+            <div key={category}>
+              <h2>c:{category}</h2>
+              <p>Last updated at: {formatRelativeTime(new Date(last_updated_at))}</p>
+              <ul className="trends-list">
+                {data.map((t, index) => (
+                  <li key={index} className="trends-item">
+                    <span className="trends-word">{t.word}</span>
+                    <span className="trends-count">{t.count}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </>
+      )}
       <style jsx>{`
-        .div_1 {
-        }
         
         .trends-container {
           margin-top: 20px;

@@ -29,7 +29,6 @@ export default function Home() {
     await axios.post('/feed/index', {'page': page})
       .then(res => {
         setFeeds({...feeds, index: res.data})
-        addToast('タイムライン取得完了')
         setloadItems(false)
       })
       .catch(err => {
@@ -66,10 +65,8 @@ export default function Home() {
     }
     if ('index' in feeds) {
       setloadItems(false)
-      console.log("indexあり", feeds)
     } else {
       fetchItems()
-      console.log("indexなし", feeds)
     }
   },[loading])
 
@@ -89,9 +86,6 @@ export default function Home() {
           return (
             <div>
               Amiverse.netへようこそ！
-              フロントが未完成で不安定な為、
-              <Link href="https://api.amiverse.net/">API</Link>
-              バージョンのご使用をお勧めします。
               <Link href="/login">ログイン</Link>
               <Link href="/signup">サインアップ</Link>
             </div>

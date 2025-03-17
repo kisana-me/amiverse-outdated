@@ -3,17 +3,7 @@ import { useState } from 'react'
 import ItemAccount from '@/components/items/item_account'
 import ItemReactions from '@/components/items/item_reactions'
 import ItemConsole from '@/components/items/item_console'
-
-const formatDate = (isoString) => {
-  const date = new Date(isoString)
-  const year = date.getFullYear()
-  const month = ('0' + (date.getMonth() + 1)).slice(-2)
-  const day = ('0' + date.getDate()).slice(-2)
-  const hours = date.getHours()
-  const minutes = ('0' + date.getMinutes()).slice(-2)
-  const seconds = ('0' + date.getSeconds()).slice(-2)
-  return `${year}年 ${month}月 ${day}日 ${hours}時 ${minutes}分 ${seconds}秒`
-}
+import { formatRelativeTime } from '@/lib/format_time'
 
 export default function Item({ item }) {
   const [consoleDisabled, setConsoleDisabled] = useState(false);
@@ -24,13 +14,13 @@ export default function Item({ item }) {
         <ItemAccount account={item.account} />
         <div className='item-info item-top-info'>
           <div className='iti-left'>
-            <Link href={'/items/' + item.aid}>
+            <Link href={'/items/' + item.aid} style={{color: 'inherit', textDecoration: 'none'}}>
               返信/引用
             </Link>
           </div>
           <div className='iti-right'>
-            <Link href={'/items/' + item.aid}>
-              { formatDate(item.created_at) }
+            <Link href={'/items/' + item.aid} style={{color: 'inherit', textDecoration: 'none'}}>
+              { formatRelativeTime(new Date(item.created_at)) }
             </Link>
           </div>
         </div>
@@ -61,12 +51,12 @@ export default function Item({ item }) {
         </div>
         <div className='item-info item-bottom-info'>
           <div className='ibi-left'>
-            <Link href={'/items/' + item.aid}>
+            <Link href={'/items/' + item.aid} style={{color: 'inherit', textDecoration: 'none'}}>
               全体公開
             </Link>
           </div>
           <div className='ibi-right'>
-            <Link href={'/items/' + item.aid}>
+            <Link href={'/items/' + item.aid} style={{color: 'inherit', textDecoration: 'none'}}>
               1000回表示
             </Link>
           </div>
