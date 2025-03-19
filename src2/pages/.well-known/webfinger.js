@@ -1,5 +1,4 @@
 import axios from '@/lib/axios'
-import FullAppUrl from '@/components/full_app_url'
 
 export async function getServerSideProps({req, res, context, query}) {
   let { resource } = query
@@ -7,6 +6,7 @@ export async function getServerSideProps({req, res, context, query}) {
   let domain = ''
   let accountStatus = false
   let domainStatus = false
+  const FullAppUrl = () =>{''}
 
   if (resource.startsWith("acct:")) {
     resource = resource.substring(5);
