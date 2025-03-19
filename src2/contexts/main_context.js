@@ -5,65 +5,64 @@ import axios from '@/lib/axios'
 const MainContext = createContext()
 
 export const MainContextProvider = ({ children }) => {
-  const [loading, setLoading] = useState(true)
-  const [loadingMessage, setLoadingMessage] = useState('セッション作成中')
   const [loggedIn, setLoggedIn] = useState(false)
   const [currentAccount, setCurrentAccount] = useState({})
+  // const [scrollPositions, setScrollPositions] = useState(0)
   const router = useRouter()
 
   const loggedInPage = () => {
     if(!loggedIn){
-      addToast(`${router.pathname}へアクセスするにはログインしてください`)
-      console.log(flashMessage)
+      addToast(`ログインしてください`)
       router.push('/')
       return
     }
   }
   const loggedOutPage = () => {
     if(loggedIn){
-      addToast(`ログイン済みですので${router.pathname}へアクセスできません`)
+      addToast(`ログイン済みです`)
       router.push('/')
       return
     }
   }
-
-  async function fetchCurrentAccount() {
+  async function fetchStatus() {
     try {
       const res = await axios.post('/sessions/check')
+      if(res.data.logged_in) {
+        setCurrentAccount(res.data.account)
+      } else {
+        setCurrentAccount({})
+      }
       setLoggedIn(res.data.logged_in)
-      setCurrentAccount(res.data.account)
     } catch (err) {
       setLoggedIn(false)
       setCurrentAccount({})
-      addToast(err.response ? 'クライアントFCAエラー' : 'サーバーFCAエラー')
     }
   }
 
-  async function startUp() {
-    try {
-      setLoadingMessage('アカウント情報確認中')
-      const res = await axios.post('/sessions/check')
-      setLoggedIn(res.data.logged_in)
-      setCurrentAccount(res.data.account)
-    } catch (err) {
-      addToast(err.response ? 'アカウントエラー' : 'サーバーエラー')
-    }
-    setLoadingMessage('ロード完了')
-    setLoading(false)
-  }
-
-  useEffect(() => {
-    startUp()
-  },[])
+  // useEffect(() => {
+  //   const handleRouteChange = (url) => {
+  //     console.log("Page changed to:", url)
+  //     console.log("scroll:", document.scrollingElement.scrollTop)
+  //     console.log("prev-scroll:", scrollPositions)
+  //     setScrollPositions(document.scrollingElement.scrollTop)
+  //   }
+  //   const handleHistoryChange = (e) => {
+  //     console.log("his changed to:", e)
+  //   }
+  //   router.events.on("routeChangeStart", handleRouteChange)
+  //   router.events.on("beforeHistoryChange", handleHistoryChange)
+  //   return () => {
+  //     router.events.off("routeChangeStart", handleRouteChange)
+  //     router.events.off("beforeHistoryChange", handleHistoryChange)
+  //   }
+  // }, [router])
 
   return (
     <MainContext.Provider value={{
-      loading, setLoading,
-      loadingMessage, setLoadingMessage,
       loggedIn, setLoggedIn,
       currentAccount, setCurrentAccount,
       loggedInPage, loggedOutPage,
-      fetchCurrentAccount
+      fetchStatus
     }}>
       {children}
     </MainContext.Provider>

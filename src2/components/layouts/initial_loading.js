@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react'
-import { useMainContext } from '@/contexts/main_context'
+import { useStartupContext } from '@/contexts/startup_context'
 
 export default function InitialLoading() {
-  const { loading, setLoading, loadingMessage } = useMainContext()
-  const [showLoading, setShowLoading] = useState(loading)
+  const { initialLoading, setInitialLoading, initialLoadingMessage } = useStartupContext()
+  const [showInitialLoading, setShowInitialLoading] = useState(initialLoading)
 
   useEffect(() => {
-    if (!loading) {
+    if (!initialLoading) {
       const timer = setTimeout(() => {
-        setShowLoading(false)
+        setShowInitialLoading(false)
       }, 390)
       return () => clearTimeout(timer)
     }
-  }, [loading])
+  }, [initialLoading])
 
   return (
     <>
-      <div className={`${showLoading ? 'show-loading' : 'hide-loading'}`}>
+      <div className={`${showInitialLoading ? 'show-loading' : 'hide-loading'}`}>
         <div className='loading-logo-wrap'>
-          <div className={`loading-logo-ring1 ${loading ? '' : 'loading-logo-ring2'}`}></div>
+          <div className={`loading-logo-ring1 ${initialLoading ? '' : 'loading-logo-ring2'}`}></div>
           <img className='loading-logo' src='/ast-imgs/amiverse-v3-alpha.svg' />
         </div>
         <div className='loading-details'>
-          <div className='loading-message'>{loadingMessage}</div>
-          <div className='loading-close-button' onClick={() => setLoading(false)} >閉じる</div>
+          <div className='loading-message'>{initialLoadingMessage}</div>
+          <div className='loading-close-button' onClick={() => setInitialLoading(false)} >閉じる</div>
         </div>
       </div>
       <style jsx>{`

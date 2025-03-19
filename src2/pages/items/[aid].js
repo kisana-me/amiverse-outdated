@@ -26,8 +26,6 @@ export default function Aid() {
     const cached_item = findItemByAid(feeds.index, router.query.aid)
     if(cached_item){
       setItem(cached_item)
-      console.log("ari")
-      console.log(cached_item)
       setLoadingItem(false)
       return
     }
@@ -39,7 +37,6 @@ export default function Aid() {
       })
       .catch(err => {
         addToast('アイテム取得エラー')
-        console.log( err)
       })
   }
   useEffect(() => {
