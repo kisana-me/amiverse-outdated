@@ -47,6 +47,7 @@ export default function Trend({ category, last_updated_at, trend }) {
           padding: 15px;
           position: absolute;
           bottom: 0;
+          box-sizing: border-box;
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
