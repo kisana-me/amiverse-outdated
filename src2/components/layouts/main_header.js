@@ -77,7 +77,7 @@ export default function MainHeader({ children }) {
           background: var(--main-container-background-color);
           padding: 5px;
         }
-        @media (min-width: 700px) {
+        @media (min-width: 700px) and (min-height: 720px) {
           .main-header-button-1 {
             display: none;
           }

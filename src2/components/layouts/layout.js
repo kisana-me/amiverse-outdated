@@ -16,36 +16,40 @@ export default function Layout({ children }) {
   
   return (
     <>
-      <div className='wrap dark-mode green-theme'>
-        <InitialLoading />
-        <div className='container'>
-          <Header />
-          <main>
+      <InitialLoading />
+      <div className='wrap'>
+        <Header />
+        <main>
+          <div className='main-content'>
             {children}
-          </main>
-          <Aside />
-          {toasts.filter((toast) => toast.status === "show").map((toast, index) => (
-            <div key={index} className="flash" style={{ bottom: `${70+40*index}px`}} >
-              {toast.message}
-            </div>
-          ))}
-          <BottomNav />
-          {overlay && <div className="global-overlay" />}
-          {menuOverlay && <div className="global-menu-overlay" onClick={()=>{closeMenu()}} />}
-        </div>
+          </div>
+        </main>
+        <Aside />
+        {toasts.filter((toast) => toast.status === "show").map((toast, index) => (
+          <div key={index} className="flash" style={{ bottom: `${70+40*index}px`}} >
+            {toast.message}
+          </div>
+        ))}
+        <BottomNav />
+        {overlay && <div className="global-overlay" />}
+        {menuOverlay && <div className="global-menu-overlay" onClick={()=>{closeMenu()}} />}
       </div>
       <style jsx>{`
-        .wrap {}
-        .container {
+        .wrap {
           display: flex;
-          background-color: var(--background-color);
-          color: var(--font-color);
         }
         main {
           width: 100%;
-          min-height: 100svh;
+          min-height: 100vh;
           padding-bottom: 60px;
           box-sizing: border-box;
+          display: flex;
+          justify-content: center;
+          overflow: hidden;
+        }
+        .main-content {
+          max-width: 800px;
+          width: 100%;
         }
         .flash {
           border: 1px solid #000;
@@ -55,31 +59,6 @@ export default function Layout({ children }) {
           right: 10px;
           background-color: #4fff67bb;
           z-index: 200;
-        }
-        @media (min-width: 700px) and (min-height: 660px) {
-          main {
-            border-left: 0.5px solid var(--border-color);
-            width: calc(100% - 70px);
-          }
-        }
-
-        @media (min-width: 1000px) {
-          main {
-            border-right: 0.5px solid var(--border-color);
-            width: calc(100% - 70px - 260px);
-          }
-        }
-
-        @media (min-width: 1150px) {
-          main {
-            width: calc(100% - 70px - 340px);
-          }
-        }
-
-        @media (min-width: 1300px) {
-          main {
-            width: calc(100% - 200px - 340px);
-          }
         }
 
         .global-overlay {

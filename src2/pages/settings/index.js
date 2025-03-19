@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useMainContext } from '@/contexts/main_context'
 import MainHeader from '@/components/layouts/main_header'
+import { useThemeContext } from '@/contexts/theme_context'
 
 export default function Settings() {
   const { loggedIn } = useMainContext()
+  const { darkThremeTrigger } = useThemeContext()
   let ignore = false
   useEffect(() => {
     if (!ignore && loggedIn) {
@@ -33,6 +35,9 @@ export default function Settings() {
         </div>
         <hr />
         <div>設定を検索</div>
+          <button onClick={() => {darkThremeTrigger()}}>
+            C
+          </button>
       </div>
       <style jsx>{`
         .div_1 {

@@ -1,23 +1,15 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { useMainContext } from '@/contexts/main_context'
 import MainHeader from '@/components/layouts/main_header'
-import axios from 'axios'
-import { formatRelativeTime } from '@/lib/format_time'
-import { useTrendsContext } from '@/contexts/trends_context'
-import Trend from '@/components/trends/trend'
-import SkeletonTrend from '@/components/trends/skeleton_trend'
+import Item from '@/components/items/item'
+import axios from '@/lib/axios'
 
-export default function index() {
+export default function Search() {
   const router = useRouter()
-  const { trends, trendsLoading, fetchTrends } = useTrendsContext()
-  const { loggedIn } = useMainContext()
-  const [lastUpdated, setLastUpdated] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
   const [searchInput, setSearchInput] = useState('')
-  
-  useEffect(() => {
-    fetchTrends()
-  },[])
+  const [searchLoading, setSearchLoading] = useState(true)
+  const [searchedItems, setSearchedItems] = useState([])
 
   const handleSearchChange = (e) => {
     setSearchInput(e.target.value)
@@ -25,9 +17,31 @@ export default function index() {
 
   const handleSearchClick = () => {
     if (searchInput) {
-      router.push(`/search?query=${searchInput}`)
+      router.push(`/search?query=${searchInput}`, undefined, { shallow: true })
     }
   }
+
+  async function fetchItems(query) {
+    await axios.post('/search', {query})
+      .then(res => {
+        setSearchedItems(res.data)
+      })
+      .catch(err => {
+        console.log("er")
+      })
+    setSearchLoading(false)
+  }
+
+  useEffect(() => {
+    if (router.query.query) {
+      setSearchQuery(router.query.query)
+      setSearchInput(router.query.query)
+      console.log('検索中')
+      fetchItems(router.query.query)
+    } else {
+      console.log('検索内容を入力')
+    }
+  }, [router.query.query])
 
   return (
     <>
@@ -43,23 +57,18 @@ export default function index() {
           🔎
         </button>
       </MainHeader>
-
-      <div className="discovery">
-
-          {trendsLoading ? (
-            <>
-              <SkeletonTrend />
-            </>
-          ) : (
-            <>
-              {trends.map(({ category, last_updated_at, data }, index) => (
-                <Trend category={category} last_updated_at={last_updated_at} trend={data} key={index} />
-              ))}
-            </>
-          )}
-
+      <div className="search-container">
+        <div>検索</div>
+        {searchLoading ? (
+          <p>'{searchQuery}'について検索中...</p>
+        ) : searchedItems.length > 0 ? (
+          searchedItems.map(item => (
+            <Item key={item.aid} item={item} />
+          ))
+        ) : (
+          <p>結果が見つかりませんでした。</p>
+        )}
       </div>
-      
       <style jsx>{`
         .search-input {
           min-width: 70%;

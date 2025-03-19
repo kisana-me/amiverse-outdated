@@ -1,27 +1,21 @@
+html {
+  background: var(--background-color);
+  color: var(--font-color);
+  scrollbar-color: var(--font-color) var(--background-color);
+  overflow-y: scroll;
+}
 body, h1, h2, h3, p {
   margin: 0;
 }
-body {
-  overflow-y: scroll;
-}
-.html-light {
-  background-color: #ffffff;
-  scrollbar-color: #000000 #ffffff;
-}
-.html-dark {
-  background-color: #000000;
-  scrollbar-color: #ffffff #000000;
-}
 a {
-  /* text-decoration: none; */
+  color: var(--link-color);
   display: inline-block;
-  color: #2dd635;
 }
 :root {
   /* Main Settings */
   --color-1: white;
   --color-2: black;
-  /* ↓ For Light Mode Color Palet (難しい) ↓ */
+  /* ↓ For Light Mode Color Palet ↓ */
   --light-0: #e42626;
   --light-1: #e17051;
   --light-2: #e17051;
@@ -43,36 +37,4 @@ a {
   --dark-7: #ff5d76;
   --dark-8: #ababab;
   --dark-9: #e7e7e7;
-}
-:root .light-mode {
-  --background-color: #fff;
-  --font-color: #000;
-  --link-color: var(--light-0);
-  --border-color: #acacac;
-  --transparent-background-color: #0000003f;
-  --content-color: #fff;
-  --shadow-color: #808080;
-  --blur-color: #fff8;
-  --primary-color: blue;
-  --button-color: #000;
-  --button-font-color: #fff;
-  --hover-color: #b5b5b588;
-  --inconspicuous-font-color: #6b6b6b;
-  --inconspicuous-background-color: #d8d8d8;
-}
-:root .dark-mode {
-  --background-color: #000;
-  --font-color: #fff;
-  --link-color: var(--dark-0);
-  --border-color: #7c7c7c;
-  --transparent-background-color: #00000060;
-  --content-color: #141414;
-  --shadow-color: #808080;
-  --blur-color: #0008;
-  --primary-color: darkblue;
-  --button-color: #fff;
-  --button-font-color: #000;
-  --hover-color: #fff8;
-  --inconspicuous-font-color: #bcbcbc;
-  --inconspicuous-background-color: #444;
 }

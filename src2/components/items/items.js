@@ -11,7 +11,7 @@ export default function Items({ items = [], loadItems = false }) {
           if (loadItems) {
             return (
               <>
-                {[...Array(5)].map((_, index) => (
+                {[...Array(20)].map((_, index) => (
                   <SkeletonItem key={index} />
                 ))}
               </>

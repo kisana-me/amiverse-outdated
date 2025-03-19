@@ -7,7 +7,6 @@ export default function ScrollRestoration() {
 
   useEffect(() => {
     const saveScrollPosition = () => {
-      console.log('設定')
       setScrollPositions((prev) => {
         const newPositions = { ...prev }
         if (window.scrollY === 0) {
@@ -23,7 +22,6 @@ export default function ScrollRestoration() {
       setTimeout(() => {
         window.scrollTo(0, scrollPositions[router.asPath] || 0)
       }, 0)
-      console.log('復活', scrollPositions)
     }
 
     window.addEventListener("beforeunload", saveScrollPosition)

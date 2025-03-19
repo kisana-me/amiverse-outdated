@@ -22,9 +22,11 @@ export default function Aside() {
       <style jsx>{`
         aside {
           width: 300px;
-          height: 100svh;
+          height: 100vh;
           top: 0;
           right: -300px;
+          border-left: 1px solid var(--border-color);
+          box-sizing: border-box;
           position: fixed;
           display: flex;
           flex-direction: column;

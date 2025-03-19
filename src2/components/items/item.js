@@ -6,7 +6,7 @@ import ItemConsole from '@/components/items/item_console'
 import { formatRelativeTime } from '@/lib/format_time'
 
 export default function Item({ item }) {
-  const [consoleDisabled, setConsoleDisabled] = useState(false);
+  const [consoleDisabled, setConsoleDisabled] = useState(false)
 
   return (
     <>

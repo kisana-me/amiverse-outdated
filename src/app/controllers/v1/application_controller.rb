@@ -157,6 +157,13 @@ class V1::ApplicationController < ApplicationController
     return timeline_data_json.to_json
   end
 
+  def items_data(items)
+    items_data_json = items.map do |item|
+      item_data(item)
+    end
+    return items_data_json.to_json
+  end
+
   # MEDIA
 
   def image(image)

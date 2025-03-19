@@ -165,6 +165,8 @@ Rails.application.routes.draw do
     post 'items/react' => 'items#react', as: 'react'
     post 'items/:aid' => 'items#show', as: 'item'
 
+    post 'search' => 'search#index', as: 'search'
+
     # emoji
     post 'emojis' => 'emojis#index', as: 'emojis'
 

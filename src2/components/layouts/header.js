@@ -221,11 +221,12 @@ export default function Header() {
       <style jsx>{`
         header {
           width: 200px;
-          height: 100svh;
+          height: 100vh;
           top: 0;
           left: -200px;
           position: fixed;
           padding: 30px 5px;
+          border-right: 1px solid var(--border-color);
           box-sizing: border-box;
           backdrop-filter: blur(3px);
           background: var(--blur-color);
