@@ -4,20 +4,22 @@ import { useMainContext } from '@/contexts/main_context'
 import MainHeader from '@/components/layouts/main_header'
 import axios from 'axios'
 import { formatRelativeTime } from '@/lib/format_time'
+import { useStartupContext } from '@/contexts/startup_context'
 import { useTrendsContext } from '@/contexts/trends_context'
 import Trend from '@/components/trends/trend'
 import SkeletonTrend from '@/components/trends/skeleton_trend'
 
 export default function index() {
   const router = useRouter()
+  const { initialLoading } = useStartupContext()
   const { trends, trendsLoading, fetchTrends } = useTrendsContext()
-  const { loggedIn } = useMainContext()
   const [lastUpdated, setLastUpdated] = useState('')
   const [searchInput, setSearchInput] = useState('')
   
   useEffect(() => {
+    if (initialLoading) {return}
     fetchTrends()
-  },[])
+  },[initialLoading])
 
   const handleSearchChange = (e) => {
     setSearchInput(e.target.value)

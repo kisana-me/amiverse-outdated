@@ -45,7 +45,6 @@ export default function Layout({ children }) {
           box-sizing: border-box;
           display: flex;
           justify-content: center;
-          overflow: hidden;
         }
         .main-content {
           max-width: 800px;

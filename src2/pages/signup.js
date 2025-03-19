@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import axios from '@/lib/axios'
 import { useRouter } from 'next/router'
 import { useToastsContext } from '@/contexts/toasts_context'
+import MainHeader from '@/components/layouts/main_header'
 
 export default function Signup() {
   const { addToast } = useToastsContext()
@@ -108,11 +109,13 @@ export default function Signup() {
 
   return (
     <>
-      <main>
-        <h1>サインイン</h1>
+      <MainHeader>
+        サインアップ
+      </MainHeader>
+      <div>
         <span>{signupStatus}</span>
         {form}
-      </main>
+      </div>
     </>
   )
 }

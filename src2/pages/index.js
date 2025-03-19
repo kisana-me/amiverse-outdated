@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react'
 import axios from '@/lib/axios'
 import Link from 'next/link'
 import MainHeader from '@/components/layouts/main_header'
-import Items from '@/components/items/items'
+import FeedItems from '@/components/feeds/feed_items'
 import { useMainContext } from '@/contexts/main_context'
 import { useOverlayContext } from '@/contexts/overlay_context'
 import { useToastsContext } from '@/contexts/toasts_context'
 import { useItemsContext } from '@/contexts/items_context'
+import { useStartupContext } from '@/contexts/startup_context'
 
 export default function Home() {
-  const {loading, loggedIn, currentAccount } = useMainContext()
+  const { loggedIn, currentAccount } = useMainContext()
+  const { initialLoading } = useStartupContext()
   const { feeds, setFeeds } = useItemsContext()
   const { isHeaderMenuOpen, headerMenuTrigger, asideMenuTrigger } = useOverlayContext()
 
@@ -60,15 +62,13 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (loading) {
-      return
-    }
+    if (initialLoading) {return}
     if ('index' in feeds) {
       setloadItems(false)
     } else {
       fetchItems()
     }
-  },[loading])
+  },[initialLoading])
 
   return (
     <>
@@ -96,7 +96,7 @@ export default function Home() {
       <button onClick={updateFeed} disabled={updating}>{updating ? '更新中' : 'フィードを更新'}</button>
       <Link href="/items/new">作成</Link>
       <div>
-        <Items items={feeds['index']} loadItems={loadItems} />
+        <FeedItems items={feeds['index']} loadItems={loadItems} />
       </div>
     </>
   )

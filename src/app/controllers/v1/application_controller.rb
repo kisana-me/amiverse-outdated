@@ -116,11 +116,11 @@ class V1::ApplicationController < ApplicationController
       item: item_data(item)
     }
   end
-  def items_data(items)
-    return items.map {|item|
-      feed_former(item)
-    }
-  end
+  # def items_data(items)
+  #   return items.map {|item|
+  #     feed_former(item)
+  #   }
+  # end
 
   ## ITEM/REACTIONS
 
@@ -161,7 +161,7 @@ class V1::ApplicationController < ApplicationController
     items_data_json = items.map do |item|
       item_data(item)
     end
-    return items_data_json.to_json
+    return items_data_json
   end
 
   # MEDIA

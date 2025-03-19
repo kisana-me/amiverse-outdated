@@ -1,13 +1,14 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import axios from '@/lib/axios'
+import { useToastsContext } from '@/contexts/toasts_context'
 
 const MainContext = createContext()
 
 export const MainContextProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false)
   const [currentAccount, setCurrentAccount] = useState({})
-  // const [scrollPositions, setScrollPositions] = useState(0)
+  const { addToast } = useToastsContext()
   const router = useRouter()
 
   const loggedInPage = () => {
@@ -38,24 +39,6 @@ export const MainContextProvider = ({ children }) => {
       setCurrentAccount({})
     }
   }
-
-  // useEffect(() => {
-  //   const handleRouteChange = (url) => {
-  //     console.log("Page changed to:", url)
-  //     console.log("scroll:", document.scrollingElement.scrollTop)
-  //     console.log("prev-scroll:", scrollPositions)
-  //     setScrollPositions(document.scrollingElement.scrollTop)
-  //   }
-  //   const handleHistoryChange = (e) => {
-  //     console.log("his changed to:", e)
-  //   }
-  //   router.events.on("routeChangeStart", handleRouteChange)
-  //   router.events.on("beforeHistoryChange", handleHistoryChange)
-  //   return () => {
-  //     router.events.off("routeChangeStart", handleRouteChange)
-  //     router.events.off("beforeHistoryChange", handleHistoryChange)
-  //   }
-  // }, [router])
 
   return (
     <MainContext.Provider value={{

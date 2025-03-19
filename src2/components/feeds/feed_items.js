@@ -1,8 +1,7 @@
-import Link from 'next/link'
 import Item from '@/components/items/item'
 import SkeletonItem from '@/components/items/skeleton_item'
 
-export default function Items({ items = [], loadItems = false }) {
+export default function FeedItems({ items = [], loadItems = false }) {
 
   return (
     <>
@@ -20,7 +19,7 @@ export default function Items({ items = [], loadItems = false }) {
             return (
               <>
                 {items.map(item => (
-                  <Item key={item.aid} item={item} />
+                  <Item key={item.item.aid + ((item.object == 'diffuse') ? '-d-' + item.diffuser.aid : '')} item={item.item} />
                 ))}
               </>
             )

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { useStartupContext } from '@/contexts/startup_context'
 import MainHeader from '@/components/layouts/main_header'
 import Item from '@/components/items/item'
 import axios from '@/lib/axios'
 
 export default function Search() {
   const router = useRouter()
+  const { initialLoading } = useStartupContext()
   const [searchQuery, setSearchQuery] = useState('')
   const [searchInput, setSearchInput] = useState('')
   const [searchLoading, setSearchLoading] = useState(true)
@@ -27,21 +29,20 @@ export default function Search() {
         setSearchedItems(res.data)
       })
       .catch(err => {
-        console.log("er")
+        console.log("検索エラー",err)
       })
     setSearchLoading(false)
   }
 
   useEffect(() => {
+    if (initialLoading) {return}
     if (router.query.query) {
       setSearchQuery(router.query.query)
       setSearchInput(router.query.query)
-      console.log('検索中')
       fetchItems(router.query.query)
     } else {
-      console.log('検索内容を入力')
     }
-  }, [router.query.query])
+  }, [router.query.query, initialLoading])
 
   return (
     <>

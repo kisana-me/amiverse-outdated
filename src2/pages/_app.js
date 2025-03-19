@@ -15,10 +15,10 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
-      <MainContextProvider>
       <OverlayContextProvider>
       <ThemeContextProvider>
       <ToastsContextProvider>
+      <MainContextProvider>
       <StartupContextProvider>
       <TrendsContextProvider>
       <ItemsContextProvider>
@@ -32,10 +32,10 @@ export default function App({ Component, pageProps }) {
       </ItemsContextProvider>
       </TrendsContextProvider>
       </StartupContextProvider>
+      </MainContextProvider>
       </ToastsContextProvider>
       </ThemeContextProvider>
       </OverlayContextProvider>
-      </MainContextProvider>
     </>
   )
 }
