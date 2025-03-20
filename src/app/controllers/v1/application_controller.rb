@@ -64,8 +64,8 @@ class V1::ApplicationController < ApplicationController
       :kind
     ])
     account_data_json['public_key'] = ''
-    account_data_json['icon_url'] = ''
-    account_data_json['banner_url'] = ''
+    account_data_json['icon_url'] = account.icon_url
+    account_data_json['banner_url'] = account.banner_url
     account_data_json['summary'] = account.description
     account_data_json['items'] = items_data(account.items)
     return account_data_json
