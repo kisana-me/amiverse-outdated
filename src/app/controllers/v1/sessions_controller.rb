@@ -7,9 +7,14 @@ class V1::SessionsController < V1::ApplicationController
   end
   def check
     if @current_account
+      account_json = render_to_string(
+        partial: 'v1/accounts/account_summary',
+        formats: [:json],
+        locals: { account: @current_account }
+      )
       render json: {
         logged_in: true,
-        account: login_account_data(@current_account)
+        account: JSON.parse(account_json)
       }
     else
       render json: { logged_in: false }

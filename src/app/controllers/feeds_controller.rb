@@ -1,4 +1,4 @@
-class FeedController < ApplicationController
+class FeedsController < ApplicationController
   before_action :logged_in_account, except: %i[ index current ]
   def index
     items = Item.where(

@@ -38,6 +38,7 @@ export default function SkeletonTrend() {
           width: 100%;
           height: 50%;
           padding: 15px;
+          box-sizing: border-box;
           position: absolute;
           bottom: 0;
           display: flex;

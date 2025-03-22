@@ -45,6 +45,7 @@ export default function Trend({ category, last_updated_at, trend }) {
           width: 100%;
           height: 50%;
           padding: 15px;
+          box-sizing: border-box;
           position: absolute;
           bottom: 0;
           box-sizing: border-box;

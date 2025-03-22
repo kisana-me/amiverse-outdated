@@ -25,7 +25,7 @@ export const ItemsContextProvider = ({ children }) => {
 
   async function fetchFeeds(category = "index", page = 0) {
     try {
-      const res = await axios.post(`/feed/${category}`, { page })
+      const res = await axios.post(`/feeds/${category}`, { page })
       return res.data
     } catch (err) {
       if (err.response) {

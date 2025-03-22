@@ -146,9 +146,9 @@ Rails.application.routes.draw do
     delete 'logout' => 'sessions#logout'
 
     # feed
-    post 'feed/index' => 'feed#index'
-    post 'feed/follow' => 'feed#follow'
-    post 'feed/current' => 'feed#current'
+    post 'feeds/index' => 'feeds#index'
+    post 'feeds/follow' => 'feeds#following'
+    post 'feeds/current' => 'feeds#current'
 
     # account
     post '@:name_id' => 'accounts#show', as: 'account'

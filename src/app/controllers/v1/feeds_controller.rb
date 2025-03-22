@@ -1,4 +1,4 @@
-class V1::FeedController < V1::ApplicationController
+class V1::FeedsController < V1::ApplicationController
   # before_action :api_logged_in_account, except: %i[ current ]
 
   def index
@@ -31,8 +31,6 @@ class V1::FeedController < V1::ApplicationController
     @page = current_page(page_param: params[:page])
     @pages = total_page(objects: fulltimeline)
     @timeline = paged_objects(page: @page, objects: fulltimeline)
-    
-    render json: timeline_data(@timeline)
   end
   def follow
     @items = @current_account.following
@@ -40,13 +38,9 @@ class V1::FeedController < V1::ApplicationController
       .map(&:items)
       .flatten.uniq
       .sort_by(&:created_at).reverse
-    render json: @items.map {|item|
-      item_data(item)
-    }
   end
   def current
     @items = paged_items(params[:page])
-    render json: items_data(@items)
   end
   def group
   end

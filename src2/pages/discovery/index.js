@@ -48,7 +48,7 @@ export default function index() {
 
       <div className="discovery">
 
-          {trendsLoading ? (
+          {true ? (
             <>
               <SkeletonTrend />
             </>

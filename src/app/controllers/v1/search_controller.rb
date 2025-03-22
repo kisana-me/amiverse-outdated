@@ -30,6 +30,5 @@ class V1::SearchController < V1::ApplicationController
     else
       @items = []
     end
-    render json: items_data(@items)
   end
 end

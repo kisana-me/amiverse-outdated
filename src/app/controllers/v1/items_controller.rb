@@ -10,7 +10,6 @@ class V1::ItemsController < V1::ApplicationController
   #   }
   # end
   def show
-    render json: item_data(@item)
   end
   def create
     @item = Item.new(
