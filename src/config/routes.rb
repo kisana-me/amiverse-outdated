@@ -11,9 +11,9 @@ Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
 
   # === base === #
-  root 'feed#index'
-  get 'following' => 'feed#following'
-  get 'current' => 'feed#current'
+  root 'feeds#index'
+  get 'following' => 'feeds#following'
+  get 'current' => 'feeds#current'
   get 'discovery' => 'discovery#index'
   get 'search' => 'search#index'
   get 'dashboard' => 'dashboard#index'
