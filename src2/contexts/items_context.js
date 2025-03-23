@@ -34,7 +34,7 @@ export const ItemsContextProvider = ({ children }) => {
         addToast("タイムライン取得エラー:不明")
       }
       console.error("fetchFeedsエラー:", err)
-      return null
+      return []
     }
   }
 
