@@ -17,8 +17,10 @@ json.images do
       :name,
       :description,
       :sensitive,
-      :warning_message,
-      :meta
+      :caution_message,
+      :meta,
+      :cache
+    json.url image.image_url
   end
 end
 
@@ -29,8 +31,10 @@ json.videos do
       :name,
       :description,
       :sensitive,
-      :warning_message,
-      :meta
+      :caution_message,
+      :meta,
+      :cache
+    json.url video.video_url
   end
 end
 
