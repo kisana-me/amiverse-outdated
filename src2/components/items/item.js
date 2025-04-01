@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ItemAccount from '@/components/items/item_account'
 import ItemReactions from '@/components/items/item_reactions'
 import ItemConsole from '@/components/items/item_console'
@@ -7,6 +7,29 @@ import { formatRelativeTime } from '@/lib/format_time'
 
 export default function Item({ item }) {
   const [consoleDisabled, setConsoleDisabled] = useState(false)
+  const [visibilityString, setVisibilityString] = useState('全体公開')
+
+  useEffect(()=> {
+    switch(item.visibility) {
+      case 'public_share':
+        setVisibilityString('全体公開')
+        break
+      case 'do_not_share':
+        setVisibilityString('非公開')
+        break
+      case 'followers_share':
+        setVisibilityString('フォロワー公開')
+        break
+      case 'scopings_share':
+        setVisibilityString('限定公開')
+        break
+      case 'direct_share':
+        setVisibilityString('直接公開')
+        break
+      default:
+        setVisibilityString('全体公開')
+    }
+  }, [item])
 
   return (
     <>
@@ -52,25 +75,23 @@ export default function Item({ item }) {
         <div className='item-info item-bottom-info'>
           <div className='ibi-left'>
             <Link href={'/items/' + item.aid} style={{color: 'inherit', textDecoration: 'none'}}>
-              全体公開
+              {visibilityString}
             </Link>
           </div>
           <div className='ibi-right'>
             <Link href={'/items/' + item.aid} style={{color: 'inherit', textDecoration: 'none'}}>
-              1000回表示
+              {item.viewed_counter}回表示
             </Link>
           </div>
         </div>
-        <ItemReactions reactions={item.reactions} />
+        <ItemReactions
+          item={item}
+          disabled={consoleDisabled}
+          reactions={item.reactions}
+        />
         <ItemConsole
-          item_aid={item.aid}
-          disabled={consoleDisabled} 
-          toggleDisabled={() => {
-            setConsoleDisabled(true);
-            setTimeout(() => {
-              setConsoleDisabled(false);
-            }, 1000);
-          }}
+          item={item}
+          disabled={consoleDisabled}
         />
       </div>
       <style jsx>{`
