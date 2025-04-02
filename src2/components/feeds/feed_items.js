@@ -19,7 +19,7 @@ export default function FeedItems({ items = [], loadItems = false }) {
             return (
               <>
                 {items.map(item => (
-                  <Item key={item.item.aid + ((item.object == 'diffuse') ? '-d-' + item.diffuser.aid : '')} item={item.item} />
+                  <Item key={item.item.aid + ((item.object == 'diffuse') ? '-d-' + item.item.aid : '')} item={item.item} />
                 ))}
               </>
             )

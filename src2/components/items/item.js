@@ -105,7 +105,7 @@ export default function Item({ item }) {
           justify-content: space-between;
           font-size: 12px;
           line-height: 12px;
-          color: #939393;
+          color: var(--inconspicuous-font-color);
         }
         .item-top-info {
           margin-top: 4px;
@@ -113,7 +113,6 @@ export default function Item({ item }) {
         .iti-left {}
         .iti-right {}
         .item-bottom-info{
-          color: #939393;
           margin-bottom: 4px;
         }
         .ibi-left {}

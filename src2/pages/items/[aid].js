@@ -11,33 +11,19 @@ import { useToastsContext } from '@/contexts/toasts_context'
 
 export default function Aid() {
   const { initialLoading } = useStartupContext()
-  const { feeds } = useItemsContext()
+  const { getItems } = useItemsContext()
   const { addToast } = useToastsContext()
   const router = useRouter()
   const [item, setItem] = useState({})
   const [loadingItem, setLoadingItem] = useState(true)
 
-  function findItemByAid(feeds, item_aid) {
-    if (!Array.isArray(feeds)) return null
-    return feeds.find(feed => feed.object === "item" && feed.item.aid === item_aid)?.item || null
+  async function fetchItem() {
+    setLoadingItem(true)
+    const cached_item = await getItems(router.query.aid)
+    setItem(cached_item)
+    setLoadingItem(false)
   }
 
-  async function fetchItem() {
-    const cached_item = findItemByAid(feeds.index, router.query.aid)
-    if(cached_item){
-      setItem(cached_item)
-      setLoadingItem(false)
-      return
-    }
-    await axios.post('/items/' + router.query.aid)
-      .then(res => {
-        setItem(res.data)
-        setLoadingItem(false)
-      })
-      .catch(err => {
-        addToast('アイテム取得エラー')
-      })
-  }
   useEffect(() => {
     if (initialLoading) {return}
     fetchItem()

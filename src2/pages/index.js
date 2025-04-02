@@ -13,36 +13,26 @@ export default function Home() {
   const { loggedIn, currentAccount } = useMainContext()
   const { initialLoading } = useStartupContext()
   const { addToast } = useToastsContext()
-  const { itemsLoading, feeds, getFeeds } = useItemsContext()
+  const { itemsLoading, getFeeds, feeds, loadFeeds } = useItemsContext()
 
   const [indexFeed, setIndexFeed] = useState([])
   const [updating, setUpdating] = useState(false)
 
   async function updateFeed() {
     setUpdating(true)
-    await getFeeds(undefined, undefined, true)
+    await loadFeeds(undefined, undefined, true)
     setUpdating(false)
   }
 
   useEffect(() => {
     if (initialLoading || itemsLoading) {return}
-    setIndexFeed(prevIndexFeed => {
-      const newIndexFeed = []
-      let page = 0;
-      while (true) {
-        const feedData = feeds.find(feed => feed.category === 'index' && feed.page === page)
-        if (!feedData) break
-        newIndexFeed.push(...feedData.feed)
-        page++
-      }
-      return newIndexFeed
-    })
+    setIndexFeed(getFeeds('index'))
   }, [feeds])
 
   useEffect(() => {
     (async () => {
       if (initialLoading) {return}
-      await getFeeds()
+      await loadFeeds()
     })()
   }, [initialLoading])
 

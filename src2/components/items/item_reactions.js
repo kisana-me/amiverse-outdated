@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { useEmojisContext } from '@/contexts/emojis_context'
 import { useToastsContext } from '@/contexts/toasts_context'
+import { useItemsContext } from '@/contexts/items_context'
 import EmojisMenu from '@/components/emojis/emojis_menu'
 import ToggleMenu from '@/components/common/toggle_menu'
 import axios from 'axios'
@@ -9,7 +10,8 @@ export default function ItemReactions({ item, disabled = false }) {
   const { addToast } = useToastsContext()
   const emojiButtonRef = useRef(null)
   const [isEmojiMenuOpen, setIsEmojiMenuOpen] = useState(false)
-  const {emojis, fetchEmojis} = useEmojisContext()
+  const {updateItems} = useItemsContext()
+  const {emojis, fetchEmojis, getEmoji} = useEmojisContext()
 
   const itemReact = async (emoji_aid) => {
     // すでにリアクションを付けていないか調べる
@@ -17,12 +19,42 @@ export default function ItemReactions({ item, disabled = false }) {
       console.log('emoji_aid: ' + emoji_aid + '. Button pressed!!')
     } else {
       const item_aid = item.aid
+      let newItem = item
+      newItem.control_disabled = true
+      updateItems(newItem)
+      let reactions = [...newItem.reactions]
+      const reactionIndex = reactions.findIndex(r => r.emoji.aid === emoji_aid)
       await axios.post('items/react', { item_aid, emoji_aid })
         .then(res => {
           if (res.data.status == 'reacted') {
-            addToast('リアクションしました')
+            newItem.reactions_counter += 1
+            if (reactionIndex !== -1) {
+              reactions[reactionIndex] = {
+                ...reactions[reactionIndex],
+                reacted: true,
+                reaction_count: reactions[reactionIndex].reaction_count + 1
+              }
+            } else {
+              reactions.push({
+                emoji: getEmoji(emoji_aid),
+                reacted: true,
+                reaction_count: 1
+              })
+            }
           } else if (res.data.status == 'deleted'){
-            addToast('リアクションを削除しました')
+            newItem.reactions_counter -= 1
+            if (reactionIndex !== -1) {
+              const updatedReaction = {
+                ...reactions[reactionIndex],
+                reacted: false,
+                reaction_count: reactions[reactionIndex].reaction_count - 1
+              }
+              if (updatedReaction.reaction_count > 0) {
+                reactions[reactionIndex] = updatedReaction
+              } else {
+                reactions.splice(reactionIndex, 1)
+              }
+            }
           } else {
             console.log(res.data.status)
             addToast(`エラー/${res.data.status}`)
@@ -31,6 +63,9 @@ export default function ItemReactions({ item, disabled = false }) {
         .catch(err => {
           console.log(err.response)
         })
+      newItem.reactions = reactions
+      newItem.control_disabled = false
+      updateItems(newItem)
     }
   }
 
@@ -42,7 +77,7 @@ export default function ItemReactions({ item, disabled = false }) {
             ref={emojiButtonRef}
             className='reaction-button rb-emojis'
             onClick={() => setIsEmojiMenuOpen(!isEmojiMenuOpen)}
-            disabled={disabled}
+            disabled={item.control_disabled === true}
           >
             <div className="reaction-icon">
               <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,7 +93,7 @@ export default function ItemReactions({ item, disabled = false }) {
             <button className={"reaction-button rb-emoji" + (reaction.reacted ? " rb-reacted" : "")}
               key={reaction.emoji.aid}
               onClick={() => itemReact(reaction.emoji.aid)}
-              disabled={disabled}
+              disabled={item.control_disabled === true}
             >
               <div className="reaction-emoji">
                 {reaction.emoji.name}
@@ -107,7 +142,7 @@ export default function ItemReactions({ item, disabled = false }) {
           border: 1px solid #0000;
           border-radius: 6px;
           margin: 0 7px 0 0;
-          color: #bcbcbc;
+          color: var(--inconspicuous-font-color);
           background: inherit;
           display: flex;
           align-items: center;

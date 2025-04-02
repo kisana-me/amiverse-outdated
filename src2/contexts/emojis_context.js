@@ -23,6 +23,11 @@ export const EmojisContextProvider = ({ children }) => {
     setEmojisLoading(false)
   }
 
+  function getEmoji(aid) {
+    const cached_emoji = emojis.find(emoji => emoji.aid === aid)
+    return cached_emoji
+  }
+
   useEffect(() => {
     
   },[])
@@ -32,7 +37,7 @@ export const EmojisContextProvider = ({ children }) => {
       emojisLoaded, setEmojisLoaded,
       emojisLoading, setEmojisLoading,
       emojis, setEmojis,
-      fetchEmojis
+      fetchEmojis, getEmoji
     }}>
       {children}
     </EmojisContext.Provider>
