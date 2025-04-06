@@ -19,7 +19,7 @@ module ActivityPub
       id: "create_item/#{item.aid}",
       type: 'Follow',
       actor: follower,
-      object: followed.activitypub_id,
+      object: followed.ap_uri,
       destination: followed
     )
   end
@@ -54,16 +54,23 @@ module ActivityPub
     accept_object = {
       "id": id,
       "type": 'Follow',
-      "actor": follower.activitypub_id,
-      "object": followed.activitypub_id
+      "actor": follower.ap_uri,
+      "object": followed.ap_uri
     }
-    aps_send(
+    body = as_wrap(
       id: 'accept_follow',
       type: 'Accept',
       actor: followed,
-      object: accept_object,
-      destination: follower
+      object: accept_object
     )
+    apd_deliver(body: body, account: followed, destination: follower)
+    # aps_send(
+    #   id: 'accept_follow',
+    #   type: 'Accept',
+    #   actor: followed,
+    #   object: accept_object,
+    #   destination: follower
+    # )
   end
   def ap_accept_undo_follow(received_body:, followed:, follower:)#???
     aps_send(
@@ -164,14 +171,14 @@ module ActivityPub
     body = {
       "@context": "https://www.w3.org/ns/activitystreams",
       "type": type,
-      "id": File.join(actor.activitypub_id, id),
-      "actor": actor.activitypub_id,
+      "id": File.join(actor.ap_uri, id),
+      "actor": actor.ap_uri,
       "object": object
     }
     deliver(
       actor: actor,
       body: body,
-      to_url: File.join(destination.activitypub_id, 'inbox')
+      to_url: File.join(destination.ap_uri, 'inbox')
     )
   end
   # read 跡地
@@ -219,16 +226,15 @@ module ActivityPub
   end
   def account(uri)
     #サーバー判定
-    #if URI.parse(uri).host == URI.parse(ENV['FRONT_URL']).host
-    #  account = Account.find_by(name_id: uri.split(/[@]/).last)
-    #else
+    if URI.parse(uri).host == URI.parse(ENV['FRONT_URL']).host
+      account = Account.find_by(name_id: uri.split(/[@]/).last)
+    else
       #server = server(URI.parse(uri).host)
-      #アカウントあるかないか
-      if account = Account.find_by(activitypub_id: uri)
+      if account = Account.find_by(ap_uri: uri)
       else
         account = explore_account(uri)
       end
-    #end
+    end
     return account
   end
   def deliver(actor:, body:, to_url:, from_url: ENV['FRONT_URL'])
