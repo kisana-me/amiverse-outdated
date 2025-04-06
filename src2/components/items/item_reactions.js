@@ -5,19 +5,18 @@ import { useItemsContext } from '@/contexts/items_context'
 import EmojisMenu from '@/components/emojis/emojis_menu'
 import ToggleMenu from '@/components/common/toggle_menu'
 import axios from 'axios'
+import { useMainContext } from '@/contexts/main_context'
 
 export default function ItemReactions({ item, disabled = false }) {
+  const { loggedIn } = useMainContext()
   const { addToast } = useToastsContext()
   const emojiButtonRef = useRef(null)
   const [isEmojiMenuOpen, setIsEmojiMenuOpen] = useState(false)
-  const {updateItems} = useItemsContext()
+  const { updateItems } = useItemsContext()
   const {emojis, fetchEmojis, getEmoji} = useEmojisContext()
 
   const itemReact = async (emoji_aid) => {
-    // すでにリアクションを付けていないか調べる
-    if (false) {
-      console.log('emoji_aid: ' + emoji_aid + '. Button pressed!!')
-    } else {
+    if (loggedIn) {
       const item_aid = item.aid
       let newItem = item
       newItem.control_disabled = true
@@ -56,16 +55,19 @@ export default function ItemReactions({ item, disabled = false }) {
               }
             }
           } else {
-            console.log(res.data.status)
-            addToast(`エラー/${res.data.status}`)
+            console.log(`リアクション:サーバーエラー, ${res.data}`)
+            addToast('リアクション:サーバーエラー')
           }
         })
         .catch(err => {
-          console.log(err.response)
+          console.log(`リアクション:通信エラー, ${err.response}`)
+          addToast('リアクション:通信エラー')
         })
       newItem.reactions = reactions
       newItem.control_disabled = false
       updateItems(newItem)
+    } else {
+      addToast('リアクションするにはログインしてください')
     }
   }
 

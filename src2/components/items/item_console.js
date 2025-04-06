@@ -1,12 +1,46 @@
 import React, { useState, useRef } from 'react'
-import ToggleMenu from '@/components/common/toggle_menu'
+import axios from 'axios'
+import { useMainContext } from '@/contexts/main_context'
 import { useToastsContext } from '@/contexts/toasts_context'
-
+import { useItemsContext } from '@/contexts/items_context'
+import ToggleMenu from '@/components/common/toggle_menu'
 
 export default function ItemConsole({ item }) {
+  const { loggedIn } = useMainContext()
   const { addToast } = useToastsContext()
+  const { updateItems } = useItemsContext()
   const [isHeaderMenuOpen, setIsHeaderMenuOpen] = useState(false)
   const menuButtonRef = useRef(null)
+
+  const itemDiffuse = async () => {
+    if (loggedIn) {
+      const item_aid = item.aid
+      let newItem = item
+      newItem.control_disabled = true
+      updateItems(newItem)
+      await axios.post('items/diffuse', { item_aid })
+        .then(res => {
+          if (res.data.status == 'diffused') {
+            newItem.diffusers_counter += 1
+            newItem.diffused = true
+          } else if (res.data.status == 'deleted'){
+            newItem.diffusers_counter -= 1
+            newItem.diffused = false
+          } else {
+            console.log(`拡散:サーバーエラー, ${res.data}`)
+            addToast('拡散:サーバーエラー')
+          }
+        })
+        .catch(err => {
+          console.log(`拡散:通信エラー, ${err.response}`)
+          addToast('拡散:通信エラー')
+        })
+      newItem.control_disabled = false
+      updateItems(newItem)
+    } else {
+      addToast('拡散するにはログインしてください')
+    }
+  }
 
   return (
     <>
@@ -24,7 +58,10 @@ export default function ItemConsole({ item }) {
         </div>
         
         <div className="console-content">
-          <button className='console-button cb-diffuse' disabled={item.control_disabled === true}>
+          <button className={"console-button cb-diffuse" + (item.diffused ? " cb-diffused" : "")}
+            disabled={item.control_disabled === true}
+            onClick={() => itemDiffuse()}
+          >
             <div className="console-icon">
               <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path fillRule="evenodd" clipRule="evenodd" d="M48.1816 12.3858C49.2557 11.5673 50.7443 11.5673 51.8184 12.3858L86.2339 38.6139C88.5177 40.3544 87.2868 44 84.4155 44H15.5846C12.7132 44 11.4824 40.3544 13.7661 38.6139L48.1816 12.3858ZM21 68H37V77C37 79.7614 34.7614 82 32 82H26C23.2386 82 21 79.7614 21 77V68ZM63 68H79V77C79 79.7614 76.7614 82 74 82H68C65.2386 82 63 79.7614 63 77V68ZM59 68H41V83C41 85.7614 43.2386 88 46 88H54C56.7614 88 59 85.7614 59 83V68ZM21 48C18.2386 48 16 50.2386 16 53V59C16 61.7614 18.2386 64 21 64H79C81.7614 64 84 61.7614 84 59V53C84 50.2386 81.7614 48 79 48H21Z" fill="currentColor"/>
@@ -140,6 +177,9 @@ export default function ItemConsole({ item }) {
         }
         .console-button:hover:not(:disabled) {
           background: #fff3;
+        }
+        .cb-diffused {
+          border: 1px solid #0f0;
         }
         /* center */
         .console-rating {

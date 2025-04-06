@@ -27,6 +27,7 @@ if item.activitypub
     :ap_url
 end
 
+json.diffused item.diffused_accounts.include?(@current_account)
 
 json.quoters_counter item.quoters.size
 json.diffusers_counter item.diffused_accounts.size
