@@ -177,6 +177,11 @@ Rails.application.routes.draw do
     # activity pub
     post 'activitypub/inbox' => 'activity_pub#inbox'
   end
+  
+  namespace :ap do
+    # account
+    post '@:name_id' => 'accounts#show', as: 'account'
+  end
 
   get '*not_found', to: 'application#routing_error'
   post '*not_found', to: 'application#routing_error'

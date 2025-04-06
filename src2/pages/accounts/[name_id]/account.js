@@ -9,6 +9,31 @@ import { useStartupContext } from '@/contexts/startup_context'
 import { useToastsContext } from '@/contexts/toasts_context'
 import { formatFullDate } from '@/lib/format_time'
 
+export async function getServerSideProps(context) {
+  const accept = context.req.headers.accept || ''
+  if (!accept.includes('application/activity+json')) {
+    return {
+      props: {}
+    }
+  }
+
+  let apData = {}
+  await axios.post('http://app:3000/ap/@' + context.query.name_id)
+  .then(res => {
+    apData = res.data
+  })
+  .catch(err => {
+    apData = err.data
+  })
+
+  context.res.setHeader('Content-Type', 'application/activity+json; charset=utf-8')
+  context.res.write(JSON.stringify(apData))
+  context.res.end()
+  return {
+    props: {}
+  }
+}
+
 export default function Account() {
   const { initialLoading } = useStartupContext()
   const { addToast } = useToastsContext()
