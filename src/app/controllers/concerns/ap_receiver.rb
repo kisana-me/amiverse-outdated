@@ -137,7 +137,6 @@ module ApReceiver
         )
         item.account = attributed_to
         item.aid = generate_aid(Item, 'aid')
-        item.kind = 'plane'
         if item.save
           status = 'Success:投稿完了'
         end

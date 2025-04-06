@@ -9,18 +9,18 @@ module ActivityPub
   def ap_create_note(item:)
     # to = メンションなどあれば
     # cc = 連携中のサーバーなど
-    note = as_note(item:, to: [], cc: [])
+    note = as_note(item: item)
     body = as_create(
-      id:,
-      to: ["https://www.w3.org/ns/activitystreams#Public"],
-      cc: [], actor: item.account, object: note, published: item.created_at.utc.iso8601
+      id: "/@#{item.account.name_id}/create_items/#{item.aid}",
+      cc: ["https://amiverse.net/@#{item.account.name_id}/followers"],
+      actor: item.account,
+      object: note,
+      published: item.created_at
     )
-    aps_send(
-      id: "create_item/#{item.aid}",
-      type: 'Follow',
-      actor: follower,
-      object: followed.ap_uri,
-      destination: followed
+    apd_deliver(
+      body: body,
+      account: item.account,
+      destination: 'https://misskey.io/inbox'
     )
   end
 
