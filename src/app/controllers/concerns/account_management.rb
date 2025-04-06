@@ -49,6 +49,6 @@ module AccountManagement
     else
       nid = str
     end
-    return nid, host, (host.blank? || host == URI.parse(ENV['APP_URL']).host)
+    return nid, host, (host.blank? || host == URI.parse(ENV['FRONT_URL']).host)
   end
 end

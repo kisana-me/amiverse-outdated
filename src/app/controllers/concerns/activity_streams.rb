@@ -22,11 +22,11 @@ module ActivityStreams
       {
         "@context": ["https://www.w3.org/ns/activitystreams", {}],
         "type": "Create",
-        "id": File.join(ENV['APP_URL'], id),
+        "id": File.join(ENV['FRONT_URL'], id),
         "published": published.utc.iso8601,
         "to": to,
         "cc": cc,
-        "actor": File.join(ENV['APP_URL'], '@'+ actor.name_id),
+        "actor": File.join(ENV['FRONT_URL'], '@'+ actor.name_id),
         "object": object
       }
     end
