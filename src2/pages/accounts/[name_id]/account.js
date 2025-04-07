@@ -8,6 +8,7 @@ import MainHeader from '@/components/layouts/main_header'
 import { useStartupContext } from '@/contexts/startup_context'
 import { useToastsContext } from '@/contexts/toasts_context'
 import { formatFullDate } from '@/lib/format_time'
+import AccountPlate from '@/components/accounts/account_plate'
 
 export async function getServerSideProps(context) {
   const accept = context.req.headers.accept || ''
@@ -86,32 +87,7 @@ export default function Account() {
           <div className="account-banner-content"></div>
         </div>
 
-        <div className="account-plate">
-          <div className="account-plate-top">
-            <div className="account-plate-icon">
-              <div className="api-status"></div>
-              <img
-                className="api-image"
-                src={account.icon_url || "/ast-imgs/icon.png"}
-                alt='アイコン'
-              />
-            </div>
-            <div className="apt-right">
-              <button>🍭</button>
-              <button>❤️</button>
-              <button>🤞</button>
-              <button>Follow</button>
-            </div>
-          </div>
-
-          <div className="account-plate-bottom">
-            <div className="account-plate-nameplate">
-              <div>{account.name}</div>
-              <div>@{account.name_id}</div>
-            </div>
-            <div className="apb-right"></div>
-          </div>
-        </div>
+        <AccountPlate account={account} />
 
         <div className="account-profile">
           <div className="account-profile-summary">{account.summary}</div>
@@ -122,7 +98,7 @@ export default function Account() {
             </div>
             <div className="apk-keyvalue">
               <div className="apk-key">🎂誕生日</div>
-              <div className="apk-value">{account.birthday}</div>
+              <div className="apk-value">{account.birth && formatFullDate(new Date(account.birth))}</div>
             </div>
             <div className="apk-keyvalue">
               <div className="apk-key">🎫参加日</div>
@@ -196,28 +172,6 @@ export default function Account() {
           display: block;
         }
         
-        /* プレート */
-
-        .account-plate {
-        }
-        .account-plate-top {
-          margin: 0px 20px;
-        }
-        .account-plate-top, .account-plate-bottom {
-          display: flex;
-        }
-        .api-image{
-          width: 80px;
-          height: 80px;
-          border-radius: 40px;
-          display: block;
-        }
-        .apt-right {
-          margin: 0 0 0 auto;
-        }
-        .account-plate-bottom {
-          margin: 0px 14px;
-        }
         
         /* プロフィール */
 
