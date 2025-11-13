@@ -7,7 +7,7 @@ class V1::SignupController < V1::ApplicationController
     @account = Account.new(
       name: params[:name],
       name_id: params[:name_id],
-      activitypub_id: URI.join(ENV['APP_URL'], '@' + params[:name_id]),
+      activitypub_id: URI.join(ENV['FRONT_URL'], '@' + params[:name_id]),
       password: params[:password],
       password_confirmation: params[:password_confirmation]
     )

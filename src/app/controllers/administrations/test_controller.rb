@@ -100,7 +100,7 @@ class Administrations::TestController < Administrations::ApplicationController
       account.ap_private_key = key_pair[:private_key]
       account.ap_public_key = key_pair[:public_key]
       account.activitypub = true
-      account.ap_uri = File.join(ENV['APP_URL'], "accounts/#{account.aid}")
+      account.ap_uri = File.join(ENV['FRONT_URL'], "accounts/#{account.aid}")
       account.save!
       flash[:success] = '作成しました'
     else

@@ -1,5 +1,5 @@
 import axios from '@/lib/axios'
-import FullAppUrl from '@/components/full_app_url'
+import fullUrl from '@/lib/full_url'
 
 export async function getServerSideProps({req, res, context, query}) {
   let { resource } = query
@@ -43,17 +43,17 @@ export async function getServerSideProps({req, res, context, query}) {
   if(accountStatus && domainStatus){
     const data = {
       subject: `acct:${name_id}@amiverse.net`,
-      aliases: [FullAppUrl(`@${name_id}`)],
+      aliases: [fullUrl(`@${name_id}`)],
       links: [
         {
           "rel":"http://webfinger.net/rel/profile-page",
           "type":"text/html",
-          "href":FullAppUrl(`@${name_id}`)
+          "href":fullUrl(`@${name_id}`)
         },
         {
           "rel":"self",
           "type":"application/activity+json",
-          "href":FullAppUrl(`@${name_id}`)
+          "href":fullUrl(`@${name_id}`)
         }
       ]
     }

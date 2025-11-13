@@ -10,7 +10,6 @@ class V1::ItemsController < V1::ApplicationController
   #   }
   # end
   def show
-    render json: item_data(@item)
   end
   def create
     @item = Item.new(
@@ -19,6 +18,7 @@ class V1::ItemsController < V1::ApplicationController
     @item.account = @current_account
     @item.aid = generate_aid(Item, 'aid')
     if @item.save
+      @current_account.update(items_counter: @current_account.items.where(visibility: :public_share, status: :shared).count)
       render json: { is_done: true, item_aid: @item.aid }
     else
       render json: { is_done: false }
@@ -51,10 +51,33 @@ class V1::ItemsController < V1::ApplicationController
     end
   end
 
+  def diffuse
+    item = get_item(aid: params[:item_aid])
+    diffusion_attrs = {
+      diffuser_id: @current_account.id,
+      diffused_id: item.id
+    }
+    if Diffusion.exists?(diffusion_attrs)
+      Diffusion.where(diffusion_attrs).delete_all
+      status = 'deleted'
+    else
+      status = Diffusion.create(diffusion_attrs).persisted? ? 'diffused' : 'error'
+    end
+    render json: { status: status }
+  end
+
   private
   def set_item
     @item = Item.find_by(
       aid: params[:aid],
+      visibility: :public_share,
+      status: :shared,
+      deleted: false
+    )
+  end
+  def get_item(aid: params[:aid])
+    Item.find_by(
+      aid: aid,
       visibility: :public_share,
       status: :shared,
       deleted: false

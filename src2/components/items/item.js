@@ -1,22 +1,35 @@
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ItemAccount from '@/components/items/item_account'
 import ItemReactions from '@/components/items/item_reactions'
 import ItemConsole from '@/components/items/item_console'
-
-const formatDate = (isoString) => {
-  const date = new Date(isoString)
-  const year = date.getFullYear()
-  const month = ('0' + (date.getMonth() + 1)).slice(-2)
-  const day = ('0' + date.getDate()).slice(-2)
-  const hours = date.getHours()
-  const minutes = ('0' + date.getMinutes()).slice(-2)
-  const seconds = ('0' + date.getSeconds()).slice(-2)
-  return `${year}年 ${month}月 ${day}日 ${hours}時 ${minutes}分 ${seconds}秒`
-}
+import { formatRelativeTime } from '@/lib/format_time'
 
 export default function Item({ item }) {
-  const [consoleDisabled, setConsoleDisabled] = useState(false);
+  const [consoleDisabled, setConsoleDisabled] = useState(false)
+  const [visibilityString, setVisibilityString] = useState('全体公開')
+
+  useEffect(()=> {
+    switch(item.visibility) {
+      case 'public_share':
+        setVisibilityString('全体公開')
+        break
+      case 'do_not_share':
+        setVisibilityString('非公開')
+        break
+      case 'followers_share':
+        setVisibilityString('フォロワー公開')
+        break
+      case 'scopings_share':
+        setVisibilityString('限定公開')
+        break
+      case 'direct_share':
+        setVisibilityString('直接公開')
+        break
+      default:
+        setVisibilityString('全体公開')
+    }
+  }, [item])
 
   return (
     <>
@@ -24,13 +37,13 @@ export default function Item({ item }) {
         <ItemAccount account={item.account} />
         <div className='item-info item-top-info'>
           <div className='iti-left'>
-            <Link href={'/items/' + item.aid}>
+            <Link href={'/items/' + item.aid} style={{color: 'inherit', textDecoration: 'none'}}>
               返信/引用
             </Link>
           </div>
           <div className='iti-right'>
-            <Link href={'/items/' + item.aid}>
-              { formatDate(item.created_at) }
+            <Link href={'/items/' + item.aid} style={{color: 'inherit', textDecoration: 'none'}}>
+              { formatRelativeTime(new Date(item.created_at)) }
             </Link>
           </div>
         </div>
@@ -61,26 +74,24 @@ export default function Item({ item }) {
         </div>
         <div className='item-info item-bottom-info'>
           <div className='ibi-left'>
-            <Link href={'/items/' + item.aid}>
-              全体公開
+            <Link href={'/items/' + item.aid} style={{color: 'inherit', textDecoration: 'none'}}>
+              {visibilityString}
             </Link>
           </div>
           <div className='ibi-right'>
-            <Link href={'/items/' + item.aid}>
-              1000回表示
+            <Link href={'/items/' + item.aid} style={{color: 'inherit', textDecoration: 'none'}}>
+              {item.viewed_counter}回表示
             </Link>
           </div>
         </div>
-        <ItemReactions reactions={item.reactions} />
+        <ItemReactions
+          item={item}
+          disabled={consoleDisabled}
+          reactions={item.reactions}
+        />
         <ItemConsole
-          item_aid={item.aid}
-          disabled={consoleDisabled} 
-          toggleDisabled={() => {
-            setConsoleDisabled(true);
-            setTimeout(() => {
-              setConsoleDisabled(false);
-            }, 1000);
-          }}
+          item={item}
+          disabled={consoleDisabled}
         />
       </div>
       <style jsx>{`
@@ -94,7 +105,7 @@ export default function Item({ item }) {
           justify-content: space-between;
           font-size: 12px;
           line-height: 12px;
-          color: #939393;
+          color: var(--inconspicuous-font-color);
         }
         .item-top-info {
           margin-top: 4px;
@@ -102,7 +113,6 @@ export default function Item({ item }) {
         .iti-left {}
         .iti-right {}
         .item-bottom-info{
-          color: #939393;
           margin-bottom: 4px;
         }
         .ibi-left {}

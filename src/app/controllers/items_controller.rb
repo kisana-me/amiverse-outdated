@@ -87,7 +87,7 @@ class ItemsController < ApplicationController
       redirect_to item_url(@item.aid), success: t('.success')
       # action cable
       # activity pub
-      # ap_create_note
+      # ap_create_note(item: @item)
     else
       flash.now[:danger] = t('.danger')
       render 'new'

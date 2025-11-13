@@ -11,7 +11,7 @@ export default function Items({ items = [], loadItems = false }) {
           if (loadItems) {
             return (
               <>
-                {[...Array(5)].map((_, index) => (
+                {[...Array(20)].map((_, index) => (
                   <SkeletonItem key={index} />
                 ))}
               </>
@@ -20,7 +20,7 @@ export default function Items({ items = [], loadItems = false }) {
             return (
               <>
                 {items.map(item => (
-                  <Item key={item.item.aid + ((item.object == 'diffuse') ? '-d-' + item.diffuser.aid : '')} item={item.item} />
+                  <Item key={item.aid} item={item} />
                 ))}
               </>
             )
@@ -34,7 +34,7 @@ export default function Items({ items = [], loadItems = false }) {
         })()}
       </div>
       <style jsx>{`
-        .item {
+        .items {
         }
       `}</style>
     </>

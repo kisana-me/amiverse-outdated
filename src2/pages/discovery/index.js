@@ -1,166 +1,86 @@
 import React, { useEffect, useState, useContext } from 'react'
+import { useRouter } from 'next/router'
 import { useMainContext } from '@/contexts/main_context'
 import MainHeader from '@/components/layouts/main_header'
 import axios from 'axios'
+import { formatRelativeTime } from '@/lib/format_time'
+import { useStartupContext } from '@/contexts/startup_context'
+import { useTrendsContext } from '@/contexts/trends_context'
+import Trend from '@/components/trends/trend'
+import SkeletonTrend from '@/components/trends/skeleton_trend'
 
 export default function index() {
-  const { loggedIn } = useMainContext()
-  const [trends, setTrends] = useState([])
+  const router = useRouter()
+  const { initialLoading } = useStartupContext()
+  const { trends, trendsLoading, fetchTrends } = useTrendsContext()
   const [lastUpdated, setLastUpdated] = useState('')
-  const [loading, setLoading] = useState(true)
-  let ignore = false
+  const [searchInput, setSearchInput] = useState('')
   
   useEffect(() => {
-    // 非同期関数を定義して即時実行
-    const fetchData = async () => {
-      if (!ignore) {
-        setLoading(true)
-        // fetch POST
-        await axios.post('/discovery', {'page': 'page'})
-        .then(res => {
-          setTrends(res.data.trends || [])
-          setLastUpdated(res.data.last_updated_at || '')
-          setLoading(false)
-        })
-        .catch(err => {
-          setLoading(false)
-        })
-      }
-    }
-    fetchData()
-    return () => {ignore = true}
-  },[])
+    if (initialLoading) {return}
+    fetchTrends()
+  },[initialLoading])
 
-  // 日付をフォーマットする関数
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+  const handleSearchChange = (e) => {
+    setSearchInput(e.target.value)
+  }
+
+  const handleSearchClick = () => {
+    if (searchInput) {
+      router.push(`/search?query=${searchInput}`)
+    }
   }
 
   return (
     <>
       <MainHeader>
-        みつける
+        <input
+          type="search"
+          value={searchInput}
+          onChange={handleSearchChange}
+          placeholder="検索ワードを入力"
+          className="search-input"
+        />
+        <button onClick={handleSearchClick} className="search-button">
+          🔎
+        </button>
       </MainHeader>
-      <div className="div_1">
-        <h2>検索</h2>
-        <p>未実装</p>
-      </div>
-      
-      <div className="trends-container">
-        <h2>トレンド</h2>
-        {loading ? (
-          <>
-            <div className="skeleton-last-updated"></div>
-            <ul className="trends-list">
-              {[...Array(5)].map((_, index) => (
-                <li key={index} className="trend-item skeleton-item">
-                  <span className="skeleton-word"></span>
-                  <span className="skeleton-count"></span>
-                </li>
+
+      <div className="discovery">
+
+          {trendsLoading ? (
+            <>
+              <SkeletonTrend />
+            </>
+          ) : (
+            <>
+              {trends.map(({ category, last_updated_at, data }, index) => (
+                <Trend category={category} last_updated_at={last_updated_at} trend={data} key={index} />
               ))}
-            </ul>
-          </>
-        ) : (
-          <>
-            {lastUpdated && (
-              <p className="last-updated">最終更新: {formatDate(lastUpdated)}</p>
-            )}
-            <ul className="trends-list">
-              {trends.map((trend, index) => (
-                <li key={index} className="trend-item">
-                  <span className="trend-word">{trend.word}</span>
-                  <span className="trend-count">{trend.count}</span>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
+            </>
+          )}
+
       </div>
       
       <style jsx>{`
-        .div_1 {
+        .search-input {
+          min-width: 70%;
+          height: 32px;
+          border: 1px solid var(--border-color);
+          border-radius: 7px;
+          padding: 0 7px;
+          background: inherit;
+          color: var(--font-color);
+          box-sizing: border-box;
         }
-        
-        .trends-container {
-          margin-top: 20px;
-          padding: 15px;
-          border-radius: 12px;
-        }
-        
-        .trends-container h2 {
-          font-size: 18px;
-          margin-bottom: 10px;
-          color: #1d9bf0;
-        }
-        
-        .last-updated {
-          font-size: 12px;
-          color: #536471;
-          margin-bottom: 15px;
-        }
-        
-        .trends-list {
-          list-style-type: none;
-          padding: 0;
-          margin: 0;
-        }
-        
-        .trend-item {
-          display: flex;
-          justify-content: space-between;
-          padding: 10px 0;
-          border-bottom: 1px solid #eff3f4;
-        }
-        
-        .trend-word {
-          font-weight: 500;
-        }
-        
-        .trend-count {
-          color: #536471;
-          font-size: 14px;
-        }
-        
-        .skeleton-last-updated {
-          height: 12px;
-          width: 150px;
-          background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-          background-size: 200% 100%;
-          animation: shimmer 1.5s infinite;
-          border-radius: 4px;
-          margin-bottom: 15px;
-        }
-        
-        .skeleton-item {
-          display: flex;
-          justify-content: space-between;
-          padding: 10px 0;
-          border-bottom: 1px solid #eff3f4;
-        }
-        
-        .skeleton-word {
-          height: 16px;
-          width: 120px;
-          background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-          background-size: 200% 100%;
-          animation: shimmer 1.5s infinite;
-          border-radius: 4px;
-        }
-        
-        .skeleton-count {
-          height: 14px;
-          width: 40px;
-          background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-          background-size: 200% 100%;
-          animation: shimmer 1.5s infinite;
-          border-radius: 4px;
-        }
-        
-        @keyframes shimmer {
-          0% { background-position: 200% 0; }
-          100% { background-position: -200% 0; }
+        .search-button {
+          height: 32px;
+          margin-left: 4px;
+          border: 1px solid var(--border-color);
+          border-radius: 7px;
+          background: inherit;
+          color: var(--inconspicuous-font-color);
+          box-sizing: border-box;
         }
       `}</style>
     </>

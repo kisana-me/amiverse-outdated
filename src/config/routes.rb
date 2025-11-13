@@ -11,9 +11,9 @@ Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
 
   # === base === #
-  root 'feed#index'
-  get 'following' => 'feed#following'
-  get 'current' => 'feed#current'
+  root 'feeds#index'
+  get 'following' => 'feeds#following'
+  get 'current' => 'feeds#current'
   get 'discovery' => 'discovery#index'
   get 'search' => 'search#index'
   get 'dashboard' => 'dashboard#index'
@@ -146,9 +146,9 @@ Rails.application.routes.draw do
     delete 'logout' => 'sessions#logout'
 
     # feed
-    post 'feed/index' => 'feed#index'
-    post 'feed/follow' => 'feed#follow'
-    post 'feed/current' => 'feed#current'
+    post 'feeds/index' => 'feeds#index'
+    post 'feeds/follow' => 'feeds#following'
+    post 'feeds/current' => 'feeds#current'
 
     # account
     post '@:name_id' => 'accounts#show', as: 'account'
@@ -163,7 +163,10 @@ Rails.application.routes.draw do
     # post 'items' => 'items#index', as: 'items'
     post 'items/create' => 'items#create', as: 'create_items'
     post 'items/react' => 'items#react', as: 'react'
+    post 'items/diffuse' => 'items#diffuse', as: 'diffuse'
     post 'items/:aid' => 'items#show', as: 'item'
+
+    post 'search' => 'search#index', as: 'search'
 
     # emoji
     post 'emojis' => 'emojis#index', as: 'emojis'
@@ -173,6 +176,11 @@ Rails.application.routes.draw do
 
     # activity pub
     post 'activitypub/inbox' => 'activity_pub#inbox'
+  end
+  
+  namespace :ap do
+    # account
+    post '@:name_id' => 'accounts#show', as: 'account'
   end
 
   get '*not_found', to: 'application#routing_error'

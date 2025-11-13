@@ -49,6 +49,21 @@ export default function DefaultHead({ children,
       <meta name="twitter:creator" content={author} />
       <meta name="twitter:creator:id" content={id} />
       <link rel="icon" href="/favicon.ico" />
+      {process.env.NODE_ENV === 'production' && (
+        <>
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4578343381731958" crossorigin="anonymous"></script>
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-X77XY981TV"></script>
+          <script>
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-X77XY981TV');
+            `}
+          </script>
+        </>
+      )}
       {children}
     </Head>
   )

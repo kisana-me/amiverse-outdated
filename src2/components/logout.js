@@ -2,9 +2,11 @@ import React, { useContext } from 'react'
 import axios from '@/lib/axios'
 import { useMainContext } from '@/contexts/main_context'
 import { useRouter } from 'next/router'
+import { useToastsContext } from '@/contexts/toasts_context'
 
 export default function Logout() {
-  const { setLoginLoading, loggedIn, setLoggedIn, setFlash } = useMainContext()
+  const { loggedIn, setLoggedIn } = useMainContext()
+  const { addToast } = useToastsContext()
   const router = useRouter()
 
   const handleLogout = async () => {
@@ -12,12 +14,14 @@ export default function Logout() {
       .then(response => {
         if (!response.data.logged_in) {
           setLoggedIn(false)
-          router.push('/').then(() => {
-          })
+          router.push('/')
+          addToast('ログアウトしました')
         } else {
+          addToast('ログアウトされてません')
         }
       })
       .catch(err => {
+        addToast('ログアウトエラー')
       })
   }
 

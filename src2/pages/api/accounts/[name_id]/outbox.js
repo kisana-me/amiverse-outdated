@@ -1,9 +1,9 @@
 import axios from '@/lib/axios'
-import FullAppUrl from '@/components/full_app_url'
 
 export default async function handler(req, res) {
   //const accept = req.headers.accept
   //const isActivity = accept.includes('application/activity+json')
+  const FullAppUrl = () =>{''}
   let res_data = { 'status': 'Error:Data was not send to API.' }
   if (req.method === "GET") {
     let data = {}

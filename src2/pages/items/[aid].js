@@ -5,49 +5,29 @@ import Link from 'next/link'
 import Image from 'next/image'
 import MainHeader from '@/components/layouts/main_header'
 import Item from '@/components/items/item'
-import { useMainContext } from '@/contexts/main_context'
+import { useStartupContext } from '@/contexts/startup_context'
 import { useItemsContext } from '@/contexts/items_context'
 import { useToastsContext } from '@/contexts/toasts_context'
 
 export default function Aid() {
-  const { loading } = useMainContext()
-  const { feeds } = useItemsContext()
+  const { initialLoading } = useStartupContext()
+  const { getItems } = useItemsContext()
   const { addToast } = useToastsContext()
   const router = useRouter()
   const [item, setItem] = useState({})
   const [loadingItem, setLoadingItem] = useState(true)
 
-  function findItemByAid(feeds, item_aid) {
-    if (!Array.isArray(feeds)) return null
-    return feeds.find(feed => feed.object === "item" && feed.item.aid === item_aid)?.item || null
+  async function fetchItem() {
+    setLoadingItem(true)
+    const cached_item = await getItems(router.query.aid)
+    setItem(cached_item)
+    setLoadingItem(false)
   }
 
-  async function fetchItem() {
-    const cached_item = findItemByAid(feeds.index, router.query.aid)
-    if(cached_item){
-      setItem(cached_item)
-      console.log("ari")
-      console.log(cached_item)
-      setLoadingItem(false)
-      return
-    }
-    await axios.post('/items/' + router.query.aid)
-      .then(res => {
-        setItem(res.data)
-        setLoadingItem(false)
-        addToast('データ取得完了')
-      })
-      .catch(err => {
-        addToast('アイテム取得エラー')
-        console.log( err)
-      })
-  }
   useEffect(() => {
-    if (loading) {
-      return
-    }
+    if (initialLoading) {return}
     fetchItem()
-  },[loading])
+  },[initialLoading])
 
   return (
     <>

@@ -12,6 +12,7 @@ export default function MainHeader({ children }) {
           <button onClick={() => {headerMenuTrigger()}}>
             <Image
               src="/ast-imgs/amiverse-v3-alpha-400x400.png"
+              alt="Amiverseのロゴ"
               width={40}
               height={40}
             />
@@ -37,6 +38,7 @@ export default function MainHeader({ children }) {
           align-items: center;
           backdrop-filter: blur(3px);
           background: var(--blur-color);
+          z-index: 80;
         }
         .main-header-button-1, .main-header-button-2 {
           display: flex;
@@ -75,7 +77,7 @@ export default function MainHeader({ children }) {
           background: var(--main-container-background-color);
           padding: 5px;
         }
-        @media (min-width: 700px) {
+        @media (min-width: 700px) and (min-height: 720px) {
           .main-header-button-1 {
             display: none;
           }

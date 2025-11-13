@@ -4,18 +4,46 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
 import Items from '@/components/items/items'
-import { useMainContext } from '@/contexts/main_context'
+import MainHeader from '@/components/layouts/main_header'
+import { useStartupContext } from '@/contexts/startup_context'
 import { useToastsContext } from '@/contexts/toasts_context'
+import { formatFullDate } from '@/lib/format_time'
+import AccountPlate from '@/components/accounts/account_plate'
+
+export async function getServerSideProps(context) {
+  const accept = context.req.headers.accept || ''
+  if (!accept.includes('application/activity+json')) {
+    return {
+      props: {}
+    }
+  }
+
+  let apData = {}
+  await axios.post('http://app:3000/ap/@' + context.query.name_id)
+  .then(res => {
+    apData = res.data
+  })
+  .catch(err => {
+    apData = err.data
+  })
+
+  context.res.setHeader('Content-Type', 'application/activity+json; charset=utf-8')
+  context.res.write(JSON.stringify(apData))
+  context.res.end()
+  return {
+    props: {}
+  }
+}
 
 export default function Account() {
-  const { loading } = useMainContext()
+  const { initialLoading } = useStartupContext()
   const { addToast } = useToastsContext()
   const { query = {} } = useRouter()
   const [account, setAccount] = useState({})
   const [nameId, setNameId] = useState('')
 
-  let ignore = false
   useEffect(() => {
+    if (initialLoading) {return}
     async function fetchAccount() {
       await axios.post('/@' + query.name_id)
         .then(res => {
@@ -23,288 +51,186 @@ export default function Account() {
           addToast('データ取得完了')
         })
         .catch(err => {
-          addToast('アカウント取得エラー')
+          addToast('データ取得完了')
         })
     }
     if(query.name_id){
       fetchAccount()
     }
-    //
-    return () => {ignore = true}
-  },[loading])
+  },[initialLoading])
 
   return (
     <>
-      <div className="account-container" id="account-container">
-        <div className="top-container">
-          <div className="banner-container" id="banner-container">
-            <img
-              className="account-banner"
-              src={account.banner_url}
-              alt='banner'
-            />
+      <MainHeader>
+        <div className="account-main-header">
+          <img src={account.icon_url || "/ast-imgs/icon.png"} className="amh-icon" alt="アイコン" />
+          <div className="amh-nameplate">
+            <div>
+              {account.name}
+            </div>
+            <div>
+              @{account.name_id}
+            </div>
+          </div>
+          <div className="amh-right">
+            <button>action</button>
           </div>
         </div>
-        <div className={`name-container`} id="name-container">
-          <div id="name-before"></div>
-          <div className="icon-container">
-            <img
-              className="account-icon"
-              src={account.icon_url}
-              alt='icon'
-            />
+      </MainHeader>
+      <div className="account-container">
+        <div className="account-banner-container">
+          <img
+            className="account-banner-image"
+            src={account.banner_url || "/ast-imgs/banner.png"}
+            alt='バナー'
+          />
+          <div className="account-banner-content"></div>
+        </div>
+
+        <AccountPlate account={account} />
+
+        <div className="account-profile">
+          <div className="account-profile-summary">{account.summary}</div>
+          <div className="account-profile-keyvalues">
+            <div className="apk-keyvalue">
+              <div className="apk-key">🗺️場所</div>
+              <div className="apk-value">{account.location}</div>
+            </div>
+            <div className="apk-keyvalue">
+              <div className="apk-key">🎂誕生日</div>
+              <div className="apk-value">{account.birth && formatFullDate(new Date(account.birth))}</div>
+            </div>
+            <div className="apk-keyvalue">
+              <div className="apk-key">🎫参加日</div>
+              <div className="apk-value">{formatFullDate(new Date(account.created_at))}</div>
+            </div>
           </div>
-          <div className="meta-container">
-            <h1>{account.name}</h1>
-            <div>@{account.name_id}</div>
-            {/* フォローボタンor編集ボタン */}
+          <div className="account-profile-counters">
+            <div className="apc-counter">
+              <div className="apc-figure">{account.followers_counter}</div>
+              <div className="apc-subscript">フォロワー</div>
+            </div>
+            <div className="apc-counter">
+              <div className="apc-figure">{account.following_counter}</div>
+              <div className="apc-subscript">フォロー</div>
+            </div>
+            <div className="apc-counter">
+              <div className="apc-figure">{account.items_counter}</div>
+              <div className="apc-subscript">投稿数</div>
+            </div>
           </div>
         </div>
-        <div className="profile-container">
-          <div><span>紹介:</span>{account.summary}</div>
-          <div><span>場所:</span>{account.location}</div>
-          <div><span>誕生日:</span>{account.birthday}</div>
-          <div><span>フォロワー:</span>{account.followers_counter}</div>
-          <div><span>フォロー:</span>{account.following_counter}</div>
-          <div><span>投稿数:</span>{account.items_counter}</div>
-          <div><span>参加日:</span>{account.created_at}</div>
+
+        <div className="account-tab">
+          <div className="account-tab-selector">投稿</div>
+          <div className="account-tab-selector">返信</div>
+          <div className="account-tab-selector">メディア</div>
+          <div className="account-tab-selector">リアクション</div>
         </div>
-        <div className="account-tab-container">
-          <div>投稿</div>
-          <div>返信</div>
-          <div>メディア</div>
-          <div>リアクション</div>
-        </div>
-        <div className="content-container">
-          <p>開始</p>
+
+        <div className="account-content">
           <Items items={account.items}/>
-          <p>終了</p>
         </div>
       </div>
       <style jsx>{`
+        .account-main-header {
+          min-width: 80%;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+        }
+        .amh-icon {
+          width: 40px;
+          height: 40px;
+          border-radius: 20px;
+        }
+        .amh-nameplate {
+          margin-left: 4px
+        }
+        .amh-right {
+          margin: 0 0 0 auto;
+        }
+
+        /* ========= */
+
         .account-container {
           max-width: 800px;
           margin: auto;
         }
         
-        // バナー
+        /* バナー */
         
-        .top-container {
+        .account-banner-container {
           width: 100%;
-          aspect-ratio: 1/1;
-          position: sticky;
-          top: 0px;
-          overflow: hidden;
+          aspect-ratio: 2/1;
         }
-        .banner-container {
+        .account-banner-image {
           width: 100%;
-          aspect-ratio: 1/1;
-          position: absolute;
-          top: 0px;
-          overflow: hidden;
-        }
-        .account-banner {
-          width: 100%;
-          aspect-ratio: 1/1;
+          aspect-ratio: 2/1;
           object-fit: cover;
-          object-position: top center;
+          object-position: center center;
           display: block;
-          background: linear-gradient(90deg,#747eee,#d453cc 50%,#fe5597);
         }
         
-        // 名前
         
-        .name-container {
-          height: 104px;
+        /* プロフィール */
+
+        .account-profile {
+          margin: 0px 14px;
+        }
+        .account-profile-summary {}
+        .account-profile-keyvalues {}
+        .apk-keyvalue {
           display: flex;
-          background: var(--name-color);
-          backdrop-filter: blur(3px);
-          //border-radius: 10px 10px 0 0;
-          border-bottom: 0.5px solid var(--border-color);
-          //box-shadow: 0 -20px 25px 10px #dc24a138;
-          position: sticky;
-          top: -1px;
-          z-index: 3;
-          transition-duration: 0.5s;
-          align-items: center;
+          color: var(--inconspicuous-font-color);
+          font-size: small;
         }
-        #name-before {
-          position: absolute;
-          left: 0;
-          bottom: 164px;
-          width: 100%;
+        .apk-key {}
+        .apk-value {
+          margin-left: 4px;
         }
-        .icon-container {
-          
+        .account-profile-counters {
+          display: flex;
+          justify-content: space-evenly;
         }
-        .icon-container img {
-          transition-duration: 0.5s;
-        }
-        .account-icon {
+        .apc-counter {
           width: 100px;
-          aspect-ratio: 1/1;
-          object-fit: cover;
-          object-position: top;
-          border: 2px #36f18a solid;
-          border-radius: 54px;
-          display: block;
-          background: linear-gradient(90deg,#747eee,#d453cc 50%,#fe5597);
-        }
-        .meta-container {
-          
-        }
-        .meta-container h1 {
-          margin: 0;
-        }
-        // 接着
-        .fixed {
-          background:  var(--fixed-name-color);
-          border-radius: 0;
-          height: 54px;
-        }
-        .fixed .account-icon {
-          width: 50px;
-        }
-        .fixed .meta-container {
-          display: flex;
-          align-items: center;
-        }
-        
-        // プロフ
-        
-        .profile-container {
-          padding: 10px;
-          background: var(--profile-color);
-          border-bottom: 0.5px solid var(--border-color);
-          z-index: 1;
-          position: relative;
-        }
-        .profile-container p {
-          margin: 0px;
-        }
-        
-        // タブ
-        
-        .account-tab-container {
-          display: flex;
-          border-radius: 0;
-          background: var(--account-tab-color);
-          border-bottom: 0.5px solid var(--border-color);
-          //overflow-x: scroll;
-          //box-shadow: 0 9px 12px 1px #dc24a138;
-          z-index: 2;
-          position: sticky;
-          top: 53px;
-          
-        }
-        .account-tab-container div {
-          height: 30px;
-          line-height: 30px;
+          margin: 7px;
+          padding: 5px;
+          border-radius: 7px;
           text-align: center;
+          box-sizing: border-box;
         }
-        
-        // コンテンツ
-        
-        .content-container {
-          background: var(--content-color);
-          z-index: 1;
-          position: relative;
-          padding: 10px;
+        .apc-counter:hover {
+          background: var(--hover-color);
         }
-        
-        // 大きさ処理
-        /* 画像を左に、右に名前とプロフといったデザインのほうがいい */
-        @media (min-width: 682px) {
-          .top-container {
-            aspect-ratio: 1/.5;
-          }
-          .banner-container{
-            aspect-ratio: 1/.5;
-          }
-          .account-banner {
-            aspect-ratio: 1/.5;
-            object-position: 50% 50%;
-          }
+        .apc-figre {
+          font-weight: bold;
         }
-        @media (min-aspect-ratio: 4/5) {
-          .top-container {
-            aspect-ratio: 1/.5;
-          }
-          .banner-container{
-            aspect-ratio: 1/.5;
-          }
-          .account-banner {
-            aspect-ratio: 1/.5;
-            object-position: 50% 50%;
-          }
+        .apc-subscript {
+          color: var(--inconspicuous-font-color);
         }
-        
-        // フォーム
-        
-        .text-field-group {
-          position: relative;
-          padding: 15px 0 0;
-          margin-top: 10px;
-          width: 50%;
-        }
-        .text-field-field {
-          width: 100%;
-          border: 0;
-          border-bottom: 2px solid gray;
-          outline: 0;
-          font-size: 1.3rem;
-          color: white;
-          padding: 7px 0;
-          background: transparent;
-          transition: border-color 0.2s;
-          &::placeholder {
-            color: transparent;
-          }
-          &:placeholder-shown ~ .text-field-label {
-            cursor: text;
-            top: 20px;
-          }
-        }
-        .text-field-label {
-          position: absolute;
-          top: 0;
-          display: block;
-          transition: 0.2s;
-          color: gray;
-        }
-        .text-field-field:focus {
-          ~ .text-field-label {
-            position: absolute;
-            top: 0;
-            display: block;
-            transition: 0.2s;
-            color: #6f17a9;
-          }
-          padding-bottom: 6px;  
-          font-weight: 700;
-          border-width: 3px;
-          border-image: linear-gradient(to right, #3b1183, #6f17a9);
-          border-image-slice: 1;
-        }
-        .text-field-field{
-          &:required,&:invalid { box-shadow:none; }
-        }
-        
-        // signup
-        
-        .signup-container {
+
+        /* タブ */
+
+        .account-tab {
           display: flex;
-          flex-direction: column;
-          align-items: center;
         }
-        .signup-form {
-          form {
-            border: 1px solid;
-            width: 400px;
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-          }
+        .account-tab-selector {
+          padding: 5px;
+          margin: 2px;
+          margin-left: 4px;
+          border-radius: 4px;
+          color: var(--inconspicuous-font-color);
+        }
+        .account-tab-selector:hover {
+          background: var(--hover-color);
+        }
+        
+        /* コンテンツ */
+
+        .account-content {
+
         }
       `}</style>
     </>

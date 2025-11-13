@@ -6,7 +6,7 @@ module ApDeliver
 
   def apd_deliver(body:, account:, destination:)
     to_url = File.join(destination.ap_uri, 'inbox')
-    from_url = ENV['APP_URL']
+    from_url = ENV['FRONT_URL']
     headers, statement, http_signature_data = create_signed_headers(actor: account, body: body, to_url: to_url, from_url: from_url)
     req,res = https_post(
       to_url,
@@ -46,7 +46,7 @@ module ApDeliver
     headers = {
       # 'Signature': statement,
       # 'Authorization': "Signature #{statement}",
-      'User-Agent': "Amiverse v.0.0.1 (+https://#{URI.parse(ENV['APP_URL']).host}/)",
+      'User-Agent': "Amiverse v.0.0.1 (+https://#{URI.parse(ENV['FRONT_URL']).host}/)",
       'Accept' => 'application/activity+json'
     }
     req,res = https_get(

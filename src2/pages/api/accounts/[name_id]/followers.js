@@ -1,5 +1,4 @@
 import axios from '@/lib/axios'
-import FullAppUrl from '@/components/full_app_url'
 
 export default async function handler(req, res) {
   //const accept = req.headers.accept

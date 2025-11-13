@@ -170,7 +170,7 @@ export default function BottomNav() {
           border-radius: 18px;
           display: block;
         }
-        @media (min-width: 700px) and (min-height: 660px) {
+        @media (min-width: 700px) and (min-height: 720px) {
           nav {
             display: none;
           }

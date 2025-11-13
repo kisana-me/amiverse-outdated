@@ -1,7 +1,7 @@
 import axios from '@/lib/axios'
-import FullAppUrl from '@/components/full_app_url'
 
 export default async function handler(req, res) {
+  const FullAppUrl = () =>{''}
   let res_data = { 'status': 'Error:Data was not send to API.' }
   if (req.method === "GET") {
     res_data = {

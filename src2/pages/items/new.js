@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react'
-import axios from '@/lib/axios'
 import { useRouter } from 'next/router'
+import axios from '@/lib/axios'
 import { useToastsContext } from '@/contexts/toasts_context'
+import MainHeader from '@/components/layouts/main_header'
 
 export default function New() {
   const router = useRouter()
-  const { addToast } = useToastsContext
+  const { addToast } = useToastsContext()
   const [itemContent, setItemContent] = useState('')
 
   async function createItem(e) {
@@ -15,22 +16,25 @@ export default function New() {
     })
     .then(res => {
       if (res.data.is_done) {
-        console.log('item/create:完了')
         addToast(`投稿しました`)
         router.push('/')
         // router.push('/items/' + res.data.item_aid)
       } else {
-        console.log('item/create:作成不可能')
+        console.log(`アイテム作成:サーバーエラー, ${res.data}`)
+        addToast('アイテム作成:サーバーエラー')
       }
     })
     .catch(err => {
-      console.log('item/create:通信エラー', err)
+      console.log(`アイテム作成:通信エラー, ${err.response}`)
+      addToast('アイテム作成:通信エラー')
     })
   }
 
   return (
-    <div className="main-container">
-      <h1>作成</h1>
+    <>
+      <MainHeader>
+        投稿
+      </MainHeader>
       <div id="items">
         <form onSubmit={createItem}>
           <label>
@@ -41,13 +45,9 @@ export default function New() {
         </form>
       </div>
       <style jsx>{`
-        .main-container {
-          background: var(--main-container-background-color);
-          padding: 5px;
-        }
         .items {
         }
       `}</style>
-    </div>
+    </>
   )
 }

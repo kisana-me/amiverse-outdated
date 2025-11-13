@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useOverlayContext } from '@/contexts/overlay_context'
 import Link from 'next/link'
 import Footer from '@/components/layouts/footer'
+import TrendsMiniList from '@/components/trends/trends_mini_list'
 
 export default function Aside() {
   const { isAsideMenuOpen } = useOverlayContext()
@@ -11,13 +12,7 @@ export default function Aside() {
       <aside className={isAsideMenuOpen ? 'show-aside' : ''}>
         <div>
           <h2>トレンド</h2>
-          <div>
-            <div>
-              ワード
-              <br />
-              1件
-            </div>
-          </div>
+          <TrendsMiniList />
           <Link href='/'>もっと見る</Link>
           <br />
           ログイン / サインアップ
@@ -27,9 +22,11 @@ export default function Aside() {
       <style jsx>{`
         aside {
           width: 300px;
-          height: 100svh;
+          height: 100vh;
           top: 0;
           right: -300px;
+          border-left: 1px solid var(--border-color);
+          box-sizing: border-box;
           position: fixed;
           display: flex;
           flex-direction: column;
